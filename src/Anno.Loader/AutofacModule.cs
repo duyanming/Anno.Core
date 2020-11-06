@@ -2,6 +2,7 @@
 using System.Linq;
 using Autofac;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Anno.Loader
 {
@@ -35,6 +36,10 @@ namespace Anno.Loader
             assembly.GetTypes().Where(x => x.GetTypeInfo().IsClass && !x.GetTypeInfo().IsAbstract && !x.GetTypeInfo().IsInterface).ToList().ForEach(
                    t =>
                    {
+                       if (CheckIfAnonymousType(t))
+                       {
+                           return;
+                       }
                        var interfaces = t.GetInterfaces();
                        if (IsAssignableFrom(t, "Anno.EngineData.BaseModule")
                        || interfaces.ToList().Exists(i => i.Name == "IFilterMetadata")
@@ -64,6 +69,16 @@ namespace Anno.Loader
                 success = IsAssignableFrom(type.BaseType, baseTypeFullName);
             }
             return success;
+        }
+        private static bool CheckIfAnonymousType(Type type)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            return Attribute.IsDefined(type, typeof(CompilerGeneratedAttribute), false)
+                && type.IsGenericType && type.Name.Contains("AnonymousType")
+                && (type.Name.StartsWith("<>"))
+                && (type.Attributes & TypeAttributes.NotPublic) == TypeAttributes.NotPublic;
         }
     }
 }
