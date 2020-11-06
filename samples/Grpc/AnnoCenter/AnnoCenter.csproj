@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(DeveloperBuildCoreTfms)</TargetFramework>
+    <Authors>杜燕明</Authors>
+    <Company>杜燕明</Company>
+    <Version>1.0.0.1</Version>
+    <!--win-x86;win-x64;linux-x64;osx-x64-->
+    <!--<RuntimeIdentifiers>win-x86</RuntimeIdentifiers>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Core\Grpc\Anno.Rpc.Center\Anno.Rpc.CenterGrpc.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AnnoCenter.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Anno.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="stop.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="start.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

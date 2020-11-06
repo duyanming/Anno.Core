@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(StandardTfms);net461</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>$(Version)</Version>
+    <Authors>Du yanming</Authors>
+    <Company>Du yanming</Company>
+    <Product>Anno IOC  DI</Product>
+    <Description>分布式开发框架 依赖注入</Description>
+    <PackageProjectUrl>https://github.com/duyanming/Viper</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup  Condition="'$(TargetFramework)' == 'net461'">
+    <PackageReference Include="Autofac" Version="6.0.0" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == '$(StandardTfms)'">
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.9" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Anno.Const\Anno.Const.csproj" />
+  </ItemGroup>
+
+</Project>

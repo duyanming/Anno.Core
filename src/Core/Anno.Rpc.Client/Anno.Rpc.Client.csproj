@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(StandardTfms);net461</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>$(Version)</Version>
+    <Description>分布式开发框架 RPC</Description>
+    <Authors>Du yanming</Authors>
+    <Company>Du yanming</Company>
+    <Product>Anno 框架 Rpc Thrift</Product>
+    <PackageProjectUrl>https://github.com/duyanming/AnnoDemo</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Iface\**" />
+    <EmbeddedResource Remove="Iface\**" />
+    <None Remove="Iface\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Anno.Const\Anno.Const.csproj" />
+    <ProjectReference Include="..\..\Anno.CronNET\Anno.CronNET.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net461'">
+    <!--<ProjectReference Include="..\Thrift\Thrift.csproj" />-->
+    <!--<PackageReference Include="apache-thrift-netcore" Version="0.9.3.2" />-->
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <!--<PackageReference Include="System.ValueTuple" Version="4.5.0" />-->
+    <!--<PackageReference Include="ApacheThrift" Version="0.12.0.1" />-->
+  </ItemGroup>
+</Project>

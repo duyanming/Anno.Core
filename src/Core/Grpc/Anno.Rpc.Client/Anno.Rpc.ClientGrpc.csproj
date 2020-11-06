@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(StandardTfms);net461</TargetFrameworks>
+    <Version>$(Version)</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Iface\**" />
+    <EmbeddedResource Remove="Iface\**" />
+    <None Remove="Iface\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Rpc\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.13.0" />
+    <PackageReference Include="Grpc.Core" Version="2.33.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Polly" Version="7.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Anno.Const\Anno.Const.csproj" />
+    <ProjectReference Include="..\..\..\Anno.CronNET\Anno.CronNET.csproj" />
+    <Compile Include="..\..\Anno.Rpc.Client\Storage\*.cs" />
+    <Compile Remove="..\..\Anno.Rpc.Client\Storage\StorageEngine.cs" />
+    <Compile Remove="..\..\Anno.Rpc.Client\Storage\KvStorageEngine.cs" />
+  </ItemGroup>
+
+</Project>

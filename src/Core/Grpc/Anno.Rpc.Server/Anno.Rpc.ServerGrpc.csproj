@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(StandardTfms);net461</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>分布式开发框架 Server</Description>
+    <Authors>Du yanming</Authors>
+    <Company>Du yanming</Company>
+    <Product>Anno 框架 Rpc Thrift</Product>
+    <PackageProjectUrl>https://github.com/duyanming/Viper</PackageProjectUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Anno.EngineData\Anno.EngineData.csproj" />
+    <ProjectReference Include="..\Anno.Rpc.Client\Anno.Rpc.ClientGrpc.csproj" />
+  </ItemGroup>
+</Project>

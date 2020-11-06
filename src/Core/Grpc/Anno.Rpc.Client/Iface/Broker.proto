@@ -1,0 +1,43 @@
+syntax="proto3";
+
+import "empty.proto";
+
+package Anno.Rpc;
+
+message Micro {  
+    string ip = 1;
+    int32 port = 2;
+    int32 timeout = 3;
+    string name = 4;
+    string nickname = 5;
+    int32 weight = 6;
+ }
+ message GetMicroReply{
+    repeated Micro micros=1;
+}
+ message BrokerRequest{
+     map<string,string> input=1;
+ } 
+ message GetMicroRequest{
+    string request=1;
+ }
+ message BrokerReply{
+    string reply=1;
+ }
+ message PingReply{
+    bool reply=1;
+ }
+
+ message AddbrokerRequest{
+    map<string,string> input=1;
+}
+service BrokerService {  
+    rpc broker(BrokerRequest) returns (BrokerReply){}
+    rpc Ping(google.protobuf.Empty) returns (PingReply);
+}
+service BrokerCenter {  
+    rpc	 Add_broker(Micro) returns(BrokerReply){}
+    rpc  GetMicro(GetMicroRequest) returns (GetMicroReply){}
+    rpc  Invoke(BrokerRequest) returns (BrokerReply){}
+    rpc  Ping(google.protobuf.Empty) returns (PingReply);
+}

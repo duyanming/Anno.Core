@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(DeveloperBuildCoreTfms)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Anno.EventBus" Version="1.0.1.9" />
+    <PackageReference Include="Anno.RateLimit" Version="1.0.1.5" />
+    <PackageReference Include="AspectCore.Extensions.Reflection" Version="2.1.0" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
+    <PackageReference Include="Polly" Version="7.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Anno.CronNET\Anno.CronNET.csproj" />
+    <ProjectReference Include="..\..\src\Anno.EngineData\Anno.EngineData.csproj" />
+    <ProjectReference Include="..\..\src\Core\Anno.Rpc.Client\Anno.Rpc.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Anno.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

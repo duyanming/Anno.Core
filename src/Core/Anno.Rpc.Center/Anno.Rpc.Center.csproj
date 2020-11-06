@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(StandardTfms);net461</TargetFrameworks>
+    <Version>$(Version)</Version>
+    <Description>分布式开发框架 注册中心</Description>
+    <Authors>Du yanming</Authors>
+    <Company>Du yanming</Company>
+    <Product>Anno 框架 Rpc Thrift</Product>
+    <PackageProjectUrl>https://github.com/duyanming/AnnoDemo</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiteDB" Version="5.0.9" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Anno.Log\Anno.Log.csproj" />
+    <ProjectReference Include="..\Anno.Rpc.Client\Anno.Rpc.Client.csproj" />
+  </ItemGroup>
+</Project>

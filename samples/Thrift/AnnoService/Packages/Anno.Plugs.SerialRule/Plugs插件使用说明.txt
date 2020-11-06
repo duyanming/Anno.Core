@@ -1,0 +1,10 @@
+﻿Plugs插件使用说明
+
+1、Plugs插件使用说明
+	1.1 插件存放在宿主程序的根目录下的 Packages 文件夹下面。
+	1.2 插件例如【dym.Plugs.SerialRule】序列生成服务 必须以目录形成存在
+	1.3 插件目录结构如下
+		dym.Plugs.SerialRule
+			|
+			dym.Plugs.SerialRuleService.dll
+	1.4 宿主程序会加载插件【XXX】目录【dym.Plugs.XXX】下面的入口文件【dym.Plugs.XXXService.dll】

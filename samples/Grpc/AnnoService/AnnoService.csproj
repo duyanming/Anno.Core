@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RuntimeIdentifiers>win10-x64;</RuntimeIdentifiers>
+    <TargetFrameworks>$(DeveloperBuildCoreTfms);net461</TargetFrameworks>
+    <Authors>杜燕明</Authors>
+    <Company>杜燕明</Company>
+    <Version>1.0.0.1</Version>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="Packages\Plugs插件使用说明.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="start.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AnnoService.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Anno.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="stop.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Packages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Core\Grpc\Anno.Rpc.Server\Anno.Rpc.ServerGrpc.csproj" />
+    <ProjectReference Include="..\..\Packages\Anno.Plugs.DLockService\Anno.Plugs.DLockService.csproj" />
+    <ProjectReference Include="..\..\Packages\Anno.Plugs.HelloWorldService\Anno.Plugs.HelloWorldService.csproj" />
+    <ProjectReference Include="..\..\Packages\Anno.Plugs.SoEasyService\Anno.Plugs.SoEasyService.csproj" />
+    <ProjectReference Include="..\..\Packages\Anno.Plugs.TraceService\Anno.Plugs.TraceService.csproj" />
+  </ItemGroup>
+</Project>

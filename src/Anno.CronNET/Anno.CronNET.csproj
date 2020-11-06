@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(StandardTfms);net461</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>$(Version)</Version>
+    <Description>分布式开发框架 定时任务管理器</Description>
+    <Authors>Du yanming</Authors>
+    <Company>Du yanming</Company>
+    <Product>Anno 定时任务</Product>
+    <PackageProjectUrl>https://github.com/duyanming/Viper</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>
