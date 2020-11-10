@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <DeveloperBuildCoreTfms>netcoreapp3.1</DeveloperBuildCoreTfms>
+    <DeveloperBuildCoreTfms>net5</DeveloperBuildCoreTfms>
     <StandardTfms>netstandard2.0</StandardTfms>
     <Version>1.0.2.6</Version>
     <PackageIconUrl>http://140.143.207.244/img/logo.jpg</PackageIconUrl>

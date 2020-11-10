@@ -1,3 +1,3 @@
 cd %cd%
-cd ./ConsoleTest/bin/Debug/netcoreapp3.1
+cd ./ConsoleTest/bin/Debug/net5
 dotnet ConsoleTest.dll
