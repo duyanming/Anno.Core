@@ -12,36 +12,36 @@
 
 ## Nuget 基础
 
-Package name                              | Version                     | Downloads
-------------------------------------------|-----------------------------|-------------
-`Anno.Const` | [![NuGet](https://img.shields.io/nuget/v/Anno.Const.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Const/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Const.svg)
-`Anno.Log` | [![NuGet](https://img.shields.io/nuget/v/Anno.Log.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Log/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Log.svg)
-`Anno.Loader` | [![NuGet](https://img.shields.io/nuget/v/Anno.Loader.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Loader/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Loader.svg)
-`Anno.CronNET` | [![NuGet](https://img.shields.io/nuget/v/Anno.CronNET.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.CronNET/) | ![downloads](https://img.shields.io/nuget/dt/Anno.CronNET.svg)
-`Anno.EngineData` | [![NuGet](https://img.shields.io/nuget/v/Anno.EngineData.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EngineData/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.svg)
+Package name                             |Description | Version                     | Downloads
+------------------------------------------|-----------------------------|-------------|-------------
+`Anno.Const`|配置库 | [![NuGet](https://img.shields.io/nuget/v/Anno.Const.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Const/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Const.svg)
+`Anno.Log`|日志库 | [![NuGet](https://img.shields.io/nuget/v/Anno.Log.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Log/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Log.svg)
+`Anno.Loader`|依赖注入库 | [![NuGet](https://img.shields.io/nuget/v/Anno.Loader.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Loader/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Loader.svg)
+`Anno.CronNET`|任务调度库 | [![NuGet](https://img.shields.io/nuget/v/Anno.CronNET.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.CronNET/) | ![downloads](https://img.shields.io/nuget/dt/Anno.CronNET.svg)
+`Anno.EngineData`|数据处理库 | [![NuGet](https://img.shields.io/nuget/v/Anno.EngineData.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EngineData/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.svg)
 
 ## Nuget 通信
 
-Package name                              | Version                     | Downloads
-------------------------------------------|-----------------------------|-------------
-`Anno.Rpc.Center` | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.Center.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.Center/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.Center.svg)
-`Anno.Rpc.Client` | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.Client.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.Client/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.Client.svg)
-`Anno.Rpc.Server` | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.Server.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.Server/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.Server.svg)
-`Anno.Rpc.CenterGrpc` | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.CenterGrpc.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.CenterGrpc/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.CenterGrpc.svg)
-`Anno.Rpc.ClientGrpc` | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.ClientGrpc.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.ClientGrpc/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.ClientGrpc.svg)
-`Anno.Rpc.ServerGrpc` | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.ServerGrpc.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.ServerGrpc/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.ServerGrpc.svg)
+Package name                       |Description       | Version                     | Downloads
+------------------------------------------|-----------------------------|-------------|-------------
+`Anno.Rpc.Center`|Thrift注册中心库  | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.Center.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.Center/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.Center.svg)
+`Anno.Rpc.Client` |Thrift客户端库| [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.Client.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.Client/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.Client.svg)
+`Anno.Rpc.Server`|Thrift Server服务库 | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.Server.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.Server/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.Server.svg)
+`Anno.Rpc.CenterGrpc`|Grpc注册中心库 | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.CenterGrpc.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.CenterGrpc/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.CenterGrpc.svg)
+`Anno.Rpc.ClientGrpc`|Grpc客户端库 | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.ClientGrpc.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.ClientGrpc/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.ClientGrpc.svg)
+`Anno.Rpc.ServerGrpc`|GrpcServer服务库 | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.ServerGrpc.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.ServerGrpc/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.ServerGrpc.svg)
 
 ## Nuget 扩展
 
-Package name                              | Version                     | Downloads
+Package name                           |Description     | Version                     | Downloads
 ------------------------------------------|-----------------------------|-------------
-`Anno.EventBus` | [![NuGet](https://img.shields.io/nuget/v/Anno.EventBus.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EventBus/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EventBus.svg)
-`Anno.RateLimit` | [![NuGet](https://img.shields.io/nuget/v/Anno.RateLimit.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.RateLimit/) | ![downloads](https://img.shields.io/nuget/dt/Anno.RateLimit.svg)
-`Anno.EngineData.RateLimit` | [![NuGet](https://img.shields.io/nuget/v/Anno.EngineData.RateLimit.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EngineData.RateLimit/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.RateLimit.svg)
-`Anno.LRUCache` | [![NuGet](https://img.shields.io/nuget/v/Anno.LRUCache.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.LRUCache/) | ![downloads](https://img.shields.io/nuget/dt/Anno.LRUCache.svg)
-`Anno.EngineData.Cache` | [![NuGet](https://img.shields.io/nuget/v/Anno.EngineData.Cache.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EngineData.Cache/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.Cache.svg)
-`Anno.Plugs.MonitorService` | [![NuGet](https://img.shields.io/nuget/v/Anno.Plugs.MonitorService.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Plugs.MonitorService/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Plugs.MonitorService.svg)
-`Anno.Rpc.ExtClient` | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.ExtClient.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.ExtClient/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.ExtClient.svg)
+`Anno.EventBus`|Description | [![NuGet](https://img.shields.io/nuget/v/Anno.EventBus.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EventBus/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EventBus.svg)
+`Anno.RateLimit`|Description | [![NuGet](https://img.shields.io/nuget/v/Anno.RateLimit.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.RateLimit/) | ![downloads](https://img.shields.io/nuget/dt/Anno.RateLimit.svg)
+`Anno.EngineData.RateLimit` |Description| [![NuGet](https://img.shields.io/nuget/v/Anno.EngineData.RateLimit.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EngineData.RateLimit/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.RateLimit.svg)
+`Anno.LRUCache`|Description | [![NuGet](https://img.shields.io/nuget/v/Anno.LRUCache.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.LRUCache/) | ![downloads](https://img.shields.io/nuget/dt/Anno.LRUCache.svg)
+`Anno.EngineData.Cache`|Description | [![NuGet](https://img.shields.io/nuget/v/Anno.EngineData.Cache.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EngineData.Cache/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.Cache.svg)
+`Anno.Plugs.MonitorService`|Description | [![NuGet](https://img.shields.io/nuget/v/Anno.Plugs.MonitorService.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Plugs.MonitorService/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Plugs.MonitorService.svg)
+`Anno.Rpc.ExtClient`|Description | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.ExtClient.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.ExtClient/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.ExtClient.svg)
 
 ## 整体架构
 
