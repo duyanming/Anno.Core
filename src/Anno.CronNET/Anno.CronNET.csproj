@@ -8,7 +8,8 @@
     <Authors>Du yanming</Authors>
     <Company>Du yanming</Company>
     <Product>Anno 定时任务</Product>
-    <PackageProjectUrl>https://github.com/duyanming/Viper</PackageProjectUrl>
   </PropertyGroup>
-
+  <ItemGroup>
+    <Content Include="..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
+  </ItemGroup>
 </Project>

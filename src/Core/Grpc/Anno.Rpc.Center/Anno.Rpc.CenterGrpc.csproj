@@ -7,7 +7,6 @@
     <Authors>Du yanming</Authors>
     <Company>Du yanming</Company>
     <Product>Anno 框架 Rpc Thrift</Product>
-    <PackageProjectUrl>https://github.com/duyanming/AnnoDemo</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -17,5 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Anno.Rpc.Client\Anno.Rpc.ClientGrpc.csproj" />
     <Compile Include="..\..\Anno.Rpc.Center\Storage\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
   </ItemGroup>
 </Project>

@@ -41,6 +41,7 @@ Package name                           |Description     | Version               
 `Anno.LRUCache`|缓存库 | [![NuGet](https://img.shields.io/nuget/v/Anno.LRUCache.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.LRUCache/) | ![downloads](https://img.shields.io/nuget/dt/Anno.LRUCache.svg)
 `Anno.EngineData.Cache`|Anno服务缓存中间件 | [![NuGet](https://img.shields.io/nuget/v/Anno.EngineData.Cache.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EngineData.Cache/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.Cache.svg)
 `Anno.Plugs.MonitorService`|Anno服务监控中间件 | [![NuGet](https://img.shields.io/nuget/v/Anno.Plugs.MonitorService.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Plugs.MonitorService/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Plugs.MonitorService.svg)
+`Anno.Rpc.Client.DynamicProxy`|接口代理Anno客户端扩展 | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.Client.DynamicProxy.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.Client.DynamicProxy/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.Client.DynamicProxy.svg)
 `Anno.Rpc.ExtClient`|接口代理Anno客户端扩展 | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.ExtClient.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.ExtClient/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.ExtClient.svg)
 
 ## 整体架构

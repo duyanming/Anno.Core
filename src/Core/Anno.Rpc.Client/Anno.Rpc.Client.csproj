@@ -7,8 +7,7 @@
     <Description>分布式开发框架 RPC</Description>
     <Authors>Du yanming</Authors>
     <Company>Du yanming</Company>
-    <Product>Anno 框架 Rpc Thrift</Product>
-    <PackageProjectUrl>https://github.com/duyanming/AnnoDemo</PackageProjectUrl>
+    <Product>Anno 框架 Rpc Thrift</Product>   
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,5 +32,8 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <!--<PackageReference Include="System.ValueTuple" Version="4.5.0" />-->
     <!--<PackageReference Include="ApacheThrift" Version="0.12.0.1" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
   </ItemGroup>
 </Project>

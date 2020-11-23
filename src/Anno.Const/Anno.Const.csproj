@@ -10,6 +10,8 @@
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <Version>$(Version)</Version>
-    <PackageProjectUrl>https://github.com/duyanming/Viper</PackageProjectUrl>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
+  </ItemGroup>
 </Project>

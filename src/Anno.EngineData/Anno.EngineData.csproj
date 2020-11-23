@@ -7,7 +7,6 @@
     <Company>Du yanming</Company>
     <Product>Anno 数据处理引擎</Product>
     <Description>分布式开发框架 数据处理器</Description>
-    <PackageProjectUrl>https://github.com/duyanming/Viper</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
     <!--<ProjectReference Include="..\..\DCS\Grpc\Anno.Rpc.ClientGrpc\Anno.Rpc.ClientGrpc.csproj" />-->
     <!--<ProjectReference Include="..\..\DCS\Anno.Rpc.Client\Anno.Rpc.Client.csproj" />-->
     <ProjectReference Include="..\Anno.CronNET\Anno.CronNET.csproj" />

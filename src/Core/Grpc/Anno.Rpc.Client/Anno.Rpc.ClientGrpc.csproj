@@ -29,5 +29,7 @@
     <Compile Remove="..\..\Anno.Rpc.Client\Storage\StorageEngine.cs" />
     <Compile Remove="..\..\Anno.Rpc.Client\Storage\KvStorageEngine.cs" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Content Include="..\..\..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
+  </ItemGroup>
 </Project>
