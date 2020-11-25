@@ -41,27 +41,27 @@ namespace Anno.EngineData
              */
             if (response.Equals(Input))
             {
-                var responseReplica=new Dictionary<string,string>();
+                var responseReplica = new Dictionary<string, string>();
                 foreach (var dic in response)
                 {
-                    responseReplica.Add(dic.Key,dic.Value);
+                    responseReplica.Add(dic.Key, dic.Value);
                 }
                 return InvokeEngine.InvokeProcessor(channel, router, method, responseReplica);
             }
 
-            if (!response.ContainsKey("TraceId"))
+            if (!response.ContainsKey("TraceId") && Input.ContainsKey("TraceId"))
             {
-                response.Add("TraceId",RequestString("TraceId"));
+                response.Add("TraceId", RequestString("TraceId"));
             }
-            if (!response.ContainsKey("PreTraceId"))
+            if (!response.ContainsKey("PreTraceId") && Input.ContainsKey("PreTraceId"))
             {
                 response.Add("PreTraceId", RequestString("PreTraceId"));
             }
-            if (!response.ContainsKey("TTL"))
+            if (!response.ContainsKey("TTL") && Input.ContainsKey("TTL"))
             {
                 response.Add("TTL", RequestString("TTL"));
             }
-            if (!response.ContainsKey("GlobalTraceId"))
+            if (!response.ContainsKey("GlobalTraceId") && Input.ContainsKey("GlobalTraceId"))
             {
                 response.Add("GlobalTraceId", RequestString("GlobalTraceId"));
             }
@@ -82,19 +82,19 @@ namespace Anno.EngineData
                 return InvokeEngine.InvokeProcessorAsync(channel, router, method, responseReplica);
             }
 
-            if (!response.ContainsKey("TraceId"))
+            if (!response.ContainsKey("TraceId") && Input.ContainsKey("TraceId"))
             {
                 response.Add("TraceId", RequestString("TraceId"));
             }
-            if (!response.ContainsKey("PreTraceId"))
+            if (!response.ContainsKey("PreTraceId") && Input.ContainsKey("PreTraceId"))
             {
                 response.Add("PreTraceId", RequestString("PreTraceId"));
             }
-            if (!response.ContainsKey("TTL"))
+            if (!response.ContainsKey("TTL") && Input.ContainsKey("TTL"))
             {
                 response.Add("TTL", RequestString("TTL"));
             }
-            if (!response.ContainsKey("GlobalTraceId"))
+            if (!response.ContainsKey("GlobalTraceId") && Input.ContainsKey("GlobalTraceId"))
             {
                 response.Add("GlobalTraceId", RequestString("GlobalTraceId"));
             }

@@ -18,6 +18,7 @@
 /*/*/obj
 /.vs/Anno/lut
 /DCS/AppService/Packages/
+/.vs
 /.vs/Anno/DesignTimeBuild/.dtbcache
 /.vs/Anno/v16/.suo
 /.vs/Anno/v16/Server/sqlite3/storage.ide-shm
