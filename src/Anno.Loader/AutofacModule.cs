@@ -36,20 +36,34 @@ namespace Anno.Loader
             assembly.GetTypes().Where(x => x.GetTypeInfo().IsClass && !x.GetTypeInfo().IsAbstract && !x.GetTypeInfo().IsInterface).ToList().ForEach(
                    t =>
                    {
-                       if (CheckIfAnonymousType(t))
-                       {
-                           return;
-                       }
+                       //if (CheckIfAnonymousType(t))
+                       //{
+                       //    return;
+                       //}
                        var interfaces = t.GetInterfaces();
                        if (IsAssignableFrom(t, "Anno.EngineData.BaseModule")
                        || interfaces.ToList().Exists(i => i.Name == "IFilterMetadata")
                        || interfaces.Length <= 0)
                        {
-                           builder.RegisterType(t);
+                           if (t.IsGenericType)
+                           {
+                               builder.RegisterGeneric(t);
+                           }
+                           else
+                           {
+                               builder.RegisterType(t);
+                           }
                        }
                        else if (!interfaces.ToList().Exists(i => i.Name == "IEntity"))
                        {
-                           builder.RegisterType(t).As(t.GetInterfaces());
+                           if (t.IsGenericType)
+                           {
+                               builder.RegisterGeneric(t).As(t.GetInterfaces());
+                           }
+                           else
+                           {
+                               builder.RegisterType(t).As(t.GetInterfaces());
+                           }
                        }
                    });
         }
@@ -74,7 +88,10 @@ namespace Anno.Loader
         {
             if (type == null)
                 throw new ArgumentNullException("type");
-
+            if (type.Name.StartsWith("<>c__"))
+            {
+                return true;
+            }
             return Attribute.IsDefined(type, typeof(CompilerGeneratedAttribute), false)
                 && type.IsGenericType && type.Name.Contains("AnonymousType")
                 && (type.Name.StartsWith("<>"))
