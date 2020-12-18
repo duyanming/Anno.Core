@@ -45,9 +45,7 @@ Package name                           |Description     | Version               
 `Anno.Rpc.ExtClient`|接口代理Anno客户端扩展 | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.ExtClient.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.ExtClient/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.ExtClient.svg)
 
 ## 整体架构
-
-[![rYPDOS.png](https://s3.ax1x.com/2020/12/18/rYPDOS.png)](https://imgchr.com/i/rYPDOS)
-
+![整体架构](https://s3.ax1x.com/2020/12/18/rYPDOS.png)
 整体架构主要分为三个部分
 
 　　1、注册中心：AnnoCenter 
