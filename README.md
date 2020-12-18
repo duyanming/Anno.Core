@@ -46,6 +46,8 @@ Package name                           |Description     | Version               
 
 ## 整体架构
 
+[![rYPDOS.png](https://s3.ax1x.com/2020/12/18/rYPDOS.png)](https://imgchr.com/i/rYPDOS)
+
 整体架构主要分为三个部分
 
 　　1、注册中心：AnnoCenter 
