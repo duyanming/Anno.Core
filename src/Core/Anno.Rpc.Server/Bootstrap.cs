@@ -7,7 +7,7 @@ namespace Anno.Rpc.Server
 {
     public static class Bootstrap
     {
-        private static Loader.IocType IocType = Loader.IocType.Autofac;
+       
         /// <summary>
         /// 启动 server
         /// </summary>
@@ -16,7 +16,7 @@ namespace Anno.Rpc.Server
         /// <param name="iocType">依赖注入类型</param>
         public static void StartUp(string[] args,Action diAction, Action startUpCallBack=null, Loader.IocType iocType = Loader.IocType.Autofac)
         {
-            IocType = iocType;
+            Loader.IocLoader.RegisterIoc(iocType);
                var reStar = false;
         reStart:
             try
