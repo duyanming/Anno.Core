@@ -11,7 +11,9 @@ namespace Anno.Rpc.Center
         /// Daemon工作状态的主方法
         /// </summary>
         /// <param name="args"></param>
-        public static void StartUp(string[] args)
+        /// <param name="Notice">通知</param>
+        /// <param name="ChangeNotice">变更通知</param>
+        public static void StartUp(string[] args, Action<ServiceInfo, NoticeType> Notice = null, Action<ServiceInfo, ServiceInfo> ChangeNotice = null)
         {
             AppDomain.CurrentDomain.ProcessExit += (s, e) =>
             {
@@ -26,6 +28,33 @@ namespace Anno.Rpc.Center
             };
             Monitor.Start();
             var tc = ThriftConfig.CreateInstance();
+            #region 服务上线 下线 变更通知
+
+            tc.ChangeNotice += (ServiceInfo newService, ServiceInfo oldService) =>
+            {
+                try
+                {
+                    ChangeNotice?.Invoke(newService, oldService);
+                }
+                finally { }
+            };
+            tc.OnlineNotice += (ServiceInfo service, NoticeType noticeType) =>
+            {
+                try
+                {
+                    Notice?.Invoke(service, noticeType);
+                }
+                finally { }
+            };
+            Distribute.CheckNotice += (ServiceInfo service, NoticeType noticeType) =>
+            {
+                try
+                {
+                    Notice?.Invoke(service, noticeType);
+                }
+                finally { }
+            };
+            #endregion
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}:服务注册、发现、健康检查、负载均衡中心，端口：{tc.Port}（AnnoCenter）已启动！");
             Console.ResetColor();

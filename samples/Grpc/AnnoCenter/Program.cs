@@ -11,7 +11,12 @@ namespace AnnoCenter
         static void Main(string[] args)
         {
             Console.Title = "AnnoCenter";
-            Bootstrap.StartUp(args);
+            Bootstrap.StartUp(args, (service, noticeType) => {
+                Console.WriteLine(noticeType.ToString() + ":" + Newtonsoft.Json.JsonConvert.SerializeObject(service));
+            }, (newService, oldService) => {
+                Console.WriteLine("NewConfig:" + Newtonsoft.Json.JsonConvert.SerializeObject(newService));
+                Console.WriteLine("OldConfig:" + Newtonsoft.Json.JsonConvert.SerializeObject(oldService));
+            });
         } 
 
     }

@@ -14,6 +14,14 @@ namespace Anno.Rpc.Center
     {
         private static ThriftConfig _instance = null;
         /// <summary>
+        /// 服务上线通知事件
+        /// </summary>
+        public event ServiceNotice OnlineNotice = null;
+        /// <summary>
+        /// 服务更改通知事件
+        /// </summary>
+        public event ServiceChangeNotice ChangeNotice = null;
+        /// <summary>
         /// AnnoCenter 默认配置文件名称
         /// </summary>
         public static string AnnoFile { get; set; } = "Anno.config";
@@ -142,6 +150,17 @@ namespace Anno.Rpc.Center
                     };
                     int weight = input["weight"] == null ? 1 : (int) Convert.ToDecimal(input["weight"]);
                     ips.Weight = weight;
+                    #region 上线和变更通知
+                    var oldService = ServiceInfoList.FirstOrDefault(t => ips.Ip == t.Ip && ips.Port == t.Port);
+                    if(OnlineNotice != null && oldService==null)
+                    {
+                        OnlineNotice.Invoke(ips,NoticeType.OnLine);
+                    }
+                    else if (ChangeNotice != null && oldService != null)
+                    {
+                        ChangeNotice.Invoke(ips,oldService);
+                    } 
+                    #endregion
                     ServiceInfoList.RemoveAll(t => ips.Ip == t.Ip && ips.Port == t.Port);
                     for (int w = 0; w < weight; w++) //权重
                     {

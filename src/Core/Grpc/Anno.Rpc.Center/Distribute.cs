@@ -13,6 +13,10 @@ namespace Anno.Rpc.Center
 {
     public static class Distribute
     {
+        /// <summary>
+        /// 服务检查通知事件
+        /// </summary>
+        public static event ServiceNotice CheckNotice = null;
         static readonly ThriftConfig Tc = ThriftConfig.CreateInstance();
         static readonly object LockHelper = new object();
         /// <summary>
@@ -90,6 +94,10 @@ namespace Anno.Rpc.Center
                         Console.ResetColor();
                         Console.WriteLine($"----------------------------------------------------------------- ");
                     }
+                    if (hc <= (60 - errorCount))
+                    {
+                        CheckNotice?.Invoke(service, NoticeType.RecoverHealth);
+                    }
                     lock (LockHelper) //防止高并发下 影响权重
                     {
                         if (!Tc.ServiceInfoList.Exists(s => s.Ip == service.Ip && s.Port == service.Port))
@@ -148,12 +156,14 @@ namespace Anno.Rpc.Center
                     Console.WriteLine($"永久移除！");
                     Console.ResetColor();
                     Console.WriteLine($"----------------------------------------------------------------- ");
+                    CheckNotice?.Invoke(service, NoticeType.OffLine);
                 }
 
                 if (hc == (60 - errorCount)) //三次失败之后 临时移除 ，防止更多请求转发给此服务节点 
                 {
                     //临时移除 并不从配置文件移除
                     Tc.ServiceInfoList.RemoveAll(i => i.Ip == service.Ip && i.Port == service.Port);
+                    CheckNotice?.Invoke(service, NoticeType.NotHealth);
                 }
                 else if (hc == 0) //硬删除
                 {
