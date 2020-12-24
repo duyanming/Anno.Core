@@ -12,6 +12,7 @@ namespace Anno.Plugs.HelloWorldService
 {
     using Anno.Const.Attribute;
     using Anno.EngineData;
+    using Anno.Plugs.HelloWorldService.Filters;
     using HelloWorldDto;
     using System.ComponentModel.DataAnnotations;
 
@@ -42,6 +43,17 @@ namespace Anno.Plugs.HelloWorldService
             var product = Newtonsoft.Json.JsonConvert.DeserializeObject<ActionResult<ProductDto>>(this.InvokeProcessor("Anno.Plugs.SoEasy", "AnnoSoEasy", "BuyProduct", input)).OutputData;
             product.CountryOfOrigin = $"中国北京中转--{ product.CountryOfOrigin}";
             return product;
+        }
+        
+        [AnnoInfo(Desc = "带有授权的接口仅限用户yrm访问密码123456")]
+        [Authorization]
+        public dynamic SayHi([AnnoInfo(Desc = "称呼")] string name, [AnnoInfo(Desc = "年龄")] int age)
+        {
+            Dictionary<string, string> input = new Dictionary<string, string>();
+            input.Add("vname", name);
+            input.Add("vage", age.ToString());
+            var soEasyMsg = Newtonsoft.Json.JsonConvert.DeserializeObject<ActionResult<string>>(this.InvokeProcessor("Anno.Plugs.SoEasy", "AnnoSoEasy", "SayHi", input)).OutputData;
+            return new { HelloWorldViperMsg = $"{name}你好啊，今年{age}岁了", SoEasyMsg = soEasyMsg };
         }
         #region 测试接口
         [AnnoInfo(Desc = "测试接口（模拟等待，返回等待毫秒数）")]
