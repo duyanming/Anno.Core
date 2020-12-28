@@ -8,6 +8,11 @@ namespace ConsoleTest
 {
     using Anno.Const;
     using Anno.EngineData;
+    using Anno.Loader;
+    using Anno.Rpc.Client;
+    using Anno.Rpc.Server;
+    using Autofac;
+
     public class DLockTest
     {
         public void Handle()
@@ -21,11 +26,11 @@ namespace ConsoleTest
             {
                 var task = Task.Factory.StartNew(() => { DLTest1("Anno"); });
                 ts.Add(task);
-                var taskXX = Task.Factory.StartNew(() => { DLTest1("Viper"); });
-                ts.Add(taskXX);
+                //var taskXX = Task.Factory.StartNew(() => { DLTest1("Viper"); });
+                //ts.Add(taskXX);
 
-                var taskJJ = Task.Factory.StartNew(() => { DLTest1("Key001"); });
-                ts.Add(taskJJ);
+                //var taskJJ = Task.Factory.StartNew(() => { DLTest1("Key001"); });
+                //ts.Add(taskJJ);
             }
 
             Task.WaitAll(ts.ToArray());
@@ -52,9 +57,14 @@ namespace ConsoleTest
         }
         void Init()
         {
-            SettingService.AppName = "DLockTest";
-            SettingService.Local.IpAddress = "192.168.1.2";
-            SettingService.Local.Port = 6660;
+            //SettingService.AppName = "DLockTest";
+            //SettingService.Local.IpAddress = "127.0.0.1";
+            //SettingService.Local.Port = 6660;
+
+            IocLoader.GetAutoFacContainerBuilder().RegisterType(typeof(RpcConnectorImpl)).As(typeof(IRpcConnector)).SingleInstance();
+            IocLoader.Build();
+            DefaultConfigManager.SetDefaultConnectionPool(100, Environment.ProcessorCount * 2, 50);
+            DefaultConfigManager.SetDefaultConfiguration("DLockTest", "127.0.0.1", 6660, false);
         }
     }
 }

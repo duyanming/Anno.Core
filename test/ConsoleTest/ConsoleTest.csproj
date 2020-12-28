@@ -16,7 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Anno.CronNET\Anno.CronNET.csproj" />
     <ProjectReference Include="..\..\src\Anno.EngineData\Anno.EngineData.csproj" />
-    <ProjectReference Include="..\..\src\Core\Anno.Rpc.Client\Anno.Rpc.Client.csproj" />
+    <ProjectReference Include="..\..\src\Core\Anno.Rpc.Server\Anno.Rpc.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>
