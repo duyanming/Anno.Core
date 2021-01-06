@@ -29,7 +29,7 @@ namespace Anno.Rpc.Center
             List<ServiceInfo> service = new List<ServiceInfo>();
             if (channel.StartsWith("md5:"))
             {
-                long waitTime = 29000;
+                long waitTime = 19000;
                 var md5 = channel.Substring(4);
                 while (md5.Equals(Tc.ServiceMd5) && waitTime > 0)
                 {
@@ -91,11 +91,7 @@ namespace Anno.Rpc.Center
                         Console.WriteLine($"恢复正常！");
                         Console.ResetColor();
                         Console.WriteLine($"----------------------------------------------------------------- ");
-                    }
-                    if (hc <= (60 - errorCount))
-                    {
-                        CheckNotice?.Invoke(service, NoticeType.RecoverHealth);
-                    }
+                    }                   
                     lock (LockHelper) //防止高并发下 影响权重
                     {
                         if (!Tc.ServiceInfoList.Exists(s => s.Ip == service.Ip && s.Port == service.Port))
@@ -106,6 +102,10 @@ namespace Anno.Rpc.Center
                                 Tc.ServiceInfoList.Add(service);
                             }
                         }
+                    }
+                    if (hc <= (60 - errorCount))
+                    {
+                        CheckNotice?.Invoke(service, NoticeType.RecoverHealth);
                     }
                 }
 
@@ -153,8 +153,7 @@ namespace Anno.Rpc.Center
                     Console.WriteLine($"{"w:" + service.Weight}");
                     Console.WriteLine($"永久移除！");
                     Console.ResetColor();
-                    Console.WriteLine($"----------------------------------------------------------------- ");
-                    CheckNotice?.Invoke(service, NoticeType.OffLine);
+                    Console.WriteLine($"----------------------------------------------------------------- ");                  
                 }
 
                 if (hc == (60 - errorCount)) //三次失败之后 临时移除 ，防止更多请求转发给此服务节点 
@@ -171,6 +170,7 @@ namespace Anno.Rpc.Center
                         {"port", service.Port.ToString()}
                     };
                     Tc.Remove(rp);
+                    CheckNotice?.Invoke(service, NoticeType.OffLine);
                     return;
                 }
 

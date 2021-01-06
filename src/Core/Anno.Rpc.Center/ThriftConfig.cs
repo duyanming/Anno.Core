@@ -61,6 +61,10 @@ namespace Anno.Rpc.Center
                 stringBuilder.Append(service.Weight);
             }
             ServiceMd5 = stringBuilder.ToString().HashCode();
+            if (JudgeIsDebug.IsDebug)
+            {
+                Log.Log.ConsoleWriteLine($"ServiceMd5:{ServiceMd5}");
+            }
         }
 
         /// <summary>
@@ -136,6 +140,7 @@ namespace Anno.Rpc.Center
                 xmlDoc.LoadXml(xmlText.ToString());
                 xmlDoc.Save(xmlPath); //保存 
             }
+            this.RefreshServiceMd5();
         }
 
         /// <summary>
@@ -176,17 +181,10 @@ namespace Anno.Rpc.Center
                     };
                     int weight = input["weight"] == null ? 1 : (int)Convert.ToDecimal(input["weight"]);
                     ips.Weight = weight;
-                    #region 上线和变更通知
+                    #region 原有服务
                     var oldService = ServiceInfoList.FirstOrDefault(t => ips.Ip == t.Ip && ips.Port == t.Port);
-                    if (OnlineNotice != null && oldService == null)
-                    {
-                        OnlineNotice.Invoke(ips, NoticeType.OnLine);
-                    }
-                    else if (ChangeNotice != null && oldService != null)
-                    {
-                        ChangeNotice.Invoke(ips, oldService);
-                    }
                     #endregion
+
                     ServiceInfoList.RemoveAll(t => ips.Ip == t.Ip && ips.Port == t.Port);
                     for (int w = 0; w < weight; w++) //权重
                     {
@@ -204,6 +202,16 @@ namespace Anno.Rpc.Center
                     Console.WriteLine($"{ips.NickName}已登记！");
                     Console.ResetColor();
                     Console.WriteLine($"----------------------------------------------------------------- ");
+                    #region 上线和变更通知                   
+                    if (OnlineNotice != null && oldService == null)
+                    {
+                        OnlineNotice.Invoke(ips, NoticeType.OnLine);
+                    }
+                    else if (ChangeNotice != null && oldService != null)
+                    {
+                        ChangeNotice.Invoke(ips, oldService);
+                    }
+                    #endregion
                 }
                 catch (Exception ex)
                 {
