@@ -26,6 +26,7 @@ namespace Anno.Rpc.Center
         /// <returns></returns>
         public static List<Micro> GetMicro(string channel)
         {
+            List<ServiceInfo> service = new List<ServiceInfo>();
             if (channel.StartsWith("md5:"))
             {
                 if (JudgeIsDebug.IsDebug)
@@ -34,7 +35,7 @@ namespace Anno.Rpc.Center
                 }
                 long waitTime = 29000;
                 var md5 = channel.Substring(4);
-                while (md5.Equals(Tc.ServiceMd5)&& waitTime>0)
+                while (md5.Equals(Tc.ServiceMd5) && waitTime > 0)
                 {
                     waitTime = waitTime - 10;
                     Thread.Sleep(10);
@@ -43,9 +44,13 @@ namespace Anno.Rpc.Center
                 {
                     Log.Log.ConsoleWriteLine($"channel:{channel},long connection end.");
                 }
+                service = Tc.ServiceInfoList;
+            }
+            else
+            {
+                service = Tc.ServiceInfoList.FindAll(i => i.Name.Contains(channel));
             }
             List<Micro> msList = new List<Micro>();
-            List<ServiceInfo> service = Tc.ServiceInfoList.FindAll(i => i.Name.Contains(channel));
             service.ForEach(s =>
             {
                 Micro micro = new Micro

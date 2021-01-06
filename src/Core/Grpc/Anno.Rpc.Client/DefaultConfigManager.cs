@@ -48,7 +48,7 @@ namespace Anno.Rpc.Client
                         {
                             CronDaemon.AddJob("*/10 * * * * ? *", TracePool.TryDequeue);
                         }
-                        CronDaemon.AddJob("*/5 * * * * ? *", () => { Connector.UpdateCache(string.Empty); });
+                        CronDaemon.AddJob("*/5 * * * * ? *", () => { Connector.UpdateCache("cron:"); });
                         CronDaemon.Start();
                     }
             }

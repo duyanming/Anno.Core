@@ -269,7 +269,7 @@ namespace Anno.Rpc.Client
             #region 到DNS中心取服务信息
             try
             {
-                if (string.IsNullOrWhiteSpace(channel))
+                if (channel.Equals("cron:"))
                 {
                     RefreshServiceMd5();
                     channel = ServiceMd5;
