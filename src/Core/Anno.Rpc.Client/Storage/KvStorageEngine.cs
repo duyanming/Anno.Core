@@ -32,7 +32,7 @@ namespace Anno.Rpc.Storage
         private AnnoKV GetAnnoKV(string key)
         {
             Dictionary<string, string> input = new Dictionary<string, string>();
-            input["KV"] = "KV";
+            input[StorageCommand.COMMAND] = StorageCommand.KVCOMMAND;
             input[KVCONST.Opt] = KVCONST.FindById;
             input[KVCONST.Id] = key;
             var rltStr = client.Invoke(input);
@@ -55,7 +55,7 @@ namespace Anno.Rpc.Storage
         public bool Set(string key, string value)
         {
             Dictionary<string, string> input = new Dictionary<string, string>();
-            input["KV"] = "KV";
+            input[StorageCommand.COMMAND] = StorageCommand.KVCOMMAND;
             input[KVCONST.Opt] = KVCONST.Upsert;
             input[KVCONST.Data] = Newtonsoft.Json.JsonConvert.SerializeObject(new AnnoKV(key, value));
             var rltStr = client.Invoke(input);

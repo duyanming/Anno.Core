@@ -8,14 +8,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Anno.Rpc.Storage
+namespace Anno.Rpc.Adapter
 {
     using LiteDB;
-    public class KvStorage
+    using Rpc.Storage;
+    /// <summary>
+    /// KV键值存储
+    /// </summary>
+    internal class KvStorageAdapter : BaseAdapter
     {
         private static LiteDatabase db;
         private static ILiteCollection<AnnoKV> col;
-        public KvStorage()
+        /// <summary>
+        /// KV键值存储
+        /// </summary>
+        public KvStorageAdapter()
         {
             if (db == null)
             {
@@ -26,7 +33,7 @@ namespace Anno.Rpc.Storage
             }
         }
 
-        internal string Invoke(Dictionary<string, string> input)
+        internal override string Invoke(Dictionary<string, string> input)
         {
             AnnoDataResult result = new AnnoDataResult();
             result.Status = false;

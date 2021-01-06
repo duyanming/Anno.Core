@@ -1,15 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using LiteDB;
 
-namespace Anno.Rpc.Storage
+namespace Anno.Rpc.Adapter
 {
-    public class AnnoStorage
+    using LiteDB;
+    using Rpc.Storage;
+    /// <summary>
+    /// 接口文档存储
+    /// </summary>
+    internal class ApiDocStorageAdapter : BaseAdapter
     {
         private static LiteDatabase db;
         private static ILiteCollection<AnnoData> col;
-        public AnnoStorage()
+        /// <summary>
+        /// 接口文档存储
+        /// </summary>
+        public ApiDocStorageAdapter()
         {
             if (db == null)
             {
@@ -20,7 +27,7 @@ namespace Anno.Rpc.Storage
             }
         }
 
-        internal string Invoke(Dictionary<string, string> input)
+        internal override string Invoke(Dictionary<string, string> input)
         {
             AnnoDataResult result = new AnnoDataResult();
             result.Status = false;

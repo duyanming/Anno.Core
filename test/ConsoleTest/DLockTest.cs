@@ -26,11 +26,11 @@ namespace ConsoleTest
             {
                 var task = Task.Factory.StartNew(() => { DLTest1("Anno"); });
                 ts.Add(task);
-                //var taskXX = Task.Factory.StartNew(() => { DLTest1("Viper"); });
-                //ts.Add(taskXX);
+                var taskXX = Task.Factory.StartNew(() => { DLTest1("Viper"); });
+                ts.Add(taskXX);
 
-                //var taskJJ = Task.Factory.StartNew(() => { DLTest1("Key001"); });
-                //ts.Add(taskJJ);
+                var taskJJ = Task.Factory.StartNew(() => { DLTest1("Key001"); });
+                ts.Add(taskJJ);
             }
 
             Task.WaitAll(ts.ToArray());

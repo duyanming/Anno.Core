@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Anno.Rpc;
+using Anno.Rpc.Storage;
+using Anno.Rpc.Adapter;
 
 namespace Anno.Rpc.Center
 {
@@ -31,23 +32,44 @@ namespace Anno.Rpc.Center
 
         public string Invoke(Dictionary<string, string> input)
         {
-            string rlt = string.Empty;
+            BaseAdapter adapter;
+            string rlt;
             try
             {
-                if (input.ContainsKey("KV"))
+                if (input.ContainsKey(StorageCommand.COMMAND))
                 {
-                    rlt= new Storage.KvStorage().Invoke(input);
+                    var command = input[StorageCommand.COMMAND];
+                    switch (command)
+                    {
+                        case StorageCommand.KVCOMMAND:
+                            adapter = new KvStorageAdapter();
+                            break;
+                        default:
+                            adapter = new ApiDocStorageAdapter();
+                            break;
+                    }
+                    rlt = adapter.Invoke(input);
                 }
                 else
                 {
-                    rlt= new Storage.AnnoStorage().Invoke(input);
+                    return FailMessage("未知指令,参考[Anno.Rpc.Storage.StorageCommand]下指令。");
                 }
             }
             catch (Exception ex)
             {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(new Storage.AnnoDataResult() { Status = false, Msg = ex.Message });
+                return FailMessage(ex.Message);
             }
             return rlt;
+        }
+        /// <summary>
+        /// 构建错误消息Json字符串
+        /// </summary>
+        /// <param name="message">错误消息</param>
+        /// <param name="status">默认False</param>
+        /// <returns>"{\"Msg\":\""+message+"\",\"Status\":false,\"Output\":null,\"OutputData\":null}"</returns>
+        internal static string FailMessage(string message, bool status = false)
+        {
+            return "{\"Msg\":\"" + message + "\",\"Status\":" + status.ToString().ToLower() + ",\"Data\":null}";
         }
     }
 }

@@ -43,23 +43,6 @@ namespace Anno.Rpc.Center
             });
             return msList;
         }
-
-        /// <summary>
-        /// 路由管道
-        /// </summary>
-        /// <param name="channel"></param>
-        /// <returns></returns>
-        static ServiceInfo Single(string channel)
-        {
-
-            Random rd = new Random(DateTime.Now.Millisecond);
-            List<ServiceInfo> ts = Tc.ServiceInfoList.FindAll(i => i.Name.Contains(channel));
-            if (ts.Count > 0)
-            {
-                return ts[rd.Next(0, ts.Count)];
-            }
-            return null;
-        }
         /// <summary>
         /// 健康检查，如果连接不上 每秒做一次尝试。
         /// 尝试 errorCount 次失败，软删除。

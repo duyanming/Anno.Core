@@ -23,9 +23,14 @@ namespace ConsoleTest
 
             Dictionary<string, string> input = new Dictionary<string, string>();
 
-            input.Add("channel", "Anno.Plugs.HelloWorld");
-            input.Add("router", "HelloWorldViper");
-            input.Add("method", "Test0");
+            //input.Add("channel", "Anno.Plugs.HelloWorld");
+            //input.Add("router", "HelloWorldViper");
+            //input.Add("method", "Test0");
+
+            input.Add("channel", "Anno.Plugs.Viper");
+            input.Add("router", "Exam");
+            input.Add("method", "SayHi");
+            input.Add("name", "anno");
 
             Stopwatch sw = Stopwatch.StartNew();
             Parallel.For(0, num, i =>
@@ -82,9 +87,15 @@ namespace ConsoleTest
 
                         Dictionary<string, string> input = new Dictionary<string, string>();
 
-                        input.Add("channel", "Anno.Plugs.HelloWorld");
-                        input.Add("router", "HelloWorldViper");
-                        input.Add("method", "Test0");
+                        //input.Add("channel", "Anno.Plugs.HelloWorld");
+                        //input.Add("router", "HelloWorldViper");
+                        //input.Add("method", "Test0");
+
+                        input.Add("channel", "Anno.Plugs.Viper");
+                        input.Add("router", "Exam");
+                        input.Add("method", "SayHi");
+                        input.Add("name", "anno");
+
                         var x = Connector.BrokerDns(input);
                         //Console.WriteLine(x);
                         if (x.IndexOf("true") <= 0)
@@ -175,7 +186,7 @@ namespace ConsoleTest
         void Init()
         {
             DefaultConfigManager.SetDefaultConnectionPool(1000, Environment.ProcessorCount*2, 100);
-            DefaultConfigManager.SetDefaultConfiguration("RpcTest", "127.0.0.1", 6660, false);
+            DefaultConfigManager.SetDefaultConfiguration("RpcTest", "127.0.0.1", 7010, false);
         }
     }
 

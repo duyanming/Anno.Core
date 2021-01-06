@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Anno.Rpc.Client\Anno.Rpc.ClientGrpc.csproj" />
     <Compile Include="..\..\Anno.Rpc.Center\Storage\*.cs" />
+      <Compile Include="..\..\Anno.Rpc.Center\Adapter\*.cs" />
     <Compile Include="..\..\Anno.Rpc.Center\EventNotice.cs" />
   </ItemGroup>
   <ItemGroup>
