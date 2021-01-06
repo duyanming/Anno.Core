@@ -34,6 +34,7 @@ namespace Anno.Rpc.Center
             {
                 try
                 {
+                    tc.RefreshServiceMd5();
                     ChangeNotice?.Invoke(newService, oldService);
                 }
                 finally { }
@@ -42,6 +43,7 @@ namespace Anno.Rpc.Center
             {
                 try
                 {
+                    tc.RefreshServiceMd5();
                     Notice?.Invoke(service, noticeType);
                 }
                 finally { }
@@ -50,6 +52,7 @@ namespace Anno.Rpc.Center
             {
                 try
                 {
+                    tc.RefreshServiceMd5();
                     Notice?.Invoke(service, noticeType);
                 }
                 finally { }

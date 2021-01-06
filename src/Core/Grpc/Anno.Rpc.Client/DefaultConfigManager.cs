@@ -37,7 +37,7 @@ namespace Anno.Rpc.Client
             SettingService.Local.Port = port;
             SettingService.TraceOnOff = traceOnOff;
             //初始化 拉取配置中心 路由信息
-            Connector.UpdateCache();
+            Connector.UpdateCache(string.Empty);
             if (CronDaemon.Status == DaemonStatus.Stop)
             {
                
@@ -48,7 +48,7 @@ namespace Anno.Rpc.Client
                         {
                             CronDaemon.AddJob("*/10 * * * * ? *", TracePool.TryDequeue);
                         }
-                        CronDaemon.AddJob("*/5 * * * * ? *", () => { Connector.UpdateCache(); });
+                        CronDaemon.AddJob("*/5 * * * * ? *", () => { Connector.UpdateCache(string.Empty); });
                         CronDaemon.Start();
                     }
             }

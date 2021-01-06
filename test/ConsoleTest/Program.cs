@@ -11,8 +11,8 @@ namespace ConsoleTest
             //new CircuitBreakerDemo().Handle();
 
             //new CronNetTest().Handle();
-            new RpcStorage().Handle();//RPCRpcStorage
-            //new RpcTest().Handle2();//RPC客户端测试
+            //new RpcStorage().Handle();//RPCRpcStorage
+            new RpcTest().Handle2();//RPC客户端测试
             //new LogTest().Handle();
             //new GrpcTest().Handle();
             //new AttributeVerificationTest().Handle();//属性校验测试
