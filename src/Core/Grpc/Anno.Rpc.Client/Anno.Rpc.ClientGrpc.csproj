@@ -26,6 +26,7 @@
     <ProjectReference Include="..\..\..\Anno.Const\Anno.Const.csproj" />
     <ProjectReference Include="..\..\..\Anno.CronNET\Anno.CronNET.csproj" />
     <Compile Include="..\..\Anno.Rpc.Client\Storage\*.cs" />
+    <Compile Include="..\..\Anno.Rpc.Client\StringHashCode.cs" />
     <Compile Remove="..\..\Anno.Rpc.Client\Storage\StorageEngine.cs" />
     <Compile Remove="..\..\Anno.Rpc.Client\Storage\KvStorageEngine.cs" />
   </ItemGroup>

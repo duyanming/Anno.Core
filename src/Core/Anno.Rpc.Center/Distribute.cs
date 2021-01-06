@@ -24,15 +24,42 @@ namespace Anno.Rpc.Center
         /// </summary>
         /// <param name="channel"></param>
         /// <returns></returns>
-        public static IEnumerable<Micro> GetMicro(string channel)
+        public static List<Micro> GetMicro(string channel)
         {
-            foreach (var service in Tc.ServiceInfoList)
+            if (channel.StartsWith("md5:"))
             {
-                if (service.Name.Contains(channel))
+                if (JudgeIsDebug.IsDebug)
                 {
-                    yield return service;
+                    Log.Log.ConsoleWriteLine($"channel:{channel},long connection.");
+                }
+                long waitTime = 29000;
+                var md5 = channel.Substring(4);
+                while (md5.Equals(Tc.ServiceMd5)&& waitTime>0)
+                {
+                    waitTime = waitTime - 10;
+                    Thread.Sleep(10);
+                }
+                if (JudgeIsDebug.IsDebug)
+                {
+                    Log.Log.ConsoleWriteLine($"channel:{channel},long connection end.");
                 }
             }
+            List<Micro> msList = new List<Micro>();
+            List<ServiceInfo> service = Tc.ServiceInfoList.FindAll(i => i.Name.Contains(channel));
+            service.ForEach(s =>
+            {
+                Micro micro = new Micro
+                {
+                    Ip = s.Ip,
+                    Port = s.Port,
+                    Timeout = s.Timeout,
+                    Name = s.Name,
+                    Nickname = s.NickName,
+                    Weight = s.Weight
+                };
+                msList.Add(micro);
+            });
+            return msList;
         }
         /// <summary>
         /// 健康检查，如果连接不上 每秒做一次尝试。

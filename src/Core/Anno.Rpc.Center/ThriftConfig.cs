@@ -36,6 +36,32 @@ namespace Anno.Rpc.Center
         public Int32 Port { get; set; }
         private Int32 TimeOut { get; set; }
         public readonly List<ServiceInfo> ServiceInfoList = new List<ServiceInfo>();
+        /// <summary>
+        /// 服务MD5值
+        /// </summary>
+        internal string ServiceMd5 { get; private set; }
+        /// <summary>
+        /// 刷新Md5值
+        /// </summary>
+        internal void RefreshServiceMd5()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (var service in ServiceInfoList)
+            {
+                stringBuilder.Append(service.Name);
+                stringBuilder.Append("#");
+                stringBuilder.Append(service.NickName);
+                stringBuilder.Append("#");
+                stringBuilder.Append(service.Ip);
+                stringBuilder.Append("#");
+                stringBuilder.Append(service.Port);
+                stringBuilder.Append("#");
+                stringBuilder.Append(service.Timeout);
+                stringBuilder.Append("#");
+                stringBuilder.Append(service.Weight);
+            }
+            ServiceMd5 = stringBuilder.ToString().HashCode();
+        }
 
         /// <summary>
         /// 获取实例
@@ -74,7 +100,7 @@ namespace Anno.Rpc.Center
                         {
                             Timeout = n.Attributes["timeout"] == null ? TimeOut : Convert.ToInt32(n.Attributes["timeout"].Value),
                             Name = n.Attributes["name"].Value,
-                            Nickname = n.Attributes["nickname"].Value,
+                            NickName = n.Attributes["nickname"].Value,
                             Ip = n.Attributes["ip"].Value,
                             Port = Convert.ToInt32(n.Attributes["port"].Value)
                         };
@@ -144,7 +170,7 @@ namespace Anno.Rpc.Center
                     {
                         Timeout = input["timeout"] == null ? TimeOut : Convert.ToInt32(input["timeout"]),
                         Name = input["name"],
-                        Nickname = input["nickname"],
+                        NickName = input["nickname"],
                         Ip = ip,
                         Port = Convert.ToInt32(input["port"])
                     };
@@ -175,7 +201,7 @@ namespace Anno.Rpc.Center
                         Console.WriteLine($"{f}");
                     });
                     Console.WriteLine($"{"w:" + ips.Weight}");
-                    Console.WriteLine($"{ips.Nickname}已登记！");
+                    Console.WriteLine($"{ips.NickName}已登记！");
                     Console.ResetColor();
                     Console.WriteLine($"----------------------------------------------------------------- ");
                 }
@@ -215,7 +241,7 @@ namespace Anno.Rpc.Center
                 {
                     XmlElement xe = xml.CreateElement("dc");
                     xe.SetAttribute("name", p.Name);
-                    xe.SetAttribute("nickname", p.Nickname);
+                    xe.SetAttribute("nickname", p.NickName);
                     xe.SetAttribute("ip", p.Ip);
                     xe.SetAttribute("port", p.Port.ToString());
                     xe.SetAttribute("timeout", p.Timeout.ToString());
@@ -274,8 +300,32 @@ namespace Anno.Rpc.Center
     /// <summary>
     /// 节点信息
     /// </summary>
-    public class ServiceInfo : Micro
+    public class ServiceInfo
     {
+        /// <summary>
+        /// 节点功能Tag
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 节点昵称
+        /// </summary>
+        public string NickName { get; set; }
+        /// <summary>
+        /// 节点IP
+        /// </summary>
+        public string Ip { get; set; }
+        /// <summary>
+        /// 节点端口
+        /// </summary>
+        public Int32 Port { get; set; }
+        /// <summary>
+        /// 节点超时时间
+        /// </summary>
+        public Int32 Timeout { get; set; }
+        /// <summary>
+        /// 权重
+        /// </summary>
+        public Int32 Weight { get; set; }
         /// <summary>
         /// 是否正在检测
         /// </summary>
