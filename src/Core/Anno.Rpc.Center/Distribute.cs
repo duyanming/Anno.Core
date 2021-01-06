@@ -24,24 +24,15 @@ namespace Anno.Rpc.Center
         /// </summary>
         /// <param name="channel"></param>
         /// <returns></returns>
-        public static List<Micro> GetMicro(string channel)
+        public static IEnumerable<Micro> GetMicro(string channel)
         {
-            List<Micro> msList = new List<Micro>();
-            List<ServiceInfo> service = Tc.ServiceInfoList.FindAll(i => i.Name.Contains(channel));
-            service.ForEach(s =>
+            foreach (var service in Tc.ServiceInfoList)
             {
-                Micro micro = new Micro
+                if (service.Name.Contains(channel))
                 {
-                    Ip = s.Ip,
-                    Port = s.Port,
-                    Timeout = s.Timeout,
-                    Name = s.Name,
-                    Nickname = s.NickName,
-                    Weight = s.Weight
-                };
-                msList.Add(micro);
-            });
-            return msList;
+                    yield return service;
+                }
+            }
         }
 
         /// <summary>

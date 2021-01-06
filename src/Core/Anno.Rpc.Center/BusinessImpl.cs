@@ -26,7 +26,7 @@ namespace Anno.Rpc.Center
         /// <returns></returns>
         public List<Micro> GetMicro(string channel)
         {
-            return Distribute.GetMicro(channel);
+            return Distribute.GetMicro(channel).ToList();
         }
 
         public string Invoke(Dictionary<string, string> input)

@@ -74,7 +74,7 @@ namespace Anno.Rpc.Center
                         {
                             Timeout = n.Attributes["timeout"] == null ? TimeOut : Convert.ToInt32(n.Attributes["timeout"].Value),
                             Name = n.Attributes["name"].Value,
-                            NickName = n.Attributes["nickname"].Value,
+                            Nickname = n.Attributes["nickname"].Value,
                             Ip = n.Attributes["ip"].Value,
                             Port = Convert.ToInt32(n.Attributes["port"].Value)
                         };
@@ -97,7 +97,7 @@ namespace Anno.Rpc.Center
                 this.TimeOut = 120000;
 
                 XmlDocument xmlDoc = new XmlDocument(); //创建空的XML文档 
-                StringBuilder xmlText=new StringBuilder();
+                StringBuilder xmlText = new StringBuilder();
                 xmlText.AppendLine("<?xml version='1.0' encoding='utf-8'?>");
                 xmlText.AppendLine("<configuration>");
                 xmlText.AppendLine("  <!--#lbs 配置-->");
@@ -144,22 +144,22 @@ namespace Anno.Rpc.Center
                     {
                         Timeout = input["timeout"] == null ? TimeOut : Convert.ToInt32(input["timeout"]),
                         Name = input["name"],
-                        NickName = input["nickname"],
+                        Nickname = input["nickname"],
                         Ip = ip,
                         Port = Convert.ToInt32(input["port"])
                     };
-                    int weight = input["weight"] == null ? 1 : (int) Convert.ToDecimal(input["weight"]);
+                    int weight = input["weight"] == null ? 1 : (int)Convert.ToDecimal(input["weight"]);
                     ips.Weight = weight;
                     #region 上线和变更通知
                     var oldService = ServiceInfoList.FirstOrDefault(t => ips.Ip == t.Ip && ips.Port == t.Port);
-                    if(OnlineNotice != null && oldService==null)
+                    if (OnlineNotice != null && oldService == null)
                     {
-                        OnlineNotice.Invoke(ips,NoticeType.OnLine);
+                        OnlineNotice.Invoke(ips, NoticeType.OnLine);
                     }
                     else if (ChangeNotice != null && oldService != null)
                     {
-                        ChangeNotice.Invoke(ips,oldService);
-                    } 
+                        ChangeNotice.Invoke(ips, oldService);
+                    }
                     #endregion
                     ServiceInfoList.RemoveAll(t => ips.Ip == t.Ip && ips.Port == t.Port);
                     for (int w = 0; w < weight; w++) //权重
@@ -170,11 +170,12 @@ namespace Anno.Rpc.Center
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}");
                     Console.WriteLine($"{ips.Ip}:{ips.Port}");
-                    ips.Name.Split(',').ToList().ForEach(f => {
+                    ips.Name.Split(',').ToList().ForEach(f =>
+                    {
                         Console.WriteLine($"{f}");
                     });
                     Console.WriteLine($"{"w:" + ips.Weight}");
-                    Console.WriteLine($"{ips.NickName}已登记！");
+                    Console.WriteLine($"{ips.Nickname}已登记！");
                     Console.ResetColor();
                     Console.WriteLine($"----------------------------------------------------------------- ");
                 }
@@ -214,7 +215,7 @@ namespace Anno.Rpc.Center
                 {
                     XmlElement xe = xml.CreateElement("dc");
                     xe.SetAttribute("name", p.Name);
-                    xe.SetAttribute("nickname", p.NickName);
+                    xe.SetAttribute("nickname", p.Nickname);
                     xe.SetAttribute("ip", p.Ip);
                     xe.SetAttribute("port", p.Port.ToString());
                     xe.SetAttribute("timeout", p.Timeout.ToString());
@@ -236,14 +237,14 @@ namespace Anno.Rpc.Center
         /// <param name="ips"></param>
         /// <param name="port"></param>
         /// <returns></returns>
-        private static string GetValidIp(string ips,int port)
+        private static string GetValidIp(string ips, int port)
         {
             string[] ipsArr = ips.Split(',');
             foreach (var ip in ipsArr)
             {
                 if (ip != "127.0.0.1")
                 {
-                    Thrift.Transport.TTransport service = new Thrift.Transport.TSocket(ip,port, 300);
+                    Thrift.Transport.TTransport service = new Thrift.Transport.TSocket(ip, port, 300);
                     try
                     {
                         if (!service.IsOpen)
@@ -273,33 +274,8 @@ namespace Anno.Rpc.Center
     /// <summary>
     /// 节点信息
     /// </summary>
-    public class ServiceInfo
+    public class ServiceInfo : Micro
     {
-        /// <summary>
-        /// 节点功能Tag
-        /// </summary>
-        public string Name { get; set; }
-        /// <summary>
-        /// 节点昵称
-        /// </summary>
-        public string NickName { get; set; }
-        /// <summary>
-        /// 节点IP
-        /// </summary>
-        public string Ip { get; set; }
-        /// <summary>
-        /// 节点端口
-        /// </summary>
-        public Int32 Port { get; set; }
-        /// <summary>
-        /// 节点超时时间
-        /// </summary>
-        public Int32 Timeout { get; set; }
-        /// <summary>
-        /// 权重
-        /// </summary>
-        public Int32 Weight { get; set; }
-
         /// <summary>
         /// 是否正在检测
         /// </summary>
