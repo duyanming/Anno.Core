@@ -84,6 +84,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{E07F4903-4
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cocas", "samples\Thrift\Cocas\Cocas.csproj", "{F33E4A2B-5E10-4EAE-8B34-608066458EF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -178,6 +180,10 @@ Global
 		{432C0AF6-9E06-4FB5-B678-8884F5106CD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{432C0AF6-9E06-4FB5-B678-8884F5106CD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{432C0AF6-9E06-4FB5-B678-8884F5106CD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F33E4A2B-5E10-4EAE-8B34-608066458EF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F33E4A2B-5E10-4EAE-8B34-608066458EF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F33E4A2B-5E10-4EAE-8B34-608066458EF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F33E4A2B-5E10-4EAE-8B34-608066458EF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -210,6 +216,7 @@ Global
 		{523E3383-4FE4-4F02-A37F-B4E86BB8A030} = {B1D75545-FB2B-445F-AE77-6B9EB5906E2F}
 		{432C0AF6-9E06-4FB5-B678-8884F5106CD1} = {B1D75545-FB2B-445F-AE77-6B9EB5906E2F}
 		{3EA5B10B-B18A-4913-9143-834A1C6DEC56} = {9FFB057D-707E-464D-9C1E-4BFBBD22AC93}
+		{F33E4A2B-5E10-4EAE-8B34-608066458EF4} = {118EC682-0C63-4EDF-A192-49607FB665F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF1BE717-8264-4D74-AEED-B289CDEDD42F}

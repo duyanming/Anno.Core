@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net461;net5.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Core\Anno.Rpc.Center\Anno.Rpc.Center.csproj" />
+    <ProjectReference Include="..\..\..\src\Core\Anno.Rpc.Server\Anno.Rpc.Server.csproj" />
+    <ProjectReference Include="..\..\Packages\Anno.Plugs.DLockService\Anno.Plugs.DLockService.csproj" />
+    <ProjectReference Include="..\..\Packages\Anno.Plugs.HelloWorldService\Anno.Plugs.HelloWorldService.csproj" />
+    <ProjectReference Include="..\..\Packages\Anno.Plugs.SoEasyService\Anno.Plugs.SoEasyService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Anno.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Cocas.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Cocas.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
