@@ -61,10 +61,6 @@ namespace Anno.Rpc.Center
                 stringBuilder.Append(service.Weight);
             }
             ServiceMd5 = stringBuilder.ToString().HashCode();
-            if (JudgeIsDebug.IsDebug)
-            {
-                Log.Log.ConsoleWriteLine($"ServiceMd5:{ServiceMd5}");
-            }
         }
 
         /// <summary>

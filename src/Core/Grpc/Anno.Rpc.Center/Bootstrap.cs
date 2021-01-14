@@ -15,6 +15,8 @@ namespace Anno.Rpc.Center
         /// <param name="ChangeNotice">变更通知</param>
         public static void StartUp(string[] args, Action<ServiceInfo, NoticeType> Notice = null, Action<ServiceInfo, ServiceInfo> ChangeNotice = null)
         {
+            var tc = ThriftConfig.CreateInstance();
+            OutputLogo(tc);
             AppDomain.CurrentDomain.ProcessExit += (s, e) =>
             {
                 if (Monitor.State)
@@ -27,7 +29,6 @@ namespace Anno.Rpc.Center
                 }
             };
             Monitor.Start();
-            var tc = ThriftConfig.CreateInstance();
             #region 服务上线 下线 变更通知
 
             tc.ChangeNotice += (ServiceInfo newService, ServiceInfo oldService) =>
@@ -70,6 +71,29 @@ namespace Anno.Rpc.Center
                 });
                 Thread.Sleep(3000);
             }
+        }
+        private static void OutputLogo(ThriftConfig tc)
+        {
+            var logo = "\r\n";
+            logo += " -----------------------------------------------------------------------------\r\n";
+            logo +=
+@"                                                _                    
+     /\                           ___          (_)                   
+    /  \    _ __   _ __    ___   ( _ )  __   __ _  _ __    ___  _ __ 
+   / /\ \  | '_ \ | '_ \  / _ \  / _ \/\\ \ / /| || '_ \  / _ \| '__|
+  / ____ \ | | | || | | || (_) || (_>  < \ V / | || |_) ||  __/| |   
+ /_/    \_\|_| |_||_| |_| \___/  \___/\/  \_/  |_|| .__/  \___||_|   
+                                                  | |                
+                                                  |_|                
+                                            anno&viper grpc center
+";
+            logo += " -----------------------------------------------------------------------------\r\n";
+            logo += $" Center Port      {tc.Port} \r\n";
+            logo += $" Author           YanMing.Du \r\n";
+            logo += $" Version          [{ typeof(Center.Bootstrap).Assembly.GetName().Version}]\r\n";
+            logo += $" Repository       https://github.com/duyanming/anno.core \r\n";
+            logo += " -----------------------------------------------------------------------------\r\n";
+            System.Console.WriteLine(logo);
         }
     }
 }

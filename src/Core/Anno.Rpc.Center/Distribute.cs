@@ -29,10 +29,10 @@ namespace Anno.Rpc.Center
             List<ServiceInfo> service = new List<ServiceInfo>();
             if (channel.StartsWith("md5:"))
             {
-                if (JudgeIsDebug.IsDebug)
-                {
-                    Log.Log.ConsoleWriteLine($"channel:{channel},long connection.");
-                }
+                //if (JudgeIsDebug.IsDebug)
+                //{
+                //    Log.Log.ConsoleWriteLine($"channel:{channel},long connection.");
+                //}
                 long waitTime = 19000;
                 var md5 = channel.Substring(4);
                 while (md5.Equals(Tc.ServiceMd5) && waitTime > 0)
@@ -40,10 +40,10 @@ namespace Anno.Rpc.Center
                     waitTime = waitTime - 10;
                     Thread.Sleep(10);
                 }
-                if (JudgeIsDebug.IsDebug)
-                {
-                    Log.Log.ConsoleWriteLine($"channel:{channel},long connection end.");
-                }
+                //if (JudgeIsDebug.IsDebug)
+                //{
+                //    Log.Log.ConsoleWriteLine($"channel:{channel},long connection end.");
+                //}
                 service = Tc.ServiceInfoList;
             }
             else
