@@ -1,3 +1,3 @@
 cd %cd%
-cd ./AnnoCenter/bin/Release/netcoreapp3.1
+cd ./AnnoCenter/bin/Release/net5.0
 dotnet AnnoCenter.dll

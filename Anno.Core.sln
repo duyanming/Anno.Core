@@ -46,6 +46,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Thrift", "Thrift", "{118EC6
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Grpc", "Grpc", "{4182479F-7B50-4B51-80FD-7EED6C3A1A84}"
+	ProjectSection(SolutionItems) = preProject
+		samples\Grpc\annoCenter.bat = samples\Grpc\annoCenter.bat
+		samples\Grpc\annoCenterRelease.bat = samples\Grpc\annoCenterRelease.bat
+		samples\Grpc\annoService.bat = samples\Grpc\annoService.bat
+		samples\Grpc\annoServiceRelease.bat = samples\Grpc\annoServiceRelease.bat
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnnoCenter", "samples\Thrift\AnnoCenter\AnnoCenter.csproj", "{3E972B44-A51F-40BE-ABA5-D60EFCCC344E}"
 EndProject
@@ -84,7 +90,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{E07F4903-4
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cocas", "samples\Thrift\Cocas\Cocas.csproj", "{F33E4A2B-5E10-4EAE-8B34-608066458EF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cocas", "samples\Thrift\Cocas\Cocas.csproj", "{F33E4A2B-5E10-4EAE-8B34-608066458EF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
