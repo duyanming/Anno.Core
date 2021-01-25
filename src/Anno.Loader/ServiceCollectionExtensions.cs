@@ -38,6 +38,10 @@ namespace Anno.Loader
             assembly.GetTypes().Where(x => x.GetTypeInfo().IsClass && !x.GetTypeInfo().IsAbstract && !x.GetTypeInfo().IsInterface).ToList().ForEach(
                     t =>
                     {
+                        if (t.GetCustomAttribute<NotInInjectAttribute>() != null)
+                        {
+                            return;
+                        }
                         var interfaces = t.GetInterfaces();
                         if (IsAssignableFrom(t, "Anno.EngineData.BaseModule")
                         || interfaces.ToList().Exists(i => i.Name == "IFilterMetadata")

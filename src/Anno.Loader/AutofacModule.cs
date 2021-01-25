@@ -36,6 +36,10 @@ namespace Anno.Loader
             assembly.GetTypes().Where(x => x.GetTypeInfo().IsClass && !x.GetTypeInfo().IsAbstract && !x.GetTypeInfo().IsInterface).ToList().ForEach(
                    t =>
                    {
+                       if (t.GetCustomAttribute<NotInInjectAttribute>() != null)
+                       {
+                           return;
+                       }
                        //if (CheckIfAnonymousType(t))
                        //{
                        //    return;
