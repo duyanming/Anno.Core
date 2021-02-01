@@ -94,6 +94,11 @@ namespace Anno.Plugs.HelloWorldService
             return new ActionResult(true, "TestFb");
         }
         #endregion
+
+        public dynamic AddProducts(List<ProductDto> products) {
+
+            return products;
+        }
     }
     public class TestDto
     {

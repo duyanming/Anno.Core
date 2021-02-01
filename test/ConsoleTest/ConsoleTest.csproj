@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\samples\Packages\HelloWorldDto\HelloWorldDto.csproj" />
     <ProjectReference Include="..\..\src\Anno.CronNET\Anno.CronNET.csproj" />
     <ProjectReference Include="..\..\src\Anno.EngineData\Anno.EngineData.csproj" />
     <ProjectReference Include="..\..\src\Core\Anno.Rpc.Server\Anno.Rpc.Server.csproj" />

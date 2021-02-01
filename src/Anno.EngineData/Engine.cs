@@ -191,7 +191,11 @@ namespace Anno.EngineData
                 }
                 else if (input.ContainsKey(p.Name))
                 {
-                    if (p.ParameterType.FullName.IndexOf("System", StringComparison.Ordinal) != -1)//系统基础数据类型
+                    if (p.ParameterType.FullName.StartsWith("System.Collections.Generic.List`1["))
+                    {
+                        parameters.Add(Newtonsoft.Json.JsonConvert.DeserializeObject(input[p.Name], p.ParameterType));
+                    }
+                    else if (p.ParameterType.FullName.IndexOf("System", StringComparison.Ordinal) != -1)//系统基础数据类型
                     {
                         parameters.Add(Convert.ChangeType(input[p.Name], p.ParameterType));//枚举
                     }
