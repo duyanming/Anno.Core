@@ -195,7 +195,7 @@ namespace Anno.EngineData
                     {
                         parameters.Add(Newtonsoft.Json.JsonConvert.DeserializeObject(input[p.Name], p.ParameterType));
                     }
-                    else if (p.ParameterType.FullName.IndexOf("System", StringComparison.Ordinal) != -1)//系统基础数据类型
+                    else if (p.ParameterType.FullName.StartsWith("System."))//系统基础数据类型
                     {
                         parameters.Add(Convert.ChangeType(input[p.Name], p.ParameterType));//枚举
                     }

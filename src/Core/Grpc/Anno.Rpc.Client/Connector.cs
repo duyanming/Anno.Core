@@ -169,13 +169,36 @@ namespace Anno.Rpc.Client
                 var prop = properties[i];
                 var value = prop.GetValue(input);
                 Type types = prop.PropertyType;
-                if (types.FullName.IndexOf("System.", StringComparison.Ordinal) != -1)
+                if (types.FullName.StartsWith("System.Collections.Generic.List`1["))
+                {
+                    _input.Add(prop.Name, Newtonsoft.Json.JsonConvert.SerializeObject(value));
+                }
+                else if (types.FullName.StartsWith("System."))
                 {
                     _input.Add(prop.Name, value.ToString());
                 }
                 else
                 {
                     _input.Add(prop.Name, Newtonsoft.Json.JsonConvert.SerializeObject(value));
+                }
+            }
+            var fields = input.GetType().GetFields().Where(p => p.IsPublic).ToList();
+            for (int i = 0; i < fields.Count; i++)
+            {
+                var field = fields[i];
+                var value = field.GetValue(input);
+                Type types = field.FieldType;
+                if (types.FullName.StartsWith("System.Collections.Generic.List`1["))
+                {
+                    _input.Add(field.Name, Newtonsoft.Json.JsonConvert.SerializeObject(value));
+                }
+                else if (types.FullName.StartsWith("System."))
+                {
+                    _input.Add(field.Name, value.ToString());
+                }
+                else
+                {
+                    _input.Add(field.Name, Newtonsoft.Json.JsonConvert.SerializeObject(value));
                 }
             }
             return _input;
