@@ -69,9 +69,8 @@ namespace Anno.Rpc.Center
         public static void HealthCheck(ServiceInfo service, int errorCount = 3)
         {
             int hc = 60;//检查次数
-
-        hCheck://再次  心跳检测
             var client = new BrokerService.BrokerServiceClient(new Channel($"{service.Ip}:{service.Port}", ChannelCredentials.Insecure));
+        hCheck://再次  心跳检测
             try
             {
                 service.Checking = true;
@@ -91,7 +90,7 @@ namespace Anno.Rpc.Center
                         Console.WriteLine($"恢复正常！");
                         Console.ResetColor();
                         Console.WriteLine($"----------------------------------------------------------------- ");
-                    }                   
+                    }
                     lock (LockHelper) //防止高并发下 影响权重
                     {
                         if (!Tc.ServiceInfoList.Exists(s => s.Ip == service.Ip && s.Port == service.Port))
@@ -153,7 +152,7 @@ namespace Anno.Rpc.Center
                     Console.WriteLine($"{"w:" + service.Weight}");
                     Console.WriteLine($"永久移除！");
                     Console.ResetColor();
-                    Console.WriteLine($"----------------------------------------------------------------- ");                  
+                    Console.WriteLine($"----------------------------------------------------------------- ");
                 }
 
                 if (hc == (60 - errorCount)) //三次失败之后 临时移除 ，防止更多请求转发给此服务节点 
