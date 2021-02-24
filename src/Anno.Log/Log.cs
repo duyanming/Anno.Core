@@ -4,11 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-//using log4net;
-//using log4net.Config;
 using System.IO;
-//using log4net.Repository;
 
 namespace Anno.Log
 {
@@ -156,10 +152,12 @@ namespace Anno.Log
                      */
                     writer.WriteLine("------------------------------------LOG分隔符---------------------------------------------");
 
-                    writer.WriteLine($"记录时间:{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} ");
-                    writer.WriteLine($"线程ID:[{threadId}] ");
-                    writer.WriteLine($"日志等级:{logType.ToString()} ");
-                    writer.WriteLine($"出错类:{type?.FullName} ");
+                    writer.WriteLine($"记录时间:    {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} ");
+                    writer.WriteLine($"线程ID:       [{threadId}] ");
+                    writer.WriteLine($"日志等级:    {logType.ToString()} ");
+                    if (type != null)
+                        writer.WriteLine($"类型:          {type?.FullName} ");
+
                     writer.WriteLine(msg);
 
                     writer.Flush();

@@ -16,6 +16,7 @@ namespace ConsoleTest
             Anno.Log.Log.Debug("debug");
 
             Anno.Log.Log.DebugConsole("debug");
+            Anno.Log.Log.Info("debug",typeof(LogTest));
         }
     }
 }
