@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="Anno.EventBus" Version="1.0.1.9" />
-    <PackageReference Include="Anno.RateLimit" Version="1.0.1.5" />
-    <PackageReference Include="AspectCore.Extensions.Reflection" Version="2.1.0" />
+    <PackageReference Include="Anno.RateLimit" Version="1.0.1.6" />
+    <PackageReference Include="AspectCore.Extensions.Reflection" Version="2.2.0" />
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
     <PackageReference Include="Polly" Version="7.2.1" />
   </ItemGroup>
