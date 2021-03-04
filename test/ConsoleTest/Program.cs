@@ -9,10 +9,14 @@ namespace ConsoleTest
         {
             // new TimeOutDemo().Handle();
             //new CircuitBreakerDemo().Handle();
-
+            //var x = Newtonsoft.Json.JsonConvert.SerializeObject(1);
+            //var x1 = Newtonsoft.Json.JsonConvert.SerializeObject("sdf");
+            //var x2 = Newtonsoft.Json.JsonConvert.SerializeObject(true);
+            //var x3 = Newtonsoft.Json.JsonConvert.SerializeObject(1.3);
             //new CronNetTest().Handle();
             //new RpcStorage().Handle();//RPCRpcStorage
             new RpcTest().Handle2();//RPC客户端测试
+            //new ExpressionAnalysisTest().Handle();
             //new LogTest().Handle();
             //new GrpcTest().Handle();
             //new AttributeVerificationTest().Handle();//属性校验测试

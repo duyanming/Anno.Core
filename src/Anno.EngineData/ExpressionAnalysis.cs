@@ -28,16 +28,17 @@ namespace Anno.EngineData
             {
                 where.AppendFormat($" {group.op} ");
                 where.AppendFormat("(");
-                int spLength = " {g.op} ".Length;
+                int spLength =0;
                 group.groups.Where(g => g.rules.Count(r => r.field != "undefined") > 0).ToList().ForEach(g =>
                 {
                     where.AppendFormat(TransmitFilter(g, table));
-                    where.AppendFormat($" {g.op} ");
+                    var op = $" {g.op} ";
+                    spLength = op.Length;
+                    where.AppendFormat(op);
                 });
                 if (group.groups.Count(g => g.rules.Count(r => r.field != "undefined") > 0) > 0)
                 {
                     where.Remove(where.Length - spLength, spLength);
-                    where.AppendFormat(")");
                 }
                 where.AppendFormat(")");
             }
