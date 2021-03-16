@@ -91,17 +91,33 @@ namespace ConsoleTest
                         input.Add("router", "HelloWorldViper");
                         input.Add("method", "Test0");
 
+                        //调用异步方法
+                        //input.Add("channel", "Anno.Plugs.HelloWorld");
+                        //input.Add("router", "HelloWorldTask");
+                        //input.Add("method", "SayHello");
+                        //input.Add("name", "Jack");
+                        //input.Add("age", "12");
+
                         //input.Add("channel", "Anno.Plugs.Viper");
                         //input.Add("router", "Exam");
                         //input.Add("method", "SayHi");
                         //input.Add("name", "anno");
 
                         var x = Connector.BrokerDns(input);
-                        //Console.WriteLine(x);
+                        Console.WriteLine(x);
                         if (x.IndexOf("true") <= 0)
                         {
                             Console.WriteLine(x);
                         }
+                        //调用异步方法Async
+                        //input.Clear();
+                        //input.Add("channel", "Anno.Plugs.HelloWorld");
+                        //input.Add("router", "HelloWorldTask");
+                        //input.Add("method", "SayHelloAsync");
+                        //input.Add("name", "Jack");
+                        //input.Add("age", "12");
+                        //x = Connector.BrokerDns(input);
+                        //Console.WriteLine(x);
                         //tasks.Add(t1);
 
                         //if (x.IndexOf("true") <= 0)

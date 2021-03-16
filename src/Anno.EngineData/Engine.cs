@@ -16,6 +16,7 @@ namespace Anno.EngineData
     /// </summary>
     public static class Engine
     {
+        private readonly static Type enumType = typeof(Enum);
         /// <summary>
         /// 转发器
         /// </summary>
@@ -124,17 +125,19 @@ namespace Anno.EngineData
                 {
                     routInfo.ActionFilters[i].OnActionExecuting(module);
                 }
-                var rlt = routInfo.RoutMethod.Invoke(module, DicToParameters(routInfo.RoutMethod, input).ToArray());
+                #region 调用业务方法
                 object rltCustomize = null;
-                if (rlt is Task)
+                if (routInfo.ReturnTypeIsTask)
                 {
-                    rltCustomize = rlt.GetType().GetProperty("Result").GetValue(rlt, null);
+                    var rlt = (routInfo.RoutMethod.Invoke(module, DicToParameters(routInfo.RoutMethod, input).ToArray()) as Task);
+                    rltCustomize = routInfo.RoutMethod.ReturnType.GetProperty("Result").GetValue(rlt, null);
                 }
                 else
                 {
-                    rltCustomize = rlt;
+                    rltCustomize = routInfo.RoutMethod.Invoke(module, DicToParameters(routInfo.RoutMethod, input).ToArray());
                 }
-                if (rltCustomize != null && typeof(IActionResult).IsAssignableFrom(rltCustomize.GetType()))
+
+                if (routInfo.ReturnTypeIsIActionResult && rltCustomize != null)
                 {
                     module.ActionResult = rltCustomize as ActionResult;
                 }
@@ -142,6 +145,7 @@ namespace Anno.EngineData
                 {
                     module.ActionResult = new ActionResult(true, rltCustomize);
                 }
+                #endregion
                 for (int i = (routInfo.ActionFilters.Count - 1); i >= 0; i--)
                 {
                     routInfo.ActionFilters[i].OnActionExecuted(module);
@@ -208,7 +212,7 @@ namespace Anno.EngineData
                     {
                         parameters.Add(Convert.ChangeType(input[p.Name], p.ParameterType));//枚举
                     }
-                    else if (p.ParameterType.BaseType == typeof(Enum))
+                    else if (p.ParameterType.BaseType == enumType)
                     {
 
                         parameters.Add(Enum.Parse(p.ParameterType, input[p.Name]));
