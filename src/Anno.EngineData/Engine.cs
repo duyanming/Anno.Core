@@ -124,7 +124,16 @@ namespace Anno.EngineData
                 {
                     routInfo.ActionFilters[i].OnActionExecuting(module);
                 }
-                var rltCustomize = routInfo.RoutMethod.Invoke(module, DicToParameters(routInfo.RoutMethod, input).ToArray());
+                var rlt = routInfo.RoutMethod.Invoke(module, DicToParameters(routInfo.RoutMethod, input).ToArray());
+                object rltCustomize = null;
+                if (rlt is Task)
+                {
+                    rltCustomize = rlt.GetType().GetProperty("Result").GetValue(rlt, null);
+                }
+                else
+                {
+                    rltCustomize = rlt;
+                }
                 if (rltCustomize != null && typeof(IActionResult).IsAssignableFrom(rltCustomize.GetType()))
                 {
                     module.ActionResult = rltCustomize as ActionResult;
