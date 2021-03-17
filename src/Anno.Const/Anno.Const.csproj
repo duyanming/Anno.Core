@@ -13,5 +13,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
+    <Content Include="..\..\LICENSE" Link="LICENSE" PackagePath="\" />
   </ItemGroup>
 </Project>

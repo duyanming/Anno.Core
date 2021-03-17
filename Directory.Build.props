@@ -2,9 +2,9 @@
   <PropertyGroup>
     <DeveloperBuildCoreTfms>net5.0</DeveloperBuildCoreTfms>
     <StandardTfms>netstandard2.0</StandardTfms>
-    <Version>1.0.3</Version>
+    <Version>1.0.3.2</Version>
     <PackageIcon>logo.jpg</PackageIcon>
-    <PackageLicenseUrl>https://github.com/duyanming/Anno.Core/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/duyanming/Viper</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup>
