@@ -17,8 +17,4 @@
     <ProjectReference Include="..\..\Anno.Log\Anno.Log.csproj" />
     <ProjectReference Include="..\Anno.Rpc.Client\Anno.Rpc.Client.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
-    <Content Include="..\..\..\LICENSE" Link="LICENSE" PackagePath="\" />
-  </ItemGroup>
 </Project>

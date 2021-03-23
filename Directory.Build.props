@@ -2,7 +2,9 @@
   <PropertyGroup>
     <DeveloperBuildCoreTfms>net5.0</DeveloperBuildCoreTfms>
     <StandardTfms>netstandard2.0</StandardTfms>
-    <Version>1.0.3.2</Version>
+    <Version>1.0.3.3</Version>
+    <Authors>Du yanming</Authors>
+    <Company>Du yanming</Company>
     <PackageIcon>logo.jpg</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/duyanming/Viper</PackageProjectUrl>
@@ -18,11 +20,18 @@
       <packageType name="SymbolsPackage"/>
     </packageTypes>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)key.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-      
+  <ItemGroup>
+    <Content Include="$(SolutionDir)logo.jpg" Link="logo.jpg" PackagePath="\" />
+    <Content Include="$(SolutionDir)LICENSE" Link="LICENSE" PackagePath="\" />
+   </ItemGroup>
 </Project>

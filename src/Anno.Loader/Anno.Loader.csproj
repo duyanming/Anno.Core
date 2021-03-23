@@ -19,8 +19,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
-    <Content Include="..\..\LICENSE" Link="LICENSE" PackagePath="\" />
     <PackageReference Include="Autofac" Version="6.1.0" />
     <ProjectReference Include="..\Anno.Const\Anno.Const.csproj" />
   </ItemGroup>

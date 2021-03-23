@@ -9,8 +9,4 @@
     <Company>Du yanming</Company>
     <Product>Anno 定时任务</Product>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
-    <Content Include="..\..\LICENSE" Link="LICENSE" PackagePath="\" />
-  </ItemGroup>
 </Project>

@@ -31,10 +31,6 @@
     <Compile Remove="..\..\Anno.Rpc.Client\Storage\KvStorageEngine.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
-    <Content Include="..\..\..\..\LICENSE" Link="LICENSE" PackagePath="\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="..\..\Anno.Rpc.Client\Storage\AnnoData.cs" Link="Storage\AnnoData.cs" />
     <Compile Update="..\..\Anno.Rpc.Client\Storage\AnnoDataResult.cs" Link="Storage\AnnoDataResult.cs" />
     <Compile Update="..\..\Anno.Rpc.Client\Storage\AnnoKV.cs" Link="Storage\AnnoKV.cs" />

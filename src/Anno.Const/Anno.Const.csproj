@@ -11,8 +11,4 @@
     <FileVersion>1.0.0.0</FileVersion>
     <Version>$(Version)</Version>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
-    <Content Include="..\..\LICENSE" Link="LICENSE" PackagePath="\" />
-  </ItemGroup>
 </Project>

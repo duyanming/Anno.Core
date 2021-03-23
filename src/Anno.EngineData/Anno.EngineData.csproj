@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\logo.jpg" Link="logo.jpg" PackagePath="\" />
-    <Content Include="..\..\LICENSE" Link="LICENSE" PackagePath="\" />
-    <!--<ProjectReference Include="..\..\DCS\Grpc\Anno.Rpc.ClientGrpc\Anno.Rpc.ClientGrpc.csproj" />-->
-    <!--<ProjectReference Include="..\..\DCS\Anno.Rpc.Client\Anno.Rpc.Client.csproj" />-->
     <ProjectReference Include="..\Anno.CronNET\Anno.CronNET.csproj" />
     <ProjectReference Include="..\Anno.Loader\Anno.Loader.csproj" />
     <ProjectReference Include="..\Anno.Log\Anno.Log.csproj" />
