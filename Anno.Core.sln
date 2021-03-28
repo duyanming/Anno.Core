@@ -80,7 +80,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "builder", "builder", "{019EA972-EEAE-4F22-9DA8-9E79731927CF}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
-		key.pfx = key.pfx
+		key.snk = key.snk
 		LICENSE = LICENSE
 		logo.jpg = logo.jpg
 	EndProjectSection
