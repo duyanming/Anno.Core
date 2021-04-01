@@ -4,7 +4,8 @@
 [![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.svg)](https://www.nuget.org/packages/Anno.EngineData)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/duyanming/Anno.Core/master/LICENSE)
 
-![Dashboard](https://s1.ax1x.com/2020/09/26/0iRcIU.png)
+![Dashboard](https://z3.ax1x.com/2021/04/01/cE4QPS.png)
+![Dashboard](https://z3.ax1x.com/2021/04/01/cE58JO.png)
 
 [在线演示](http://140.143.207.244) :http://140.143.207.244
 
