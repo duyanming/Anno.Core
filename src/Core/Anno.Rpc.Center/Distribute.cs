@@ -27,23 +27,20 @@ namespace Anno.Rpc.Center
         public static List<Micro> GetMicro(string channel)
         {
             List<ServiceInfo> service = new List<ServiceInfo>();
+            //if (channel.StartsWith("md5:"))
+            //{
+            //    long waitTime = 19000;
+            //    var md5 = channel.Substring(4);
+            //    while(md5.Equals(Tc.ServiceMd5) && waitTime > 0)
+            //    {
+            //        waitTime = waitTime - 10;
+            //        Task.Delay(10).Wait();// Thread.Sleep(10);
+            //    }
+            //    service = Tc.ServiceInfoList;
+            //}
+
             if (channel.StartsWith("md5:"))
             {
-                //if (JudgeIsDebug.IsDebug)
-                //{
-                //    Log.Log.ConsoleWriteLine($"channel:{channel},long connection.");
-                //}
-                long waitTime = 19000;
-                var md5 = channel.Substring(4);
-                while (md5.Equals(Tc.ServiceMd5) && waitTime > 0)
-                {
-                    waitTime = waitTime - 10;
-                    Thread.Sleep(10);
-                }
-                //if (JudgeIsDebug.IsDebug)
-                //{
-                //    Log.Log.ConsoleWriteLine($"channel:{channel},long connection end.");
-                //}
                 service = Tc.ServiceInfoList;
             }
             else
@@ -79,7 +76,7 @@ namespace Anno.Rpc.Center
             int hc = 60;//检查次数
 
         hCheck://再次  心跳检测
-            TTransport transport = new TSocket(service.Ip, service.Port, 3000);
+            TTransport transport = new TSocket(service.Ip, service.Port, 10_000);
             try
             {
                 service.Checking = true;

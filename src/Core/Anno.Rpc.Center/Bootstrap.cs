@@ -70,7 +70,7 @@ namespace Anno.Rpc.Center
                 {
                     Task.Run(() => { Distribute.HealthCheck(service); });
                 });
-                Thread.Sleep(3000);
+                Thread.Sleep(5000);
             }
         }
 

@@ -18,7 +18,7 @@ namespace Anno.Rpc.Server
             int maxThreads = Const.SettingService.MaxThreads;
             if (maxThreads <= 0)
             {
-                maxThreads = 200;
+                maxThreads = 500;
             }
             _server = new TThreadedServer(processor, serverTransport,Log.Log.ConsoleWriteLine, maxThreads);
             new Thread(_server.Serve) { IsBackground = true }.Start();//开启业务服务
