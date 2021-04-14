@@ -13,9 +13,10 @@ namespace Anno.EngineData
         /// 插件启动配置
         /// </summary>
         /// <param name="iocAction">用于用户自定义做依赖注入</param>
-        public static void Bootstrap(Action iocAction)
+        public static void Bootstrap(Action iocAction,Loader.IocType iocType)
         {
             Const.SettingService.InitConfig();
+            Loader.IocLoader.RegisterIoc(iocType);
             iocAction?.Invoke();
             PreConfigurationBootstrap();
             Loader.IocLoader.Build();

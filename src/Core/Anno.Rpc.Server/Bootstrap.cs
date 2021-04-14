@@ -19,12 +19,11 @@ namespace Anno.Rpc.Server
         /// <param name="iocType">依赖注入类型</param>
         public static void StartUp(string[] args, Action diAction, Action startUpCallBack = null, Loader.IocType iocType = Loader.IocType.Autofac)
         {
-            Loader.IocLoader.RegisterIoc(iocType);
             var reStar = false;
         reStart:
             try
             {
-                Enter(args, diAction, reStar);
+                Enter(args, diAction, reStar,iocType);
                 startUpCallBack?.Invoke();
                 AppDomain.CurrentDomain.ProcessExit += (s, e) =>
                 {
@@ -66,11 +65,11 @@ namespace Anno.Rpc.Server
         /// <param name="args"></param>
         /// <param name="diAction"></param>
         /// <param name="reStart">异常之中回复启动，true。正常启动，false</param>
-        static void Enter(string[] args, Action diAction, bool reStart)
+        static void Enter(string[] args, Action diAction, bool reStart, Loader.IocType iocType)
         {
             if (!reStart)
             {
-                EngineData.AnnoBootstrap.Bootstrap(diAction);
+                EngineData.AnnoBootstrap.Bootstrap(diAction, iocType);
             }
             Console.Title = Const.SettingService.AppName;
             #region 设置监听端口（可以通过参数 设置。没有取配置文件）

@@ -51,11 +51,7 @@ namespace Anno.Loader
                 {
                     throw new ArgumentOutOfRangeException("IocType 参数类型不正确！");
                 }
-            }
-            else
-            {
-                throw new Exception("不能重复调用！");
-            }
+            }           
         }
         public static ContainerBuilder GetAutoFacContainerBuilder()
         {
