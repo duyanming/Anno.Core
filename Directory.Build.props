@@ -2,7 +2,7 @@
   <PropertyGroup>
     <DeveloperBuildCoreTfms>net5.0</DeveloperBuildCoreTfms>
     <StandardTfms>netstandard2.0</StandardTfms>
-    <Version>1.0.3.3</Version>
+    <Version>1.0.3.5</Version>
     <Authors>Du yanming</Authors>
     <Company>Du yanming</Company>
     <PackageIcon>logo.jpg</PackageIcon>
@@ -31,7 +31,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(SolutionDir)logo.jpg" Link="logo.jpg" PackagePath="\" />
-    <Content Include="$(SolutionDir)LICENSE" Link="LICENSE" PackagePath="\" />
+    <None Include="$(SolutionDir)logo.jpg"  Pack="true" PackagePath="\" />
+    <None Include="$(SolutionDir)LICENSE"   Pack="true" PackagePath="\" />
    </ItemGroup>
 </Project>
