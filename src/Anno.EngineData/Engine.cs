@@ -87,7 +87,7 @@ namespace Anno.EngineData
                 }
                 #endregion
                 List<object> lo = new List<object>() { input };
-                module = Loader.IocLoader.Resolve<BaseModule>(routInfo.RoutModuleType); //创建实例(无参构造器)
+                module = Loader.IocLoader.Resolve<BaseModule>(routInfo.RoutModuleType);
                 var init = module.Init(input);
                 if (!init)
                 {

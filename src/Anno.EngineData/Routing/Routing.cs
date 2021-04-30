@@ -43,6 +43,14 @@ namespace Anno.EngineData.Routing
                     success = true;
                 }
             }
+            if (metadata.GetType().GetInterface("ICacheMiddleware") != null)
+            {
+                if (!GlobalCacheMiddleware.Contains(metadata))
+                {
+                    GlobalCacheMiddleware.Add(metadata as ICacheMiddleware);
+                    success = true;
+                }
+            }
             return success;
         }
         #endregion
