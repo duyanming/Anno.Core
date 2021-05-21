@@ -112,12 +112,13 @@ namespace Anno.EngineData
                     routInfo.AuthorizationFilters[i].OnAuthorization(module);
                     if (!module.Authorized)
                     {
-                        return new ActionResult()
+                        return module.ActionResult == null ? new ActionResult()
                         {
                             Status = false,
                             OutputData = 401,
                             Msg = "401,Unauthrized"
-                        };
+                        } : module.ActionResult
+                        ;
                     }
                 }
                 #endregion
