@@ -71,7 +71,6 @@ namespace Anno.Rpc.Server
             {
                 EngineData.AnnoBootstrap.Bootstrap(diAction, iocType);
             }
-            Console.Title = Const.SettingService.AppName;
             #region 设置监听端口（可以通过参数 设置。没有取配置文件）
 
             int.TryParse(ArgsValue.GetValueByName("-p", args), out int port);
