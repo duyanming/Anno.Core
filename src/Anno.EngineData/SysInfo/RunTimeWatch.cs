@@ -7,12 +7,12 @@ namespace Anno.EngineData.SysInfo
     /// <summary>
     /// 记录程序运行时长
     /// </summary>
-    public class RunTimeWatch
+    public static class RunTimeWatch
     {
         static RunTimeWatch()
         {
             mWatch = new System.Diagnostics.Stopwatch();
-            StartTime = DateTime.Now;
+            StartTime =DateTime.Now;
             mWatch.Start();
         }
 

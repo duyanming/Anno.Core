@@ -11,7 +11,7 @@ namespace Anno
         /// <summary>
         /// 计算文件的哈希值
         /// </summary>
-        /// <param name="buffer">被操作的源数据流</param>
+        /// <param name="str">被操作的源数据</param>
         /// <param name="algo">加密算法</param>
         /// <returns>哈希值16进制字符串</returns>
         public static string HashCode(this string str, string algo = "md5")

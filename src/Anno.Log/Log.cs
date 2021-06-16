@@ -17,7 +17,7 @@ namespace Anno.Log
         /// <summary>
         /// 日志锁
         /// </summary>
-        private static object _locker = new object();
+        private static readonly object Locker = new object();
 
         /// <summary>
         /// 
@@ -48,10 +48,19 @@ namespace Anno.Log
         {
             if (JudgeIsDebug.IsDebug)
             {
-                Console.ForegroundColor = (ConsoleColor)new Random().Next(1, 14);
-                Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffff") + ":" + message);
-                Console.ResetColor();
+                WriteLine(message, (ConsoleColor)new Random().Next(1, 14));
             }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="color"></param>
+        public static void WriteLine(object message, ConsoleColor color = ConsoleColor.White)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffff") + ":" + message);
+            Console.ResetColor();
         }
 
         /// <summary>
@@ -126,7 +135,7 @@ namespace Anno.Log
             Task.Run(() =>
             {
                 //防止文件占用
-                lock (_locker)
+                lock (Locker)
                 {
                     string logFile = DateTime.Today.ToString("yyyy-MM-dd");
                     //目录
