@@ -95,6 +95,22 @@ namespace Anno.Plugs.HelloWorldService
         }
         #endregion
 
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <returns></returns>
+        [AnnoInfo(Desc = "上传文件")]
+        public dynamic UpLoadFile()
+        {
+            var file = Request<AnnoFile>("annoFile");
+            var filePath = AppDomain.CurrentDomain.BaseDirectory;
+            using (var stream = System.IO.File.Create(System.IO.Path.Combine(filePath, file.FileName)))
+            {
+                stream.Write(file.Content, 0, file.Length);
+            }
+            return new ActionResult(true, new { Msg = "上传成功", SourceId = 18 });
+        }
+
         public dynamic AddProducts(List<ProductDto> products) {
 
             return products;

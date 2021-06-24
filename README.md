@@ -101,6 +101,7 @@ Packages
     Anno.Plugs.HelloWorldService
     初始化配置
     实现接口：IPlugsConfigurationBootstrap
+    老二
 
 ```cs
 using Anno.EngineData;
