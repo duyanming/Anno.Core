@@ -377,7 +377,7 @@ namespace Anno.Const
             {
                 foreach (DirectoryInfo plugInfo in new DirectoryInfo(basePath).GetDirectories().Where(dir => dir.Name.StartsWith("Anno.Plugs.")))
                 {
-                    if (SettingService.IgnoreFuncNames.Exists(ig => plugInfo.Name.ToUpper().Contains(ig)))
+                    if (SettingService.IgnoreFuncNames.Exists(ig => plugInfo.Name.ToUpper().Trim().Contains(ig)))
                     {
                         continue;
                     }
