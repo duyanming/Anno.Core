@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 /*
  * 这是一个将注册中心和服务宿主合并到一个程序的示例
  * 注册中心配置文件为：Cocas.config
@@ -64,6 +64,12 @@ namespace Cocas
             Bootstrap.StartUp(args, () =>//服务配置文件读取完成后回调(服务未启动)
             {
                 var autofac = IocLoader.GetAutoFacContainerBuilder();
+                 /**
+                 * IRpcConnector 是Anno.EngineData 内置的服务调用接口
+                 * 例如：this.InvokeProcessor("Anno.Plugs.SoEasy", "AnnoSoEasy", "SayHi", input)
+                 * IRpcConnector 接口用户可以自己实现也可以使用 Thrift或者Grpc Anno内置的实现
+                 * 此处使用的是Thrift的实现
+                 */
                 autofac.RegisterType(typeof(RpcConnectorImpl)).As(typeof(IRpcConnector)).SingleInstance();
             }
             , () =>//服务启动后的回调方法
