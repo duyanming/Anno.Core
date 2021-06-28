@@ -24,7 +24,7 @@ namespace Anno.EngineData
         /// <returns></returns>
         public static ActionResult Transmit(Dictionary<string, string> input)
         {
-            #region 查找System.Type
+            #region 查找路由信息RoutInfo
             var key = $"{input[Eng.NAMESPACE]}Service.{input[Eng.CLASS]}Module/{input[Eng.METHOD]}";
             if (Routing.Routing.Router.TryGetValue(key, out Routing.RoutInfo routInfo))
             {
@@ -62,7 +62,7 @@ namespace Anno.EngineData
         /// <returns></returns>
         public static async Task<ActionResult> TransmitAsync(Dictionary<string, string> input)
         {
-            return await Task.Run(() => Transmit(input));
+            return await Task.Run(() => Transmit(input)).ConfigureAwait(false);
         }
         /// <summary>
         /// 根据服务转发
@@ -185,7 +185,7 @@ namespace Anno.EngineData
         /// <returns></returns>
         public static async Task<ActionResult> TransmitAsync(Dictionary<string, string> input, Routing.RoutInfo routInfo)
         {
-            return await Task.Run(() => Transmit(input, routInfo));
+            return await Task.Run(() => Transmit(input, routInfo)).ConfigureAwait(false);
         }
         /// <summary>
         /// 扩展属性校验

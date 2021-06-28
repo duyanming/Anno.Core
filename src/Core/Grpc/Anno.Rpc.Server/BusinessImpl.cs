@@ -13,28 +13,29 @@ namespace Anno.Rpc.Server
     {
         public override Task<BrokerReply> broker(BrokerRequest request, ServerCallContext context)
         {
-           return Task.Run(()=> {
-               BrokerReply reply = new BrokerReply();
-               ActionResult actionResult = null;
-               try
-               {
-                   Dictionary<string, string> input = new Dictionary<string, string>(request.Input);
-                   actionResult = Engine.Transmit(input);
-               }
-               catch (Exception ex)
-               { //记录异常日志
-                   actionResult = new ActionResult
-                   {
-                       Msg = ex.InnerException.Message
-                   };
-               }
-               reply.Reply= JsonConvert.SerializeObject(actionResult);
-               return reply;
-           });
+            return Task.Run(() =>
+            {
+                BrokerReply reply = new BrokerReply();
+                ActionResult actionResult = null;
+                try
+                {
+                    Dictionary<string, string> input = new Dictionary<string, string>(request.Input);
+                    actionResult = Engine.Transmit(input);
+                }
+                catch (Exception ex)
+                { //记录异常日志
+                    actionResult = new ActionResult
+                    {
+                        Msg = ex.InnerException?.Message ?? ex.Message
+                    };
+                }
+                reply.Reply = JsonConvert.SerializeObject(actionResult);
+                return reply;
+            });
         }
         public override Task<PingReply> Ping(Empty request, ServerCallContext context)
         {
-            return Task.FromResult(new PingReply() { Reply=true});
+            return Task.FromResult(new PingReply() { Reply = true });
         }
     }
 }

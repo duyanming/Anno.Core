@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using Anno.EngineData;
-using Anno.Rpc;
 
 namespace Anno.Rpc.Server
 {
@@ -10,7 +9,7 @@ namespace Anno.Rpc.Server
     {
         public string broker(Dictionary<string, string> input)
         {
-            ActionResult actionResult = null;
+            ActionResult actionResult;
             try
             {
                 actionResult = Engine.Transmit(input);
@@ -19,7 +18,7 @@ namespace Anno.Rpc.Server
             { //记录异常日志
                 actionResult = new ActionResult
                 {
-                    Msg = ex.InnerException.Message
+                    Msg = ex.InnerException?.Message??ex.Message
                 };
             }
             return JsonConvert.SerializeObject(actionResult);
