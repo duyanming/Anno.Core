@@ -4,8 +4,20 @@
 [![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.svg)](https://www.nuget.org/packages/Anno.EngineData)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/duyanming/Anno.Core/master/LICENSE)
 
-![Dashboard](https://z3.ax1x.com/2021/04/01/cE4QPS.png)
-![Dashboard](https://z3.ax1x.com/2021/04/01/cE58JO.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/Rade3R.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/RadaKP.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/RawXSs.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/Ra0FfJ.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/RadBVS.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/RadWrV.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/RadXqK.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/RawPxI.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/RaweIg.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/RawhQI.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/Ra0tnP.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/Ra0ocR.png)
+![Dashboard](https://z3.ax1x.com/2021/06/29/RaBkE8.png)
+
 
 [在线演示](http://140.143.207.244) :http://140.143.207.244
 
@@ -43,7 +55,6 @@ Package name                           |Description     | Version               
 `Anno.EngineData.Cache`|Anno服务缓存中间件 | [![NuGet](https://img.shields.io/nuget/v/Anno.EngineData.Cache.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.EngineData.Cache/) | ![downloads](https://img.shields.io/nuget/dt/Anno.EngineData.Cache.svg)
 `Anno.Plugs.MonitorService`|Anno服务监控中间件 | [![NuGet](https://img.shields.io/nuget/v/Anno.Plugs.MonitorService.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Plugs.MonitorService/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Plugs.MonitorService.svg)
 `Anno.Rpc.Client.DynamicProxy`|接口代理Anno客户端扩展 | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.Client.DynamicProxy.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.Client.DynamicProxy/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.Client.DynamicProxy.svg)
-`Anno.Rpc.ExtClient`|接口代理Anno客户端扩展 | [![NuGet](https://img.shields.io/nuget/v/Anno.Rpc.ExtClient.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Anno.Rpc.ExtClient/) | ![downloads](https://img.shields.io/nuget/dt/Anno.Rpc.ExtClient.svg)
 
 ## 🎂整体架构
 ![整体架构](https://s3.ax1x.com/2020/12/18/rtegcd.png)
@@ -98,10 +109,11 @@ Package name                           |Description     | Version               
 服务宿主程序，本着约定大于配置的开发原则。
 插件式开发具体参考：
 Packages
-    Anno.Plugs.HelloWorldService
-    初始化配置
+
+    命名空间和程序集名称相同，格式为Anno.Plugs.XXXService 例如：Anno.Plugs.HelloWorldService
+
+    初始化配置    
     实现接口：IPlugsConfigurationBootstrap
-    老二
 
 ```cs
 using Anno.EngineData;
@@ -144,6 +156,7 @@ namespace Anno.Plugs.HelloWorldService
 功能模块实现
 继承: BaseModule
 
+Module命名规范为 XXXModule，以Module结尾 例如：HelloWorldViperModule
 ```cs
 /****************************************************** 
 Writer:Du YanMing

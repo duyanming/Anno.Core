@@ -59,7 +59,7 @@ namespace Anno.Log
         public static void WriteLine(object message, ConsoleColor color = ConsoleColor.White)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffff") + ":" + message);
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss:ffff}]: {message}");
             Console.ResetColor();
         }
 
@@ -70,7 +70,7 @@ namespace Anno.Log
         public static void ConsoleWriteLine(string message)
         {
             Console.ForegroundColor = (ConsoleColor)new Random().Next(1, 14);
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffff") + ":" + message);
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss:ffff}]: {message}");
             Console.ResetColor();
         }
         /// <summary>
