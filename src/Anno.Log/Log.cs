@@ -64,6 +64,18 @@ namespace Anno.Log
         }
 
         /// <summary>
+        /// 没有开头 [{DateTime.Now:yyyy-MM-dd HH:mm:ss:ffff}]:
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="color"></param>
+        public static void WriteLineNoDate(object message, ConsoleColor color = ConsoleColor.White)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>

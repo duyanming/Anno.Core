@@ -23,8 +23,8 @@
     <PackageReference Include="Polly" Version="7.2.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Anno.Const\Anno.Const.csproj" />
     <ProjectReference Include="..\..\..\Anno.CronNET\Anno.CronNET.csproj" />
+    <ProjectReference Include="..\..\..\Anno.Log\Anno.Log.csproj" />
     <Compile Include="..\..\Anno.Rpc.Client\Storage\*.cs" />
     <Compile Include="..\..\Anno.Rpc.Client\StringHashCode.cs" />
     <Compile Remove="..\..\Anno.Rpc.Client\Storage\StorageEngine.cs" />

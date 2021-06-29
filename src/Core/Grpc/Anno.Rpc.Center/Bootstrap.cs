@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Anno.Rpc.Center
 {
+    using Anno.Log;
     public static class Bootstrap
     {
         /// <summary>
@@ -21,11 +22,9 @@ namespace Anno.Rpc.Center
             {
                 if (Monitor.State)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} AnnoCenter Service is being stopped·····");
+                    Log.WriteLine("AnnoCenter Service is being stopped·····", ConsoleColor.DarkGreen);
                     Monitor.Stop();
-                    Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} AnnoCenter The service has stopped!");
-                    Console.ResetColor();
+                    Log.WriteLine("AnnoCenter The service has stopped!", ConsoleColor.DarkGreen);
                 }
             };
             Monitor.Start();
@@ -59,9 +58,7 @@ namespace Anno.Rpc.Center
                 finally { }
             };
             #endregion
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}:服务注册、发现、健康检查、负载均衡中心，端口：{tc.Port}（AnnoCenter）已启动！");
-            Console.ResetColor();
+            Log.WriteLine($"服务注册、发现、健康检查、KV存储、API文档、负载均衡中心，端口：{tc.Port}（AnnoCenter）已启动！", ConsoleColor.DarkGreen);
             //阻止daemon进程退出
             while (true)
             {
@@ -93,7 +90,7 @@ namespace Anno.Rpc.Center
             logo += $" Version          [{ typeof(Center.Bootstrap).Assembly.GetName().Version}]\r\n";
             logo += $" Repository       https://github.com/duyanming/anno.core \r\n";
             logo += " -----------------------------------------------------------------------------\r\n";
-            System.Console.WriteLine(logo);
+            Log.WriteLineNoDate(logo);
         }
     }
 }

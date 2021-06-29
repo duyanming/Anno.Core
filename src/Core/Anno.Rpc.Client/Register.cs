@@ -10,6 +10,7 @@ using Thrift.Transport;
 
 namespace Anno.Rpc.Client
 {
+    using Anno.Log;
     /// <summary>
     /// 注册中心
     /// </summary>
@@ -50,16 +51,13 @@ namespace Anno.Rpc.Client
                 _transport.Close();
                 if (rlt)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine($"{DateTime.Now}");
-                    Console.WriteLine($"本机【{SettingService.AppName}】：");
+                    Log.WriteLine($"本机【{SettingService.AppName}】：", ConsoleColor.DarkGreen);
                     foreach (var ip in info["ip"].Split(','))
                     {
-                        Console.WriteLine($"{ip}");
+                        Log.WriteLine($"{ip}", ConsoleColor.DarkGreen);
                     }
-                    Console.WriteLine($"已注册到：{target.IpAddress}");
-                    Console.ResetColor();
-                    Console.WriteLine($"----------------------------------------------------------------- ");
+                    Log.WriteLine($"已注册到：{target.IpAddress}", ConsoleColor.DarkGreen);
+                    Log.WriteLineNoDate(" -----------------------------------------------------------------------------");
                 }
                 return rlt;
             }
@@ -68,10 +66,8 @@ namespace Anno.Rpc.Client
                 Thread.Sleep(1000);//间隔一秒后重新注册
                 if (countDown > 0)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine($"{DateTime.Now} 注册到{target.IpAddress}:{target.Port}失败......剩余重试次数（{countDown}）");
-                    Console.WriteLine($"错误信息：{ex.Message}");
-                    Console.ResetColor();
+                    Log.WriteLine($"注册到{target.IpAddress}:{target.Port}失败......剩余重试次数（{countDown}）", ConsoleColor.DarkYellow);
+                    Log.WriteLineNoDate($"错误信息：{ex.Message}");
                     try
                     {
                         if (_transport.IsOpen)
@@ -89,9 +85,7 @@ namespace Anno.Rpc.Client
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine($"{DateTime.Now} 未连接到{target.IpAddress}:{target.Port}注册失败......");
-                    Console.ResetColor();
+                    Log.WriteLine($"{DateTime.Now} 未连接到{target.IpAddress}:{target.Port}注册失败......", ConsoleColor.DarkRed);
                 }
 
             }
@@ -128,9 +122,7 @@ namespace Anno.Rpc.Client
             {
                 return string.Join(",", addresses.ToList());
             }
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("找不到有效IPv4地址！");
-            Console.ResetColor();
+            Log.WriteLine("找不到有效IPv4地址！", ConsoleColor.DarkYellow);
             return string.Empty;
         }
     }

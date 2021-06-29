@@ -4,6 +4,7 @@ using Grpc.Core;
 
 namespace Anno.Rpc.Server
 {
+    using Anno.Log;
     public static class Server
     {
         private static Grpc.Core.Server _server;
@@ -46,7 +47,7 @@ namespace Anno.Rpc.Server
             logo += $" Version          [{ typeof(Client.Connector).Assembly.GetName().Version}]\r\n";
             logo += $" Repository       https://github.com/duyanming/anno.core \r\n";
             logo += " -----------------------------------------------------------------------------\r\n";
-            System.Console.WriteLine(logo);
+            Log.WriteLineNoDate(logo);
         }
     }
 }

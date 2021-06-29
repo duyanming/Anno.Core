@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Anno.Rpc.Center
 {
+    using Anno.Log;
     /// <summary>
     /// 系统配置
     /// </summary>
@@ -187,17 +188,14 @@ namespace Anno.Rpc.Center
                         ServiceInfoList.Add(ips);
                     }
 
-                    Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}");
-                    Console.WriteLine($"{ips.Ip}:{ips.Port}");
+                    Log.WriteLine($"{ips.Ip}:{ips.Port}", ConsoleColor.DarkGreen);
                     ips.Name.Split(',').ToList().ForEach(f =>
                     {
-                        Console.WriteLine($"{f}");
+                        Log.WriteLine($"{f}", ConsoleColor.DarkGreen);
                     });
-                    Console.WriteLine($"{"w:" + ips.Weight}");
-                    Console.WriteLine($"{ips.NickName}已登记！");
-                    Console.ResetColor();
-                    Console.WriteLine($"----------------------------------------------------------------- ");
+                    Log.WriteLine($"{"权重:" + ips.Weight}", ConsoleColor.DarkGreen);
+                    Log.WriteLine($"{ips.NickName}已登记！", ConsoleColor.DarkGreen);
+                    Log.WriteLineNoDate($" -----------------------------------------------------------------------------");
                     #region 上线和变更通知                   
                     if (OnlineNotice != null && oldService == null)
                     {

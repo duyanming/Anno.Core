@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Thrift.Transport;
-using Thrift.Protocol;
-using System.IO;
-using System.Threading.Tasks;
-using Anno.Rpc;
 
 namespace Anno.Rpc.Center
 {
+    using Anno.Log;
     public static class Distribute
     {
         /// <summary>
@@ -85,17 +82,14 @@ namespace Anno.Rpc.Center
                 {
                     if (hc != 60)
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkGreen;
-                        Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: ");
-                        Console.WriteLine($"{service.Ip}:{service.Port}");
+                        Log.WriteLine($"{service.Ip}:{service.Port}", ConsoleColor.DarkGreen);
                         foreach (var f in service.Name.Split(','))
                         {
-                            Console.WriteLine($"{f}");
+                            Log.WriteLine($"{f}", ConsoleColor.DarkGreen);
                         }
-                        Console.WriteLine($"{"w:" + service.Weight}");
-                        Console.WriteLine($"恢复正常！");
-                        Console.ResetColor();
-                        Console.WriteLine($"----------------------------------------------------------------- ");
+                        Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkGreen);
+                        Log.WriteLine($"恢复正常！", ConsoleColor.DarkGreen);
+                        Log.WriteLineNoDate($" -----------------------------------------------------------------------------");
                     }                   
                     transport.Flush();
                     transport.Close();
@@ -120,48 +114,39 @@ namespace Anno.Rpc.Center
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error Info:{service.Ip}:{service.Port} {ex.Message}");
+                Log.WriteLine($"Error Info:{service.Ip}:{service.Port} {ex.Message}", ConsoleColor.DarkYellow);
                 if (hc == 60)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: ");
-                    Console.WriteLine($"{service.Ip}:{service.Port}");
+                    Log.WriteLine($"{service.Ip}:{service.Port}", ConsoleColor.DarkYellow);
                     foreach (var f in service.Name.Split(','))
                     {
-                        Console.WriteLine($"{f}");
+                        Log.WriteLine($"{f}", ConsoleColor.DarkYellow);
                     }
-                    Console.WriteLine($"{"w:" + service.Weight}");
-                    Console.WriteLine($"检测中···{hc}！");
-                    Console.ResetColor();
-                    Console.WriteLine($"----------------------------------------------------------------- ");
+                    Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
+                    Log.WriteLine($"检测中···{hc}！", ConsoleColor.DarkYellow);
+                    Log.WriteLineNoDate($" -----------------------------------------------------------------------------");
                 }
                 else if (hc == (60 - errorCount))
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: ");
-                    Console.WriteLine($"{service.Ip}:{service.Port}");
+                    Log.WriteLine($"{service.Ip}:{service.Port}", ConsoleColor.DarkYellow);
                     foreach (var f in service.Name.Split(','))
                     {
-                        Console.WriteLine($"{f}");
+                        Log.WriteLine($"{f}", ConsoleColor.DarkYellow);
                     }
-                    Console.WriteLine($"{"w:" + service.Weight}");
-                    Console.WriteLine($"故障恢复中···{hc}！");
-                    Console.ResetColor();
-                    Console.WriteLine($"----------------------------------------------------------------- ");
+                    Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
+                    Log.WriteLine($"故障恢复中···{hc}！", ConsoleColor.DarkYellow);
+                    Log.WriteLineNoDate($" -----------------------------------------------------------------------------");
                 }
                 else if (hc == 0) //硬删除
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}:");
-                    Console.WriteLine($"{service.Ip}:{service.Port}");
+                    Log.WriteLine($"{service.Ip}:{service.Port}", ConsoleColor.DarkYellow);
                     foreach (var f in service.Name.Split(','))
                     {
                         Console.WriteLine($"{f}");
                     }
-                    Console.WriteLine($"{"w:" + service.Weight}");
-                    Console.WriteLine($"永久移除！");
-                    Console.ResetColor();
-                    Console.WriteLine($"----------------------------------------------------------------- ");                   
+                    Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
+                    Log.WriteLine($"永久移除···{hc}！", ConsoleColor.DarkYellow);
+                    Log.WriteLineNoDate($" -----------------------------------------------------------------------------");                 
                 }
 
                 if (hc == (60 - errorCount)) //三次失败之后 临时移除 ，防止更多请求转发给此服务节点 
