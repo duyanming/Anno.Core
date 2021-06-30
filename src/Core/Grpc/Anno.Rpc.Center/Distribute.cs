@@ -86,7 +86,7 @@ namespace Anno.Rpc.Center
                         }
                         Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkGreen);
                         Log.WriteLine($"恢复正常！", ConsoleColor.DarkGreen);
-                        Log.WriteLineNoDate($" -----------------------------------------------------------------------------");
+                        Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
                     }
                     lock (LockHelper) //防止高并发下 影响权重
                     {
@@ -118,7 +118,7 @@ namespace Anno.Rpc.Center
                     }
                     Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
                     Log.WriteLine($"检测中···{hc}！", ConsoleColor.DarkYellow);
-                    Log.WriteLineNoDate($" -----------------------------------------------------------------------------");
+                    Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
                 }
                 else if (hc == (60 - errorCount))
                 {
@@ -129,7 +129,7 @@ namespace Anno.Rpc.Center
                     }
                     Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
                     Log.WriteLine($"故障恢复中···{hc}！", ConsoleColor.DarkYellow);
-                    Log.WriteLineNoDate($" -----------------------------------------------------------------------------");
+                    Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
                 }
                 else if (hc == 0) //硬删除
                 {
@@ -140,7 +140,7 @@ namespace Anno.Rpc.Center
                     }
                     Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
                     Log.WriteLine($"永久移除···{hc}！", ConsoleColor.DarkYellow);
-                    Log.WriteLineNoDate($" -----------------------------------------------------------------------------");
+                    Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
                 }
 
                 if (hc == (60 - errorCount)) //三次失败之后 临时移除 ，防止更多请求转发给此服务节点 

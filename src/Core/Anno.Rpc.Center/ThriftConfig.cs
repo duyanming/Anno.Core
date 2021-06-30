@@ -195,7 +195,7 @@ namespace Anno.Rpc.Center
                     });
                     Log.WriteLine($"{"权重:" + ips.Weight}", ConsoleColor.DarkGreen);
                     Log.WriteLine($"{ips.NickName}已登记！", ConsoleColor.DarkGreen);
-                    Log.WriteLineNoDate($" -----------------------------------------------------------------------------");
+                    Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
                     #region 上线和变更通知                   
                     if (OnlineNotice != null && oldService == null)
                     {

@@ -58,8 +58,10 @@ namespace Anno.Log
         /// <param name="color"></param>
         public static void WriteLine(object message, ConsoleColor color = ConsoleColor.White)
         {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($" [{DateTime.Now:yyyy-MM-dd HH:mm:ss:ffff}]: ");
             Console.ForegroundColor = color;
-            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss:ffff}]: {message}");
+            Console.WriteLine($"{message}");
             Console.ResetColor();
         }
 
@@ -71,7 +73,18 @@ namespace Anno.Log
         public static void WriteLineNoDate(object message, ConsoleColor color = ConsoleColor.White)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(message);
+            Console.WriteLine($" {message}");
+            Console.ResetColor();
+        }
+        /// <summary>
+        /// 没有开头 [{DateTime.Now:yyyy-MM-dd HH:mm:ss:ffff}]:
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="color"></param>
+        public static void WriteLineAlignNoDate(object message, ConsoleColor color = ConsoleColor.White)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine($"                             {message}");
             Console.ResetColor();
         }
 

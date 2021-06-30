@@ -30,7 +30,7 @@ namespace Anno.Rpc.Server
                     startUpCallBack?.Invoke();
                 }
                 catch (Exception ex) {
-                    Log.WriteLineNoDate(ex.Message);
+                    Log.WriteLineAlignNoDate(ex.Message);
                 }
                 AppDomain.CurrentDomain.ProcessExit += (s, e) =>
                 {
@@ -122,7 +122,7 @@ namespace Anno.Rpc.Server
                 Log.WriteLine($"{f}", ConsoleColor.DarkGreen);
             }
             Log.WriteLine($"{"权重:" + Const.SettingService.Weight}", ConsoleColor.DarkGreen);
-            Log.WriteLineNoDate(" -----------------------------------------------------------------------------");
+            Log.WriteLineNoDate("-----------------------------------------------------------------------------");
             Const.SettingService.Ts.ForEach(t => { new Client.Register().ToCenter(t, 60); });
             /*
              * 1、 Const.SettingService.Local 在AnnoService(服务提供方)中 作为 本机信息

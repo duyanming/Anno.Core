@@ -47,7 +47,7 @@ namespace Anno.Rpc.Client
                         Log.WriteLine($"{ip}", ConsoleColor.DarkGreen);
                     }
                     Log.WriteLine($"已注册到：{target.IpAddress}", ConsoleColor.DarkGreen);
-                    Log.WriteLineNoDate(" -----------------------------------------------------------------------------");
+                    Log.WriteLineNoDate("-----------------------------------------------------------------------------");
                 }
                 return rlt;
             }
@@ -57,7 +57,7 @@ namespace Anno.Rpc.Client
                 if (countDown > 0)
                 {
                     Log.WriteLine($"注册到{target.IpAddress}:{target.Port}失败......剩余重试次数（{countDown}）", ConsoleColor.DarkYellow);
-                    Log.WriteLineNoDate($"错误信息：{ex.Message}");
+                    Log.WriteLineAlignNoDate(ex.Message);
                     try
                     {
                         _client = new BrokerCenter.BrokerCenterClient(_channel);
