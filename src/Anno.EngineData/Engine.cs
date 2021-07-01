@@ -166,8 +166,10 @@ namespace Anno.EngineData
                         ef.OnException(ex, module);
                     }
                 }
+#if DEBUG
                 //记录日志
                 Log.Log.Error(ex, routInfo.RoutModuleType);
+#endif
                 return new ActionResult()
                 {
                     Status = false,
