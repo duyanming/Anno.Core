@@ -48,7 +48,7 @@ namespace Cocas
         {
             if (args.Contains("-help"))
             {
-                Log.ConsoleWriteLine(@"
+                Log.WriteLineNoDate(@"
 启动参数：
 	-p 6659		设置启动端口
 	-xt 200		设置服务最大线程数
