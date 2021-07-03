@@ -202,12 +202,12 @@ namespace Anno.EngineData
             {
                 if (p.GetCustomAttributes<FromBodyAttribute>().Any())
                 {
-                    parameters.Add(Newtonsoft.Json.JsonConvert.DeserializeObject(Newtonsoft.Json.JsonConvert.SerializeObject(input), p.ParameterType));
+                    parameters.Add(p.ParameterType.ToObjFromDic(input));
                     continue;
                 }
                 else if (input.ContainsKey(p.Name))
                 {
-                    if (p.ParameterType.FullName.StartsWith("System.Collections.Generic.List`1["))
+                    if (p.ParameterType.FullName.StartsWith("System.Collections.Generic"))
                     {
                         parameters.Add(Newtonsoft.Json.JsonConvert.DeserializeObject(input[p.Name], p.ParameterType));
                     }
@@ -311,6 +311,49 @@ namespace Anno.EngineData
             }
 
             return sb.ToString();
+        }
+
+        private static object ToObjFromDic(this Type type, Dictionary<string, string> input)
+        {
+            var body = type.Assembly.CreateInstance(type.FullName);
+            List<PropertyInfo> targetProps = type.GetProperties().Where(p => p.CanWrite == true).ToList();
+            var fields = type.GetFields().Where(p => p.IsPublic).ToList();
+            if (targetProps != null && targetProps.Count > 0)
+            {
+                var keys = input.Keys.ToList();
+                foreach (var propertyInfo in targetProps)
+                {
+                    foreach (var key in keys)
+                    {
+                        if (key.Equals(propertyInfo.Name, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            var valueStr = input[key];
+                            try
+                            {
+                                if (propertyInfo.PropertyType.IsPrimitive ||
+                                    (propertyInfo.PropertyType.FullName.StartsWith("System.") && !propertyInfo.PropertyType.FullName.StartsWith("System.Collections.Generic")))
+                                {
+                                    var value = Convert.ChangeType(valueStr, propertyInfo.PropertyType);
+                                    propertyInfo.SetValue(body, value, null);
+                                }
+                                else if (propertyInfo.PropertyType.BaseType == enumType)
+                                {
+                                    var value = Enum.Parse(propertyInfo.PropertyType, valueStr);
+                                    propertyInfo.SetValue(body, value, null);
+                                }
+                                else
+                                {
+                                    var value = Newtonsoft.Json.JsonConvert.DeserializeObject(valueStr, propertyInfo.PropertyType);
+                                    propertyInfo.SetValue(body, value, null);
+                                }
+                            }
+                            catch { }
+                            break;
+                        }
+                    }
+                }
+            }
+            return body;
         }
     }
 }
