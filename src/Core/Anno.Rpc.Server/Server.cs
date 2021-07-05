@@ -35,7 +35,7 @@ namespace Anno.Rpc.Server
             var logo = "\r\n";
             logo += " -----------------------------------------------------------------------------\r\n";
             logo +=
-@"                                                _                    
+$@"                                                _                    
      /\                           ___          (_)                   
     /  \    _ __   _ __    ___   ( _ )  __   __ _  _ __    ___  _ __ 
    / /\ \  | '_ \ | '_ \  / _ \  / _ \/\\ \ / /| || '_ \  / _ \| '__|
@@ -43,7 +43,7 @@ namespace Anno.Rpc.Server
  /_/    \_\|_| |_||_| |_| \___/  \___/\/  \_/  |_|| .__/  \___||_|   
                                                   | |                
                                                   |_|                
-                                            anno&viper  thrift service 
+                                 [{EngineData.SysInfo.RunTimeWatch.StartTime:yyyy-MM-dd HH:mm:ss}] thrift service 
 ";
             logo += " -----------------------------------------------------------------------------\r\n";
             logo += $" Server Port      {Const.SettingService.Local.Port} \r\n";
