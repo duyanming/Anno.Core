@@ -24,6 +24,10 @@ namespace Anno.Rpc.Center
         /// 服务更改通知事件
         /// </summary>
         public event ServiceChangeNotice ChangeNotice = null;
+        /// <summary>
+        /// AnnoCenter 默认配置文件名称
+        /// </summary>
+        public static string AnnoFile { get; set; } = "Anno.config";
         private static readonly object LockHelper = new object();
 
         private static readonly object LockAdd = new object();
@@ -83,7 +87,7 @@ namespace Anno.Rpc.Center
         /// </summary>
         private void Init()
         {
-            string xmlPath = Path.Combine(Directory.GetCurrentDirectory(), "Anno.config");
+            string xmlPath = Path.Combine(Directory.GetCurrentDirectory(), AnnoFile);
             if (File.Exists(xmlPath))
             {
                 XmlDocument xml = new XmlDocument();
@@ -225,7 +229,7 @@ namespace Anno.Rpc.Center
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(Path.Combine(Directory.GetCurrentDirectory(), "Anno.config"));
+                xml.Load(Path.Combine(Directory.GetCurrentDirectory(), AnnoFile));
                 XmlNode servers = xml.SelectSingleNode("//configuration/Servers");//查找<Servers> 
                 servers.RemoveAll();
                 List<ServiceInfo> tempIps = new List<ServiceInfo>();
@@ -247,7 +251,7 @@ namespace Anno.Rpc.Center
                     xe.SetAttribute("weight", p.Weight.ToString());
                     servers.AppendChild(xe);
                 });
-                xml.Save(Path.Combine(Directory.GetCurrentDirectory(), "Anno.config"));
+                xml.Save(Path.Combine(Directory.GetCurrentDirectory(), AnnoFile));
             }
             catch (Exception ex)
             {
