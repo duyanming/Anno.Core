@@ -10,7 +10,6 @@ namespace Anno.Rpc.Client
 {
     using Anno.Const;
     using Grpc.Core;
-    using Polly;
     using Anno.Const.Enum;
 
     /// <summary>
@@ -40,15 +39,15 @@ namespace Anno.Rpc.Client
                     return FailMessage($"缺少必输关键字（{Eng.NAMESPACE}、{Eng.CLASS}、{Eng.METHOD}）");
                 }
 
-                var retryPolicy =
-                     Policy
-                         .Handle<RpcException>()//.Or<TTransportException>().Or<Exception>()
-                         .WaitAndRetry(new[] {
-                            TimeSpan.FromSeconds(0.1),
-                            TimeSpan.FromSeconds(0.5),
-                            TimeSpan.FromSeconds(1) });
-                retryPolicy.Execute(() =>
-                {
+                //var retryPolicy =
+                //     Policy
+                //         .Handle<RpcException>()
+                //         .WaitAndRetry(new[] {
+                //            TimeSpan.FromSeconds(0.1),
+                //            TimeSpan.FromSeconds(0.5),
+                //            TimeSpan.FromSeconds(1) });
+                //retryPolicy.Execute(() =>
+                //{
                     #region 获取目标服务器信息
                     var caches = Single(input[Eng.NAMESPACE]);
                     if (caches != null)
@@ -61,7 +60,7 @@ namespace Anno.Rpc.Client
                     }
                     #endregion
 
-                });
+                //});
             }
             catch (Exception e)
             {
@@ -221,8 +220,15 @@ namespace Anno.Rpc.Client
             }
             catch (Exception ex) //如果异常则从缓存中清除 该缓存
             {
-                _microCaches.RemoveAll(c => c.Mi.Ip == micro.Ip && c.Mi.Port == micro.Port);
-                throw ex;
+                if (ex is RpcException && ((RpcException)ex).StatusCode==StatusCode.DeadlineExceeded)
+                {
+                    output = FailMessage(ex.Message);
+                }
+                else
+                {
+                    _microCaches.RemoveAll(c => c.Mi.Ip == micro.Ip && c.Mi.Port == micro.Port);
+                    throw ex;
+                }
             }
             finally
             {
@@ -340,7 +346,7 @@ namespace Anno.Rpc.Client
                 try
                 {
                     _channel.ShutdownAsync();
-                    // return (null, FailMessage($"负载中心连接失败！"));
+                    //Log.Log.WriteLine($"UpdateCache-{ex.Message}");
                     _channel = new Channel($"{SettingService.Local.IpAddress}:{SettingService.Local.Port}", ChannelCredentials.Insecure);
                     _client = new BrokerCenter.BrokerCenterClient(_channel);
                 }

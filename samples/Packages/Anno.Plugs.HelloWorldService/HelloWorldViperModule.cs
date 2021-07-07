@@ -115,6 +115,17 @@ namespace Anno.Plugs.HelloWorldService
 
             return products;
         }
+        /// <summary>
+        /// 等待指定的秒数
+        /// </summary>
+        /// <param name="seconds">时间单位秒</param>
+        /// <returns></returns>
+        public dynamic WaitFor(int seconds) {
+            DateTime starTime = DateTime.Now;
+            System.Threading.Thread.Sleep(seconds*1000);
+            DateTime endTime = DateTime.Now;
+            return $"starTime:[{starTime:yyyy-MM-dd HH:mm:ss}],endTime:[{endTime:yyyy-MM-dd HH:mm:ss}]";
+        }
     }
     public class TestDto
     {

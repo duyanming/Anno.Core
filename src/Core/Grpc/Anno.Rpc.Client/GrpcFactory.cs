@@ -77,7 +77,7 @@ namespace Anno.Rpc.Client
         {
             if (!_tranPool.TryGetValue(id, out var transpool))
             {
-                throw new GrpcException($"未找到服务【{id}】");
+                throw new GrpcException(GrpcException.ExceptionType.ServerCaptured,$"未找到服务【{id}】");
             }
             if (!transpool.TransportPool.TryPop(out var transport))
             {
@@ -92,13 +92,13 @@ namespace Anno.Rpc.Client
                     //Console.WriteLine("WaitingTimeoutEnd");
                     if (!result)
                     {
-                        throw new GrpcException($"Timeout连接池等待超时！");
+                        throw new GrpcException(GrpcException.ExceptionType.Timeout,$"Timeout连接池等待超时！");
                         //monitor.TimeoutNotify(transpool.ServiceConfig.Name, transpool.ServiceConfig.WaitingTimeout);
                     }
                 }
                 if (!transpool.TransportPool.TryPop(out transport))
                 {
-                    throw new GrpcException("连接池异常");
+                    throw new GrpcException(GrpcException.ExceptionType.ServerUnkown, "连接池异常");
                 }
             }
             transpool.InterlockedIncrement();

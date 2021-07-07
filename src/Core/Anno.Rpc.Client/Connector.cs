@@ -351,9 +351,7 @@ namespace Anno.Rpc.Client
                 {
                     if (connectionCenterInit == false)
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffff") + $":注册中心 {SettingService.Local.IpAddress}:{SettingService.Local.Port} " + ex.Message);
-                        Console.ResetColor();
+                        Log.Log.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffff") + $":注册中心 {SettingService.Local.IpAddress}:{SettingService.Local.Port} " + ex.Message, ConsoleColor.DarkYellow);
                         connectionCenterInit = true;
                     }
                     // return (null, FailMessage($"负载中心连接失败！"));

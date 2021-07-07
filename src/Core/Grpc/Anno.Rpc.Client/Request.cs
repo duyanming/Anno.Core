@@ -44,22 +44,24 @@ namespace Anno.Rpc.Client
                 if (ex is RpcException)//连接不可用的时候 直接销毁 从新从连接池拿
                 {
                     var sEx = (RpcException)ex;
-                    if (sEx.StatusCode == StatusCode.Unavailable)
+                    if (sEx.StatusCode == StatusCode.Unavailable || sEx.StatusCode == StatusCode.Aborted)
                     {
                         error++;
                         if (error == 3) //累计3 拿不到有效连接 抛出异常 移除（此值 只是一个参考）
                         {
                             GrpcFactory.RemoveServicePool(id);
-                            throw sEx; 
+                            throw sEx;
                         }
 
-                        GrpcFactory.ReturnInstance(transport,id); //归还有问题链接
+                        GrpcFactory.ReturnInstance(transport, id); //归还有问题链接
 
                         transport = GrpcFactory.BorrowInstance(id);
                         goto reStart;
                     }
+                    else if (sEx.StatusCode == StatusCode.DeadlineExceeded) {
+                        GrpcFactory.ReturnInstance(transport, id); //归还有问题链接
+                    }
                 }
-                GrpcFactory.RemoveServicePool(id);
                 throw ex;
             }
             return output;

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(DeveloperBuildCoreTfms)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Grpc\Anno.Rpc.Client\Anno.Rpc.ClientGrpc.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -209,7 +209,7 @@ namespace Anno.Rpc.Center
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    Log.WriteLine(ex);
                     return false;
                 }
                 finally
@@ -254,7 +254,7 @@ namespace Anno.Rpc.Center
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Log.WriteLine(ex);
                 return false;
             }
             return true;
