@@ -22,12 +22,14 @@ namespace Anno.Test
             input.Add("productName", "ThinkBook 14");
             input.Add("number", "6");
             var x = Connector.BrokerDns(input);
+            Console.WriteLine(x);
             Assert.IsTrue(x.IndexOf("true") > 0);
         }
 
         [SetUp]
         public void SetUp()
         {
+            Console.OutputEncoding = Encoding.UTF8;
             DefaultConfigManager.SetDefaultConnectionPool(1000, Environment.ProcessorCount * 2, 100);
             DefaultConfigManager.SetDefaultConfiguration("ServiceCallService", "127.0.0.1", 6660, false);
         }

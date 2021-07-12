@@ -36,8 +36,9 @@ namespace ConsoleGrpcTest
 
                         input.Add("channel", "Anno.Plugs.HelloWorld");
                         input.Add("router", "HelloWorldViper");
-                        input.Add("method", "WaitFor");
-                        input.Add("seconds", "5");
+                        input.Add("method", "Test0");
+                        //input.Add("method", "WaitFor");
+                        //input.Add("seconds", "5");
                         var t1 = Task.Run(() =>
                         {
                             var x = Connector.BrokerDns(input);
