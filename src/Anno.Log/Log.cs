@@ -9,11 +9,34 @@ using System.IO;
 namespace Anno.Log
 {
     using Newtonsoft.Json;
+    using System.Collections.Concurrent;
+
     /// <summary>
     /// 日志工具
     /// </summary>
     public static class Log
     {
+        private static bool _defaultRuning = false;
+        private static ConcurrentQueue<LogDataInfo> _defaultLog = new ConcurrentQueue<LogDataInfo>();
+
+        private static bool _infoRuning = false;
+        private static ConcurrentQueue<LogDataInfo> _infoLog = new ConcurrentQueue<LogDataInfo>();
+
+        private static bool _debugRuning = false;
+        private static ConcurrentQueue<LogDataInfo> _debugLog = new ConcurrentQueue<LogDataInfo>();
+
+        private static bool _warnRuning = false;
+        private static ConcurrentQueue<LogDataInfo> _warnLog = new ConcurrentQueue<LogDataInfo>();
+
+        private static bool _errorRuning = false;
+        private static ConcurrentQueue<LogDataInfo> _errorLog = new ConcurrentQueue<LogDataInfo>();
+
+        private static bool _fatalRuning = false;
+        private static ConcurrentQueue<LogDataInfo> _fatalLog = new ConcurrentQueue<LogDataInfo>();
+
+        private static bool _traceRuning = false;
+        private static ConcurrentQueue<LogDataInfo> _traceLog = new ConcurrentQueue<LogDataInfo>();
+
         /// <summary>
         /// 日志锁
         /// </summary>
@@ -140,63 +163,251 @@ namespace Anno.Log
         /// <param name="logType">日志类型</param>
         static void WriteLogSync(object logStr, Type type = null, LogType logType = LogType.Default)
         {
+            switch (logType)
+            {
+                case LogType.Info:
+                    _infoLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
+                    break;
+                case LogType.Debug:
+                    _debugLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
+                    break;
+                case LogType.Warn:
+                    _warnLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
+                    break;
+                case LogType.Error:
+                    _errorLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
+                    break;
+                case LogType.Fatal:
+                    _fatalLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
+                    break;
+                case LogType.Trace:
+                    _traceLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
+                    break;
+                default:
+                    _defaultLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
+                    break;
+            }
+            switch (logType)
+            {
+                case LogType.Info:
+                    if (_infoRuning) return;
+                    break;
+                case LogType.Debug:
+                    if (_debugRuning) return;
+                    break;
+                case LogType.Warn:
+                    if (_warnRuning) return;
+                    break;
+                case LogType.Error:
+                    if (_errorRuning) return;
+                    break;
+                case LogType.Fatal:
+                    if (_fatalRuning) return;
+                    break;
+                case LogType.Trace:
+                    if (_traceRuning) return;
+                    break;
+                default:
+                    if (_defaultRuning) return;
+                    break;
+            }
+            WriteFile(logType);
+        }
+
+        /// <summary>
+        /// 写文件
+        /// </summary>
+        /// <param name="logType"></param>
+        static Task WriteFile(LogType logType)
+        {
+            return Task.Run(() =>
+            {
+                string logFile = DateTime.Today.ToString("yyyy-MM-dd");
+                //目录
+                string dir = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "log");
+                string logDir = string.Concat(dir, Path.DirectorySeparatorChar, logType.ToString(), logFile, ".log");
+                FileStream file = null;
+                lock (Locker)
+                {
+                    try
+                    {
+                        if (!File.Exists(logDir))
+                        {
+
+                            if (!Directory.Exists(dir))
+                            {
+                                Directory.CreateDirectory(dir);
+                            }
+                            file = new FileStream(logDir, FileMode.CreateNew);
+                        }
+                        else
+                        {
+                            file = new FileStream(logDir, FileMode.Append);
+                        }
+                    }
+                    catch { return; }
+                }
+                StreamWriter writer = new StreamWriter(file, Encoding.UTF8);
+
+                LogDataInfo log;
+                switch (logType)
+                {
+                    case LogType.Info:
+                        try
+                        {
+                            _infoRuning = true;
+                            while (_infoLog.TryDequeue(out log))
+                            {
+                                WriteLogFile(log, writer);
+                            }
+                        }
+                        catch (Exception) { }
+                        finally
+                        {
+                            writer.Flush();
+                            writer.Close();
+                            file.Close();
+                            _infoRuning = false;
+                        }
+
+                        break;
+                    case LogType.Debug:
+                        try
+                        {
+                            _debugRuning = true;
+                            while (_debugLog.TryDequeue(out log))
+                            {
+                                WriteLogFile(log, writer);
+                            }
+                        }
+                        catch (Exception) { }
+                        finally
+                        {
+                            writer.Flush();
+                            writer.Close();
+                            file.Close();
+                            _debugRuning = false;
+                        }
+
+                        break;
+                    case LogType.Warn:
+                        try
+                        {
+                            _warnRuning = true;
+                            while (_warnLog.TryDequeue(out log))
+                            {
+                                WriteLogFile(log, writer);
+                            }
+                        }
+                        catch (Exception) { }
+                        finally
+                        {
+                            writer.Flush();
+                            writer.Close();
+                            file.Close();
+                            _warnRuning = false;
+                        }
+                        break;
+                    case LogType.Error:
+                        try
+                        {
+                            _errorRuning = true;
+                            while (_errorLog.TryDequeue(out log))
+                            {
+                                WriteLogFile(log, writer);
+                            }
+                        }
+                        catch (Exception) { }
+                        finally
+                        {
+                            writer.Flush();
+                            writer.Close();
+                            file.Close();
+                            _errorRuning = false;
+                        }
+                        break;
+                    case LogType.Fatal:
+                        try
+                        {
+                            _fatalRuning = true;
+                            while (_fatalLog.TryDequeue(out log))
+                            {
+                                WriteLogFile(log, writer);
+                            }
+                        }
+                        catch (Exception) { }
+                        finally
+                        {
+                            writer.Flush();
+                            writer.Close();
+                            file.Close();
+                            _fatalRuning = false;
+                        }
+                        break;
+                    case LogType.Trace:
+                        try
+                        {
+                            _traceRuning = true;
+                            while (_traceLog.TryDequeue(out log))
+                            {
+                                WriteLogFile(log, writer);
+                            }
+                        }
+                        catch (Exception) { }
+                        finally
+                        {
+                            writer.Flush();
+                            writer.Close();
+                            file.Close();
+                            _traceRuning = false;
+                        }
+                        break;
+                    default:
+                        try
+                        {
+                            _defaultRuning = true;
+                            while (_defaultLog.TryDequeue(out log))
+                            {
+                                WriteLogFile(log, writer);
+                            }
+                        }
+                        catch (Exception) { }
+                        finally
+                        {
+                            writer.Flush();
+                            writer.Close();
+                            file.Close();
+                            _defaultRuning = false;
+                        }
+                        break;
+                }
+
+            });
+        }
+
+        static void WriteLogFile(LogDataInfo log, StreamWriter writer)
+        {
             var msg = string.Empty;
             try
             {
-                msg = JsonConvert.SerializeObject(logStr);
+                msg = JsonConvert.SerializeObject(log.logStr);
             }
             catch
             {
-                msg = logStr.ToString();
+                msg = log.logStr.ToString();
             }
-            //当前线程ID
-            string threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
-
             /*
-             * 写日志的时候不阻塞 业务
+             * 添加空行
              */
-            Task.Run(() =>
-            {
-                //防止文件占用
-                lock (Locker)
-                {
-                    string logFile = DateTime.Today.ToString("yyyy-MM-dd");
-                    //目录
-                    string dir = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "log");
-                    string logDir = string.Concat(dir, Path.DirectorySeparatorChar, logType.ToString(), logFile, ".log");
-                    FileStream file = null;
-                    if (!File.Exists(logDir))
-                    {
+            writer.WriteLine("------------------------------------LOG分隔符---------------------------------------------");
 
-                        if (!Directory.Exists(dir))
-                        {
-                            Directory.CreateDirectory(dir);
-                        }
-                        file = new FileStream(logDir, FileMode.CreateNew);
-                    }
-                    else
-                    {
-                        file = new FileStream(logDir, FileMode.Append);
-                    }
-                    StreamWriter writer = new StreamWriter(file, Encoding.UTF8);
-                    /*
-                     * 添加空行
-                     */
-                    writer.WriteLine("------------------------------------LOG分隔符---------------------------------------------");
+            writer.WriteLine($"记录时间:    {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} ");
+            writer.WriteLine($"线程ID:       [{log.threadId}] ");
+            writer.WriteLine($"日志等级:    {log.logType} ");
+            if (log.type != null)
+                writer.WriteLine($"类型:          {log.type.FullName} ");
 
-                    writer.WriteLine($"记录时间:    {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} ");
-                    writer.WriteLine($"线程ID:       [{threadId}] ");
-                    writer.WriteLine($"日志等级:    {logType.ToString()} ");
-                    if (type != null)
-                        writer.WriteLine($"类型:          {type?.FullName} ");
-
-                    writer.WriteLine(msg);
-
-                    writer.Flush();
-                    writer.Close();
-                    file.Close();
-                }
-            });
+            writer.WriteLine(msg);
         }
     }
     /// <summary>
