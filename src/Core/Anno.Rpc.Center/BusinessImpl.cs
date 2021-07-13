@@ -5,11 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Anno.Rpc.Storage;
 using Anno.Rpc.Adapter;
+using System.Collections.Concurrent;
 
 namespace Anno.Rpc.Center
 {
     public class BusinessImpl : BrokerCenter.Iface
     {
+        private static ConcurrentDictionary<string, BaseAdapter> _adapters = new ConcurrentDictionary<string, BaseAdapter>();
+        public BusinessImpl()
+        {
+            _adapters.TryAdd(StorageCommand.KVCOMMAND, new KvStorageAdapter());
+            _adapters.TryAdd(StorageCommand.APIDOCCOMMAND, new ApiDocStorageAdapter());
+        }
         /// <summary>
         /// 添加
         /// </summary>
@@ -36,18 +43,8 @@ namespace Anno.Rpc.Center
             string rlt;
             try
             {
-                if (input.ContainsKey(StorageCommand.COMMAND))
+                if (input.ContainsKey(StorageCommand.COMMAND) && _adapters.TryGetValue(input[StorageCommand.COMMAND], out adapter))
                 {
-                    var command = input[StorageCommand.COMMAND];
-                    switch (command)
-                    {
-                        case StorageCommand.KVCOMMAND:
-                            adapter = new KvStorageAdapter();
-                            break;
-                        default:
-                            adapter = new ApiDocStorageAdapter();
-                            break;
-                    }
                     rlt = adapter.Invoke(input);
                 }
                 else

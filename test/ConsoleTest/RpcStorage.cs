@@ -3,7 +3,9 @@ using Anno.Rpc;
 using Anno.Rpc.Client;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ConsoleTest
 {
@@ -12,13 +14,31 @@ namespace ConsoleTest
         public void Handle()
         {
             Init();
-            using (Anno.Rpc.Storage.KvStorageEngine kvEngine = new Anno.Rpc.Storage.KvStorageEngine())
+
+        To:
+            Console.Write("请输入调用次数：");
+            long.TryParse(Console.ReadLine(), out long num);
+
+            Stopwatch sw = Stopwatch.StartNew();
+            Parallel.For(0, num, i =>
             {
-                var rlt = kvEngine.Set("viper", "Viper 你好啊！");
-                var getViper = kvEngine.Get("viper");
-                var rltobj = kvEngine.Set("12", new ViperTest() { Id = 12, Name = "Viper" });
-                var getobj = kvEngine.Get<ViperTest>("12");
+                using (Anno.Rpc.Storage.KvStorageEngine kvEngine = new Anno.Rpc.Storage.KvStorageEngine())
+                {
+                    var rlt = kvEngine.Set("viper", "Viper 你好啊！");
+                    var getViper = kvEngine.Get("viper");
+                    var rltobj = kvEngine.Set("12", new ViperTest() { Id = 12, Name = "Viper" });
+                    var getobj = kvEngine.Get<ViperTest>("12");
+                }
+            });
+            long ElapsedMilliseconds = sw.ElapsedMilliseconds;
+            if (ElapsedMilliseconds == 0)
+            {
+                ElapsedMilliseconds = 1;
             }
+            Console.WriteLine($"运行时间：{sw.ElapsedMilliseconds}/ms,TPS:{(num) * 1000 / ElapsedMilliseconds}");
+            sw.Stop();
+            goto To;
+
         }
         void Init()
         {
