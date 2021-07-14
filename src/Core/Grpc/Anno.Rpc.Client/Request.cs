@@ -47,7 +47,7 @@ namespace Anno.Rpc.Client
                     if (sEx.StatusCode == StatusCode.Unavailable || sEx.StatusCode == StatusCode.Aborted)
                     {
                         error++;
-                        if (error == 3) //累计3 拿不到有效连接 抛出异常 移除（此值 只是一个参考）
+                        if (error == 100) //累计3 拿不到有效连接 抛出异常 移除（此值 只是一个参考）
                         {
                             GrpcFactory.RemoveServicePool(id);
                             throw sEx;
