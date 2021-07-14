@@ -119,6 +119,16 @@ namespace Anno.Log
             Console.WriteLine($"                             {message}");
             Console.ResetColor();
         }
+
+        /// <summary>
+        /// 可以替换为WriteLineNoDate
+        /// </summary>
+        /// <param name="message"></param>
+        [Obsolete("请使用WriteLineNoDate")]
+        public static void ConsoleWriteLine(string message)
+        {
+            WriteLineNoDate($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss:ffff}]: {message}");
+        }
         /// <summary>
         /// 
         /// </summary>

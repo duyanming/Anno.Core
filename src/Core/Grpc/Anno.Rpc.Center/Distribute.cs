@@ -28,15 +28,19 @@ namespace Anno.Rpc.Center
         public static List<Micro> GetMicro(string channel)
         {
             List<ServiceInfo> service = new List<ServiceInfo>();
+            //if (channel.StartsWith("md5:"))
+            //{
+            //    long waitTime = 19000;
+            //    var md5 = channel.Substring(4);
+            //    while (md5.Equals(Tc.ServiceMd5) && waitTime > 0)
+            //    {
+            //        waitTime = waitTime - 10;
+            //        Thread.Sleep(10);
+            //    }
+            //    service = Tc.ServiceInfoList;
+            //}
             if (channel.StartsWith("md5:"))
             {
-                long waitTime = 19000;
-                var md5 = channel.Substring(4);
-                while (md5.Equals(Tc.ServiceMd5) && waitTime > 0)
-                {
-                    waitTime = waitTime - 10;
-                    Thread.Sleep(10);
-                }
                 service = Tc.ServiceInfoList;
             }
             else
