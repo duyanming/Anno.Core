@@ -140,7 +140,7 @@ namespace Anno.Rpc.Center
                     Log.WriteLine($"{service.Ip}:{service.Port}", ConsoleColor.DarkYellow);
                     foreach (var f in service.Name.Split(','))
                     {
-                        Log.WriteLine($"{f}");
+                        Log.WriteLine($"{f}", ConsoleColor.DarkYellow);
                     }
                     Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
                     Log.WriteLine($"永久移除···{hc}！", ConsoleColor.DarkYellow);

@@ -11,6 +11,7 @@ namespace Anno.Rpc.Client
     using Anno.Const;
     using Grpc.Core;
     using Anno.Const.Enum;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// 客户端连接器
@@ -48,17 +49,17 @@ namespace Anno.Rpc.Client
                 //            TimeSpan.FromSeconds(1) });
                 //retryPolicy.Execute(() =>
                 //{
-                    #region 获取目标服务器信息
-                    var caches = Single(input[Eng.NAMESPACE]);
-                    if (caches != null)
-                    {
-                        output = BrokerDnsInner(input, caches.Mi);
-                    }
-                    else
-                    {
-                        output = FailMessage($"未找到服务【{input[Eng.NAMESPACE]}】");
-                    }
-                    #endregion
+                #region 获取目标服务器信息
+                var caches = Single(input[Eng.NAMESPACE]);
+                if (caches != null)
+                {
+                    output = BrokerDnsInner(input, caches.Mi);
+                }
+                else
+                {
+                    output = FailMessage($"未找到服务【{input[Eng.NAMESPACE]}】");
+                }
+                #endregion
 
                 //});
             }
@@ -154,6 +155,13 @@ namespace Anno.Rpc.Client
         {
             return BrokerDnsAsync(input.ToDic(), micro);
         }
+        public static ReadOnlyCollection<MicroCache> Micros
+        {
+            get
+            {
+                return _microCaches.AsReadOnly();
+            }
+        }
         /// <summary>
         /// 对象转换字典
         /// </summary>
@@ -220,7 +228,7 @@ namespace Anno.Rpc.Client
             }
             catch (Exception ex) //如果异常则从缓存中清除 该缓存
             {
-                if (ex is RpcException && ((RpcException)ex).StatusCode==StatusCode.DeadlineExceeded)
+                if (ex is RpcException && ((RpcException)ex).StatusCode == StatusCode.DeadlineExceeded)
                 {
                     output = FailMessage(ex.Message);
                 }

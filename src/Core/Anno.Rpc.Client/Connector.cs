@@ -15,6 +15,8 @@ using Anno.Const.Enum;
 
 namespace Anno.Rpc.Client
 {
+    using System.Collections.ObjectModel;
+
     /// <summary>
     /// 客户端连接器
     /// 保留关键字【TraceId,PreTraceId,AppName,AppNameTarget,GlobalTraceId,TTL,X-Original-For】
@@ -139,6 +141,14 @@ namespace Anno.Rpc.Client
                 var micro = _microCaches.FirstOrDefault(m => m.Mi.Nickname == nickName)?.Mi;
                 return BrokerDns(input, micro);
             });
+        }
+
+        public static ReadOnlyCollection<MicroCache> Micros
+        {
+            get
+            {
+                return _microCaches.AsReadOnly();
+            }
         }
 
         public static string BrokerDns<T>(T input) where T : IInputDto
