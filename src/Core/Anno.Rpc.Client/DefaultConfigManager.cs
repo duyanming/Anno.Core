@@ -21,8 +21,7 @@ namespace Anno.Rpc.Client
         {
             MaxActive = 500,
             MaxIdle = 50,
-            MinIdle = Environment.ProcessorCount
-
+            MinIdle = 3
         };
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace Anno.Rpc.Client
         /// <param name="centerAddress">注册中心地址</param>
         /// <param name="port">注册中心端口</param>
         /// <param name="traceOnOff">调用链追踪默认打开</param>
-        public static void SetDefaultConfiguration(string appName ,string centerAddress,int port=6660,bool traceOnOff=true)
+        public static void SetDefaultConfiguration(string appName, string centerAddress, int port = 6660, bool traceOnOff = true)
         {
             SettingService.AppName = appName;
             SettingService.Local.IpAddress = centerAddress;
@@ -42,17 +41,17 @@ namespace Anno.Rpc.Client
             Connector.UpdateCache(string.Empty);
             if (CronDaemon.Status == DaemonStatus.Stop)
             {
-               
-                    if (CronDaemon.Status == DaemonStatus.Stop)
+
+                if (CronDaemon.Status == DaemonStatus.Stop)
+                {
+                    CronDaemon.AddJob("*/30 * * * * ? *", ThriftFactory.CleanPoolLink);
+                    if (Const.SettingService.TraceOnOff)
                     {
-                        CronDaemon.AddJob("*/30 * * * * ? *", ThriftFactory.CleanPoolLink);
-                        if (Const.SettingService.TraceOnOff)
-                        {
-                            CronDaemon.AddJob("*/10 * * * * ? *", TracePool.TryDequeue);
-                        }
-                        CronDaemon.AddJob("*/5 * * * * ? *", () => { Connector.UpdateCache("cron:"); });
-                        CronDaemon.Start();
+                        CronDaemon.AddJob("*/10 * * * * ? *", TracePool.TryDequeue);
                     }
+                    CronDaemon.AddJob("*/5 * * * * ? *", () => { Connector.UpdateCache("cron:"); });
+                    CronDaemon.Start();
+                }
             }
         }
         /// <summary>
@@ -61,7 +60,7 @@ namespace Anno.Rpc.Client
         /// <param name="maxActive"></param>
         /// <param name="minIdle"></param>
         /// <param name="maxIdle"></param>
-        public static void SetDefaultConnectionPool( int maxActive,int minIdle,int maxIdle)
+        public static void SetDefaultConnectionPool(int maxActive, int minIdle, int maxIdle)
         {
             DefaultConnectionPoolConfiguration.MaxActive = maxActive;
             DefaultConnectionPoolConfiguration.MinIdle = minIdle;

@@ -19,7 +19,7 @@ namespace Anno.Rpc.Client
         {
             MaxActive = 500,
             MaxIdle = 50,
-            MinIdle = Environment.ProcessorCount
+            MinIdle = 3
 
         };
 
