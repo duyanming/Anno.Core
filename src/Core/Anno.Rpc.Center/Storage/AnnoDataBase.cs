@@ -11,29 +11,40 @@ using System.Text;
 namespace Anno.Rpc.Storage
 {
     using LiteDB;
+    using System.IO;
+
     public class AnnoDataBase
     {
-        private static LiteDatabase db;
-        private static object locker = new object();
+        private static string connectionString = "Filename=Anno.db;Connection=Shared";
+        private static bool dbExists = false;
         public static LiteDatabase Db
         {
             get
             {
-                if (db == null)
+                LiteDatabase db = null;
+                if (!dbExists)
                 {
-                    lock (locker)
+                    if (!File.Exists(connectionString))
                     {
-                        if (db == null)
-                        {
-                            db = new LiteDatabase("Anno.db");
-                        }
-                        return db;
+                        db = new LiteDatabase(connectionString);
+                        var colKv = db.GetCollection<AnnoKV>();
+                        colKv.EnsureIndex(x => x.Id,true);
+                        colKv.EnsureIndex(x => x.Value);
+
+                        var colDoc = db.GetCollection<AnnoData>();
+                        colDoc.EnsureIndex(x => x.Id,true);
+                        colDoc.EnsureIndex(x => x.Value);
+                    }
+                    else
+                    {
+                        db = new LiteDatabase(connectionString);
                     }
                 }
                 else
                 {
-                    return db;
+                    db = new LiteDatabase(connectionString);
                 }
+                return db;
             }
         }
     }
