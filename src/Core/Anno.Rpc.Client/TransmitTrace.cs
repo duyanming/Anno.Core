@@ -120,7 +120,7 @@ namespace Anno.Rpc.Client
 
         public static void EnQueue(sys_trace trace, string result)
         {
-            if (trace != null)
+            if (SettingService.TraceOnOff && trace != null)
             {
                 trace.UseTimeMs = (DateTime.Now - trace.Timespan).TotalMilliseconds;
                 trace.Response = result;
@@ -163,7 +163,7 @@ namespace Anno.Rpc.Client
                 trace.Request = Newtonsoft.Json.JsonConvert.SerializeObject(trace.InputDictionary);
                 trace.GlobalTraceId = GetValueByKey(trace.InputDictionary, "GlobalTraceId");
                 trace.Uname = GetValueByKey(trace.InputDictionary, "uname");
-                trace.Rlt = trace.Response?.IndexOf("tatus\":true") >0;
+                trace.Rlt = trace.Response?.IndexOf("tatus\":true") > 0;
 
                 if (trace.Rlt)
                 {
