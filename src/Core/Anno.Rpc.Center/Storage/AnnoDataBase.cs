@@ -24,21 +24,33 @@ namespace Anno.Rpc.Storage
                 LiteDatabase db = null;
                 if (!dbExists)
                 {
-                    if (!File.Exists(connectionString))
+                    if (!File.Exists("Anno.db"))
                     {
                         db = new LiteDatabase(connectionString);
                         var colKv = db.GetCollection<AnnoKV>();
-                        colKv.EnsureIndex(x => x.Id,true);
-                        colKv.EnsureIndex(x => x.Value);
+                        colKv.EnsureIndex(x => x.Id, true);
 
                         var colDoc = db.GetCollection<AnnoData>();
-                        colDoc.EnsureIndex(x => x.Id,true);
-                        colDoc.EnsureIndex(x => x.Value);
+                        colDoc.EnsureIndex(x => x.Id, true);
+                        colDoc.EnsureIndex(x => x.App);
                     }
                     else
                     {
                         db = new LiteDatabase(connectionString);
+                        /**
+                         *兼容历史，移除Value作为索引，防止索引长度 1023的限制 
+                         */
+                        try
+                        {
+                            var colKv = db.GetCollection<AnnoKV>();
+                            colKv.DropIndex("Value");
+
+                            var colDoc = db.GetCollection<AnnoData>();
+                            colDoc.DropIndex("Value");
+                        }
+                        catch { }
                     }
+                    dbExists = true;
                 }
                 else
                 {
