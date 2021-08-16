@@ -14,7 +14,10 @@ namespace Anno.Rpc.Client
     {
         private const string Namespace = "Anno.Plugs.Trace";
         private const string Class = "Trace";
-        private const string Method = "Trace";
+        /// <summary>
+        /// 调用链深度默认100
+        /// </summary>
+        public static int CallChainDepth = 100;
         /// <summary>
         /// 设置调用链 TraceId
         /// </summary>
@@ -98,6 +101,10 @@ namespace Anno.Rpc.Client
             if (input.ContainsKey(TTL))
             {
                 int.TryParse(input[TTL], out int ttl);
+                if (ttl >= CallChainDepth)
+                {
+                    throw new ThriftException($"调用链深度不能超过{CallChainDepth},请检查业务或调整深度：Anno.Rpc.Client.TransmitTrace.CallChainDepth");
+                }
                 input[TTL] = (ttl + 1).ToString();
             }
             else
@@ -107,7 +114,6 @@ namespace Anno.Rpc.Client
             #endregion
 
             return TracePool.CreateTrance(input);
-            //TracePool.EnQueue(input);
         }
     }
 

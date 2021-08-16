@@ -217,6 +217,10 @@ namespace Anno.Rpc.Client
         }
         private static string BrokerDnsInner(Dictionary<string, string> input, Micro micro)
         {
+            if (micro == null)
+            {
+                return FailMessage($"未找到服务【{input[Eng.NAMESPACE]}】");
+            }
             string output = string.Empty;
             #region 调用链
 
