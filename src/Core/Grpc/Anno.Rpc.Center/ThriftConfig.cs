@@ -325,5 +325,10 @@ namespace Anno.Rpc.Center
         /// 是否正在检测
         /// </summary>
         public bool Checking { get; set; } = false;
+
+        /// <summary>
+        /// 是否已临时移除
+        /// </summary>
+        public bool IsTemporaryRemove { get; set; } = false;
     }
 }

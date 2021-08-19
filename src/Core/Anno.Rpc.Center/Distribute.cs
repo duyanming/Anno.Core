@@ -70,118 +70,107 @@ namespace Anno.Rpc.Center
         /// <returns></returns>
         public static void HealthCheck(ServiceInfo service, int errorCount = 3)
         {
-            int hc = 60;//检查次数
-
-        hCheck://再次  心跳检测
-            TTransport transport = new TSocket(service.Ip, service.Port, 10_000);
             try
             {
+                int hc = 60;//检查次数
                 service.Checking = true;
-                transport.Open();
-                if (transport.IsOpen)
+                while (hc > 0)
                 {
-                    if (hc != 60)
+                    if (Alive(service))
                     {
-                        Log.WriteLine($"{service.Ip}:{service.Port}", ConsoleColor.DarkGreen);
-                        foreach (var f in service.Name.Split(','))
+                        if (hc == 60)
                         {
-                            Log.WriteLine($"{f}", ConsoleColor.DarkGreen);
+                            break;
                         }
-                        Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkGreen);
-                        Log.WriteLine($"恢复正常！", ConsoleColor.DarkGreen);
-                        Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
-                    }                   
-                    transport.Flush();
-                    transport.Close();
-                    lock (LockHelper) //防止高并发下 影响权重
-                    {
-                        if (!Tc.ServiceInfoList.Exists(s => s.Ip == service.Ip && s.Port == service.Port))
+                        else
                         {
-                            //已存在不再添加 不存在则添加 
-                            for (int i = 0; i < service.Weight; i++)
+                            WriteHealthCheck(service, hc, "恢复正常", ConsoleColor.DarkGreen);
+                            if (service.IsTemporaryRemove)//如果服务已被临时移除则找回
                             {
-                                Tc.ServiceInfoList.Add(service);
+                                lock (LockHelper) //防止高并发下 影响权重
+                                {
+                                    if (!Tc.ServiceInfoList.Exists(s => s.Ip == service.Ip && s.Port == service.Port))
+                                    {
+                                        //已存在不再添加 不存在则添加 
+                                        for (int i = 0; i < service.Weight; i++)
+                                        {
+                                            Tc.ServiceInfoList.Add(service);
+                                        }
+                                    }
+                                }
+                                CheckNotice?.Invoke(service, NoticeType.RecoverHealth);
                             }
                         }
+                        break;
                     }
-                    if (hc <= (60 - errorCount))
+                    else
                     {
-                        CheckNotice?.Invoke(service, NoticeType.RecoverHealth);
-                    }
-                }
+                        hc--;
+                        Log.WriteLine($"Error Info:{service.Ip}:{service.Port} not alive {hc}", ConsoleColor.DarkYellow);
+                        if (hc == (60 - errorCount))//三次失败之后 临时移除 ，防止更多请求转发给此服务节点 
+                        {
+                            //临时移除 并不从配置文件移除
+                            Tc.ServiceInfoList.RemoveAll(i => i.Ip == service.Ip && i.Port == service.Port);
+                            service.IsTemporaryRemove = true;
+                            CheckNotice?.Invoke(service, NoticeType.NotHealth);
 
-                transport.Dispose();
-            }
-            catch (Exception ex)
-            {
-                Log.WriteLine($"Error Info:{service.Ip}:{service.Port} {ex.Message}", ConsoleColor.DarkYellow);
-                if (hc == 60)
-                {
-                    Log.WriteLine($"{service.Ip}:{service.Port}", ConsoleColor.DarkYellow);
-                    foreach (var f in service.Name.Split(','))
-                    {
-                        Log.WriteLine($"{f}", ConsoleColor.DarkYellow);
-                    }
-                    Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
-                    Log.WriteLine($"检测中···{hc}！", ConsoleColor.DarkYellow);
-                    Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
-                }
-                else if (hc == (60 - errorCount))
-                {
-                    Log.WriteLine($"{service.Ip}:{service.Port}", ConsoleColor.DarkYellow);
-                    foreach (var f in service.Name.Split(','))
-                    {
-                        Log.WriteLine($"{f}", ConsoleColor.DarkYellow);
-                    }
-                    Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
-                    Log.WriteLine($"故障恢复中···{hc}！", ConsoleColor.DarkYellow);
-                    Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
-                }
-                else if (hc == 0) //硬删除
-                {
-                    Log.WriteLine($"{service.Ip}:{service.Port}", ConsoleColor.DarkYellow);
-                    foreach (var f in service.Name.Split(','))
-                    {
-                        Log.WriteLine($"{f}");
-                    }
-                    Log.WriteLine($"{"权重:" + service.Weight}", ConsoleColor.DarkYellow);
-                    Log.WriteLine($"永久移除···{hc}！", ConsoleColor.DarkYellow);
-                    Log.WriteLineNoDate($"-----------------------------------------------------------------------------");                 
-                }
+                            WriteHealthCheck(service, hc, "故障恢复中", ConsoleColor.DarkYellow);
+                        }
+                        else if (hc == 0) //硬删除
+                        {
+                            Dictionary<string, string> rp = new Dictionary<string, string>
+                        {
+                            {"ip", service.Ip},
+                            {"port", service.Port.ToString()}
+                        };
+                            Tc.Remove(rp);
+                            CheckNotice?.Invoke(service, NoticeType.OffLine);
 
-                if (hc == (60 - errorCount)) //三次失败之后 临时移除 ，防止更多请求转发给此服务节点 
-                {
-                    //临时移除 并不从配置文件移除
-                    Tc.ServiceInfoList.RemoveAll(i => i.Ip == service.Ip && i.Port == service.Port);
-                    CheckNotice?.Invoke(service, NoticeType.NotHealth);
+                            WriteHealthCheck(service, hc, "永久移除", ConsoleColor.DarkYellow);
+                            break;
+                        }
+                        Thread.Sleep(1000); //间隔一秒 健康检查
+                    }
                 }
-                else if (hc == 0) //硬删除
-                {
-                    Dictionary<string, string> rp = new Dictionary<string, string>
-                    {
-                        {"ip", service.Ip},
-                        {"port", service.Port.ToString()}
-                    };
-                    Tc.Remove(rp);
-                    CheckNotice?.Invoke(service, NoticeType.OffLine);
-                    return;
-                }
-
-                Thread.Sleep(1000); //间隔一秒 健康检查
-                hc--;
-                transport.Dispose();
-                goto hCheck;
             }
             finally
             {
-                if (transport.IsOpen)
-                {
-                    transport.Flush();
-                    transport.Close();
-                }
-                transport.Dispose();
                 service.Checking = false;
             }
+        }
+
+        private static bool Alive(ServiceInfo service)
+        {
+            bool isAlive = false;
+            try
+            {
+                using (TTransport transport = new TSocket(service.Ip, service.Port, 5_000))
+                {
+                    transport.Open();
+                    if (transport.IsOpen)
+                    {
+                        isAlive = true;
+                        transport.Close();
+                    }
+                }
+            }
+            catch
+            {
+                isAlive = false;
+            }
+            return isAlive;
+        }
+
+        private static void WriteHealthCheck(ServiceInfo service, int hc, string msg, ConsoleColor consoleColor)
+        {
+            Log.WriteLine($"{service.Ip}:{service.Port}", consoleColor);
+            foreach (var f in service.Name.Split(','))
+            {
+                Log.WriteLine($"{f}", consoleColor);
+            }
+            Log.WriteLine($"{"权重:" + service.Weight}", consoleColor);
+            Log.WriteLine($"{msg}···{hc}！", consoleColor);
+            Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
         }
     }
 }
