@@ -82,7 +82,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "builder", "builder", "{019E
 		Directory.Build.props = Directory.Build.props
 		key.snk = key.snk
 		LICENSE = LICENSE
-		logo.jpg = logo.jpg
+		logo.png = logo.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{3EA5B10B-B18A-4913-9143-834A1C6DEC56}"
@@ -96,7 +96,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cocas", "samples\Thrift\Coc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cocas", "samples\Grpc\Cocas\Cocas.csproj", "{38EB2206-0CD0-49CA-A031-E8B9014B7F20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleGrpcTest", "test\ConsoleGrpcTest\ConsoleGrpcTest.csproj", "{C14F5EA9-CA43-4154-902D-F30B96A24032}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGrpcTest", "test\ConsoleGrpcTest\ConsoleGrpcTest.csproj", "{C14F5EA9-CA43-4154-902D-F30B96A24032}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
