@@ -41,13 +41,15 @@ namespace Anno.Rpc.Client
                 bool rlt = (_client.Add_broker(micro).Reply=="1");
                 if (rlt)
                 {
-                    Log.WriteLine($"本机【{SettingService.AppName}】：", ConsoleColor.DarkGreen);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.AppendLine($"本机【{SettingService.AppName}】：");
                     foreach (var ip in micro.Ip.Split(','))
                     {
-                        Log.WriteLine($"{ip}", ConsoleColor.DarkGreen);
+                        stringBuilder.AppendLine($"{ip}");
                     }
-                    Log.WriteLine($"已注册到：{target.IpAddress}", ConsoleColor.DarkGreen);
-                    Log.WriteLineNoDate("-----------------------------------------------------------------------------");
+                    stringBuilder.AppendLine($"已注册到：{target.IpAddress}");
+                    Log.Anno(stringBuilder.ToString(),typeof(Register));
+                    Log.WriteLine($"已注册到：{target.IpAddress}");
                 }
                 return rlt;
             }
@@ -56,8 +58,10 @@ namespace Anno.Rpc.Client
                 Thread.Sleep(1000);//间隔一秒后重新注册
                 if (countDown > 0)
                 {
-                    Log.WriteLine($"注册到{target.IpAddress}:{target.Port}失败......剩余重试次数（{countDown}）", ConsoleColor.DarkYellow);
-                    Log.WriteLineAlignNoDate(ex.Message);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.AppendLine($"注册到{target.IpAddress}:{target.Port}失败......剩余重试次数（{countDown}）");
+                    stringBuilder.AppendLine(ex.Message);
+                    Log.Anno(stringBuilder.ToString(), typeof(Register));
                     try
                     {
                         _client = new BrokerCenter.BrokerCenterClient(_channel);
@@ -71,7 +75,7 @@ namespace Anno.Rpc.Client
                 }
                 else
                 {
-                    Log.WriteLine($"{DateTime.Now} 未连接到{target.IpAddress}:{target.Port}注册失败......", ConsoleColor.DarkRed);
+                    Log.Anno($"{DateTime.Now} 未连接到{target.IpAddress}:{target.Port}注册失败......", typeof(Register));
                 }
 
             }
@@ -93,7 +97,7 @@ namespace Anno.Rpc.Client
             {
                 return string.Join(",", addresses.ToList());
             }
-            Log.WriteLine("找不到有效IPv4地址！", ConsoleColor.DarkYellow);
+            Log.Anno("找不到有效IPv4地址！", typeof(Register));
             return string.Empty;
         }
     }

@@ -139,7 +139,7 @@ namespace Thrift.Server
             }
             catch (TTransportException ttx)
             {
-                logDelegate("Error, could not listen on ServerTransport: " + ttx);
+                Anno.Log.Log.WriteLine("Error, could not listen on ServerTransport: " + ttx);
                 return;
             }
 

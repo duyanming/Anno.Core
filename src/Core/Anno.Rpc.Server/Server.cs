@@ -19,7 +19,7 @@ namespace Anno.Rpc.Server
             {
                 maxThreads = 500;
             }
-            _server = new TThreadedServer(processor, serverTransport,Log.WriteLineNoDate, maxThreads);
+            _server = new TThreadedServer(processor, serverTransport,Log.Anno, maxThreads);
             new Thread(_server.Serve) { IsBackground = true }.Start();//开启业务服务
             State = true;
         }

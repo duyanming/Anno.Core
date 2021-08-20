@@ -88,7 +88,7 @@ namespace Anno.Rpc.Center
                         }
                         else
                         {
-                            WriteHealthCheck(service, hc, "恢复正常", ConsoleColor.DarkGreen);
+                            WriteHealthCheck(service, hc, "恢复正常");
                             if (service.IsTemporaryRemove)//如果服务已被临时移除则找回
                             {
                                 lock (LockHelper) //防止高并发下 影响权重
@@ -110,7 +110,7 @@ namespace Anno.Rpc.Center
                     else
                     {
                         hc--;
-                        Log.WriteLine($"Error Info:{service.Ip}:{service.Port} not alive {hc}", ConsoleColor.DarkYellow);
+                        Log.Anno($"Error Info:{service.Ip}:{service.Port} not alive {hc}", typeof(Distribute));
                         if (hc == (60 - errorCount))//三次失败之后 临时移除 ，防止更多请求转发给此服务节点 
                         {
                             //临时移除 并不从配置文件移除
@@ -118,7 +118,7 @@ namespace Anno.Rpc.Center
                             service.IsTemporaryRemove = true;
                             CheckNotice?.Invoke(service, NoticeType.NotHealth);
 
-                            WriteHealthCheck(service, hc, "故障恢复中", ConsoleColor.DarkYellow);
+                            WriteHealthCheck(service, hc, "故障恢复中");
                         }
                         else if (hc == 0) //硬删除
                         {
@@ -130,7 +130,7 @@ namespace Anno.Rpc.Center
                             Tc.Remove(rp);
                             CheckNotice?.Invoke(service, NoticeType.OffLine);
 
-                            WriteHealthCheck(service, hc, "永久移除", ConsoleColor.DarkYellow);
+                            WriteHealthCheck(service, hc, "永久移除");
                             break;
                         }
                         Thread.Sleep(1000); //间隔一秒 健康检查
@@ -160,16 +160,17 @@ namespace Anno.Rpc.Center
             return isAlive;
         }
 
-        private static void WriteHealthCheck(ServiceInfo service, int hc, string msg, ConsoleColor consoleColor)
+        private static void WriteHealthCheck(ServiceInfo service, int hc, string msg)
         {
-            Log.WriteLine($"{service.Ip}:{service.Port}", consoleColor);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"{service.Ip}:{service.Port}");
             foreach (var f in service.Name.Split(','))
             {
-                Log.WriteLine($"{f}", consoleColor);
+                stringBuilder.AppendLine($"{f}");
             }
-            Log.WriteLine($"{"权重:" + service.Weight}", consoleColor);
-            Log.WriteLine($"{msg}···{hc}！", consoleColor);
-            Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
+            stringBuilder.AppendLine($"{"权重:" + service.Weight}");
+            stringBuilder.AppendLine($"{msg}···{hc}！");
+            Log.Anno(stringBuilder.ToString());
         }
     }
 }

@@ -365,10 +365,9 @@ namespace Anno.Rpc.Client
                 {
                     if (connectionCenterInit == false)
                     {
-                        Log.Log.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffff") + $":注册中心 {SettingService.Local.IpAddress}:{SettingService.Local.Port} " + ex.Message, ConsoleColor.DarkYellow);
+                        Log.Log.Anno(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffff") + $":注册中心 {SettingService.Local.IpAddress}:{SettingService.Local.Port} " + ex.Message);
                         connectionCenterInit = true;
                     }
-                    // return (null, FailMessage($"负载中心连接失败！"));
                     if (_proxyCenter.IsOpen)
                     {
                         _proxyCenter.Flush();

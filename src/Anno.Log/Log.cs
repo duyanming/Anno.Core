@@ -16,6 +16,8 @@ namespace Anno.Log
     /// </summary>
     public static class Log
     {
+        private readonly static object writeLineLocker = new object();
+
         private static bool _defaultRuning = false;
         private static ConcurrentQueue<LogDataInfo> _defaultLog = new ConcurrentQueue<LogDataInfo>();
 
@@ -36,6 +38,9 @@ namespace Anno.Log
 
         private static bool _traceRuning = false;
         private static ConcurrentQueue<LogDataInfo> _traceLog = new ConcurrentQueue<LogDataInfo>();
+
+        private static bool _annoRuning = false;
+        private static ConcurrentQueue<LogDataInfo> _annoLog = new ConcurrentQueue<LogDataInfo>();
 
         /// <summary>
         /// 日志锁
@@ -81,11 +86,14 @@ namespace Anno.Log
         /// <param name="color"></param>
         public static void WriteLine(object message, ConsoleColor color = ConsoleColor.White)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($" [{DateTime.Now:yyyy-MM-dd HH:mm:ss:ffff}]: ");
-            Console.ForegroundColor = color;
-            Console.WriteLine($"{message}");
-            Console.ResetColor();
+            lock (writeLineLocker)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($" [{DateTime.Now:HH:mm:ss:ffff}]: ");
+                Console.ForegroundColor = color;
+                Console.WriteLine($"{message}");
+                Console.ResetColor();
+            }
         }
 
         /// <summary>
@@ -95,9 +103,12 @@ namespace Anno.Log
         /// <param name="color"></param>
         public static void WriteLineNoDate(object message, ConsoleColor color)
         {
-            Console.ForegroundColor = color;
-            Console.WriteLine($" {message}");
-            Console.ResetColor();
+            lock (writeLineLocker)
+            {
+                Console.ForegroundColor = color;
+                Console.WriteLine($" {message}");
+                Console.ResetColor();
+            }
         }
 
         /// <summary>
@@ -115,9 +126,12 @@ namespace Anno.Log
         /// <param name="color"></param>
         public static void WriteLineAlignNoDate(object message, ConsoleColor color = ConsoleColor.White)
         {
-            Console.ForegroundColor = color;
-            Console.WriteLine($"                             {message}");
-            Console.ResetColor();
+            lock (writeLineLocker)
+            {
+                Console.ForegroundColor = color;
+                Console.WriteLine($"                  {message}");
+                Console.ResetColor();
+            }
         }
 
         /// <summary>
@@ -127,7 +141,7 @@ namespace Anno.Log
         [Obsolete("请使用WriteLineNoDate")]
         public static void ConsoleWriteLine(string message)
         {
-            WriteLineNoDate($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss:ffff}]: {message}");
+            WriteLineNoDate($"[{DateTime.Now:HH:mm:ss:ffff}]: {message}");
         }
         /// <summary>
         /// 
@@ -166,6 +180,24 @@ namespace Anno.Log
             WriteLogSync(message, type, LogType.Trace);
         }
         /// <summary>
+        /// Anno框架日志
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="type"></param>
+        public static void Anno(object message, Type type = null)
+        {
+            WriteLogSync(message, type, LogType.Anno);
+        }
+        /// <summary>
+        /// AnnoRpc 框架日志
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="type"></param>
+        public static void Anno(string message)
+        {
+            Anno(message, null);
+        }
+        /// <summary>
         /// 写日志异步 队列
         /// </summary>
         /// <param name="logStr">消息</param>
@@ -193,6 +225,9 @@ namespace Anno.Log
                 case LogType.Trace:
                     _traceLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
                     break;
+                case LogType.Anno:
+                    _annoLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
+                    break;
                 default:
                     _defaultLog.Enqueue(new LogDataInfo() { logStr = logStr, type = type, threadId = System.Threading.Thread.CurrentThread.ManagedThreadId, logType = logType });
                     break;
@@ -216,6 +251,9 @@ namespace Anno.Log
                     break;
                 case LogType.Trace:
                     if (_traceRuning) return;
+                    break;
+                case LogType.Anno:
+                    if (_annoRuning) return;
                     break;
                 default:
                     if (_defaultRuning) return;
@@ -372,6 +410,25 @@ namespace Anno.Log
                             _traceRuning = false;
                         }
                         break;
+
+                    case LogType.Anno:
+                        try
+                        {
+                            _annoRuning = true;
+                            while (_annoLog.TryDequeue(out log))
+                            {
+                                WriteLogFile(log, writer);
+                            }
+                        }
+                        catch (Exception) { }
+                        finally
+                        {
+                            writer.Flush();
+                            writer.Close();
+                            file.Close();
+                            _annoRuning = false;
+                        }
+                        break;
                     default:
                         try
                         {
@@ -417,7 +474,7 @@ namespace Anno.Log
             if (log.type != null)
                 writer.WriteLine($"类型:          {log.type.FullName} ");
 
-            writer.WriteLine(msg);
+            writer.WriteLine($"内容：          {msg}");
         }
     }
     /// <summary>
@@ -452,6 +509,10 @@ namespace Anno.Log
         /// <summary>
         /// 分布式追踪
         /// </summary>
-        Trace
+        Trace,
+        /// <summary>
+        /// Anno框架级别的日志
+        /// </summary>
+        Anno
     }
 }

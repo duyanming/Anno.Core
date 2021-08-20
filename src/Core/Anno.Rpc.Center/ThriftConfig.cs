@@ -188,14 +188,16 @@ namespace Anno.Rpc.Center
                         ServiceInfoList.Add(ips);
                     }
 
-                    Log.WriteLine($"{ips.Ip}:{ips.Port}", ConsoleColor.DarkGreen);
-                    ips.Name.Split(',').ToList().ForEach(f =>
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.AppendLine($"{ips.Ip}:{ips.Port}");
+                    foreach (var f in ips.Name.Split(','))
                     {
-                        Log.WriteLine($"{f}", ConsoleColor.DarkGreen);
-                    });
-                    Log.WriteLine($"{"权重:" + ips.Weight}", ConsoleColor.DarkGreen);
-                    Log.WriteLine($"{ips.NickName}已登记！", ConsoleColor.DarkGreen);
-                    Log.WriteLineNoDate($"-----------------------------------------------------------------------------");
+                        stringBuilder.AppendLine($"{f}");
+                    }
+                    stringBuilder.AppendLine($"{"权重:" + ips.Weight}");
+                    stringBuilder.AppendLine($"{ips.NickName}已登记！");
+                    Log.Anno(stringBuilder.ToString(), typeof(ThriftConfig));
+
                     #region 上线和变更通知                   
                     if (OnlineNotice != null && oldService == null)
                     {
@@ -209,7 +211,7 @@ namespace Anno.Rpc.Center
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLine(ex);
+                    Log.Anno(ex,typeof(ThriftConfig));
                     return false;
                 }
                 finally
@@ -254,7 +256,7 @@ namespace Anno.Rpc.Center
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex);
+                Log.Anno(ex, typeof(ThriftConfig));
                 return false;
             }
             return true;
