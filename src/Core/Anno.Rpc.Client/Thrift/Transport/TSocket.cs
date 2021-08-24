@@ -54,12 +54,19 @@ namespace Thrift.Transport
         {
             get
             {
-                if (TcpClient == null)
+                try
+                {
+                    if (TcpClient == null)
+                    {
+                        return false;
+                    }
+
+                    return TcpClient.Connected;
+                }
+                catch
                 {
                     return false;
                 }
-
-                return TcpClient.Connected;
             }
         }
 
