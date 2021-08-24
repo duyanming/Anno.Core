@@ -13,7 +13,7 @@ namespace Anno.EngineData
         /// 插件启动配置
         /// </summary>
         /// <param name="iocAction">用于用户自定义做依赖注入</param>
-        public static void Bootstrap(Action iocAction,Loader.IocType iocType)
+        public static void Bootstrap(Action iocAction, Loader.IocType iocType)
         {
             Const.SettingService.InitConfig();
             Loader.IocLoader.RegisterIoc(iocType);
@@ -103,11 +103,11 @@ namespace Anno.EngineData
                            /*
                            * 模块过滤器
                            */
-                           routInfo.AuthorizationFilters.AddRange(t.GetCustomAttributes<AuthorizationFilterAttribute>());
+                           routInfo.AuthorizationFilters.AddRange(t.GetAnnoCustomAttributes<IAuthorizationFilter>());
                            /*
                            * 方法过滤器
                            */
-                           routInfo.AuthorizationFilters.AddRange(method.GetCustomAttributes<AuthorizationFilterAttribute>());
+                           routInfo.AuthorizationFilters.AddRange(method.GetAnnoCustomAttributes<IAuthorizationFilter>());
                            #endregion
                            #region Action Filters
                            /*
@@ -117,21 +117,22 @@ namespace Anno.EngineData
                            /*
                            * 模块过滤器
                            */
-                           routInfo.ActionFilters.AddRange(routInfo.RoutModuleType.GetCustomAttributes<ActionFilterAttribute>());
+                           routInfo.ActionFilters.AddRange(routInfo.RoutModuleType.GetAnnoCustomAttributes<IActionFilter>());
                            /*
                            * 方法过滤器
                            */
-                           routInfo.ActionFilters.AddRange(routInfo.RoutMethod.GetCustomAttributes<ActionFilterAttribute>());
+                           routInfo.ActionFilters.AddRange(routInfo.RoutMethod.GetAnnoCustomAttributes<IActionFilter>());
+
                            #endregion
                            #region Exception Filters
                            /*
                           * 方法过滤器
                           */
-                           routInfo.ExceptionFilters.AddRange(routInfo.RoutMethod.GetCustomAttributes<ExceptionFilterAttribute>());
+                           routInfo.ExceptionFilters.AddRange(routInfo.RoutMethod.GetAnnoCustomAttributes<IExceptionFilter>());
                            /*
                            * 模块过滤器
                            */
-                           routInfo.ExceptionFilters.AddRange(routInfo.RoutModuleType.GetCustomAttributes<ExceptionFilterAttribute>());
+                           routInfo.ExceptionFilters.AddRange(routInfo.RoutModuleType.GetAnnoCustomAttributes<IExceptionFilter>());
                            /*
                             * 全局过滤器
                             */
@@ -180,6 +181,42 @@ namespace Anno.EngineData
                 success = IsAssignableFrom(type.BaseType, baseTypeFullName);
             }
             return success;
+        }
+
+        static List<T> GetAnnoCustomAttributes<T>(this Type type) where T : IFilterMetadata
+        {
+            var annoObjCustomAttributes = type.GetCustomAttributes(true);
+            List<T> annoCustomAttributes = new List<T>();
+            if (annoObjCustomAttributes != null && annoObjCustomAttributes.Length > 0)
+            {
+                for (int i = 0; i < annoObjCustomAttributes.Length; i++)
+                {
+                    var annoObjCustom = annoObjCustomAttributes[i];
+                    if (annoObjCustom.GetType().GetInterface(typeof(T).Name, true) != null)
+                    {
+                        annoCustomAttributes.Add((T)annoObjCustom);
+                    }
+                }
+            }
+            return annoCustomAttributes;
+        }
+
+        static List<T> GetAnnoCustomAttributes<T>(this MethodInfo type) where T : IFilterMetadata
+        {
+            var annoObjCustomAttributes = type.GetCustomAttributes(true);
+            List<T> annoCustomAttributes = new List<T>();
+            if (annoObjCustomAttributes != null && annoObjCustomAttributes.Length > 0)
+            {
+                for (int i = 0; i < annoObjCustomAttributes.Length; i++)
+                {
+                    var annoObjCustom = annoObjCustomAttributes[i];
+                    if (annoObjCustom.GetType().GetInterface(typeof(T).Name, true)!=null)
+                    {
+                        annoCustomAttributes.Add((T)annoObjCustom);
+                    }
+                }
+            }
+            return annoCustomAttributes;
         }
     }
 }
