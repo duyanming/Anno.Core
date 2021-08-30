@@ -94,7 +94,7 @@ namespace Anno.CronNET
 
             if (millisecond != 500)
             {
-                Thread.Sleep(millisecond);
+                Task.Delay(millisecond).Wait();
             }
             #endregion
             _timer.Start();

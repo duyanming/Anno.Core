@@ -133,7 +133,7 @@ namespace Anno.Rpc.Center
                             WriteHealthCheck(service, hc, "永久移除");
                             break;
                         }
-                        Thread.Sleep(1000); //间隔一秒 健康检查
+                        Task.Delay(1000).Wait();//间隔一秒 健康检查
                     }
                 }
             }

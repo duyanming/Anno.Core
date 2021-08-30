@@ -15,6 +15,7 @@ namespace Anno.Plugs.HelloWorldService
     using Anno.Plugs.HelloWorldService.Filters;
     using HelloWorldDto;
     using System.ComponentModel.DataAnnotations;
+    using System.Threading.Tasks;
 
     public class HelloWorldViperModule : BaseModule
     {
@@ -122,7 +123,7 @@ namespace Anno.Plugs.HelloWorldService
         /// <returns></returns>
         public dynamic WaitFor(int seconds) {
             DateTime starTime = DateTime.Now;
-            System.Threading.Thread.Sleep(seconds*1000);
+            Task.Delay(seconds * 1000).Wait();
             DateTime endTime = DateTime.Now;
             return $"starTime:[{starTime:yyyy-MM-dd HH:mm:ss}],endTime:[{endTime:yyyy-MM-dd HH:mm:ss}]";
         }

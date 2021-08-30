@@ -10,6 +10,8 @@ namespace Anno.Rpc.Server
     using System.Reflection;
     using System.Threading;
     using Anno.Const.Attribute;
+    using System.Threading.Tasks;
+
     public static class Bootstrap
     {
         /// <summary>
@@ -44,7 +46,7 @@ namespace Anno.Rpc.Server
                 //阻止daemon进程退出
                 while (true)
                 {
-                    Thread.Sleep(1000);
+                    Task.Delay(1000).Wait();
                 }
             }
             catch (Exception e)

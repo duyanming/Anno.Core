@@ -66,7 +66,7 @@ namespace Anno.Rpc.Center
                 {
                     Task.Run(() => { Distribute.HealthCheck(service); });
                 });
-                Thread.Sleep(3000);
+                Task.Delay(3000).Wait();
             }
         }
         private static void OutputLogo(ThriftConfig tc)

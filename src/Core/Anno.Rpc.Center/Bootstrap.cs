@@ -67,7 +67,7 @@ namespace Anno.Rpc.Center
                 {
                     Task.Run(() => { Distribute.HealthCheck(service); });
                 });
-                Thread.Sleep(5000);
+                Task.Delay(5000).Wait();
             }
         }
 

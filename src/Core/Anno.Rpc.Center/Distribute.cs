@@ -8,6 +8,8 @@ using Thrift.Transport;
 namespace Anno.Rpc.Center
 {
     using Anno.Log;
+    using System.Threading.Tasks;
+
     public static class Distribute
     {
         /// <summary>
@@ -31,7 +33,7 @@ namespace Anno.Rpc.Center
             //    while(md5.Equals(Tc.ServiceMd5) && waitTime > 0)
             //    {
             //        waitTime = waitTime - 10;
-            //        Task.Delay(10).Wait();// Thread.Sleep(10);
+            //        Task.Delay(10).Wait();
             //    }
             //    service = Tc.ServiceInfoList;
             //}
@@ -129,7 +131,7 @@ namespace Anno.Rpc.Center
                             WriteHealthCheck(service, hc, "永久移除");
                             break;
                         }
-                        Thread.Sleep(1000); //间隔一秒 健康检查
+                        Task.Delay(1000).Wait(); //间隔一秒 健康检查
                     }
                 }
             }

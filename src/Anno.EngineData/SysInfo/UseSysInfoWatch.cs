@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Anno.EngineData.SysInfo
 {
@@ -99,7 +100,7 @@ namespace Anno.EngineData.SysInfo
                 }
 
             }
-            System.Threading.Thread.Sleep(cpuFullTime);
+            Task.Delay(cpuFullTime).Wait();
             foreach (var process in processes)
             {
                 try

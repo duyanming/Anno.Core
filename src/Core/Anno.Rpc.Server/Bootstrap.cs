@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Reflection;
 using Anno.Const.Attribute;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace Anno.Rpc.Server
                 //阻止daemon进程退出
                 while (true)
                 {
-                    Thread.Sleep(1000);
+                    Task.Delay(1000).Wait();
                 }
             }
             catch (Exception e)
