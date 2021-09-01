@@ -107,8 +107,8 @@ namespace Anno.CronNET
         {
             Status = DaemonStatus.Stop;
             _timer.Stop();
-            //foreach (CronJob job in cron_jobs)
-            //    job.abort();
+            foreach (CronJob job in _cronJobs)
+                job.abort();
         }
 
         private void timer_elapsed(object sender, ElapsedEventArgs e)

@@ -260,14 +260,11 @@ namespace Thrift.Server
             stop = true;
             serverTransport.Close();
             //clean up all the threads myself
-#if NETSTANDARD
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == false)
+#if !NETSTANDARD
+            workerThread.Abort();
+            foreach (Thread t in clientThreads)
             {
-                workerThread.Abort();
-                foreach (Thread t in clientThreads)
-                {
-                    t.Abort();
-                }
+                t.Abort();
             }
 #endif
         }
