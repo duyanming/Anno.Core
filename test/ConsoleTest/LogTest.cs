@@ -20,15 +20,21 @@ namespace ConsoleTest
             Console.Write("请输入调用次数：");
             long.TryParse(Console.ReadLine(), out long num);
 
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("你好1");
+            sb.AppendLine("你好11");
+            sb.AppendLine("你好111");
+            sb.AppendLine("你好1111");
+            sb.AppendLine("你好11你好111你好111你好111你好111你好111你好111你好111你好111你好111你好111你好111你好111你好111你好111你好111你好1111");
             Stopwatch sw = Stopwatch.StartNew();
             Parallel.For(0, num, i =>
             {
-                Log.Debug($"Debug{i}");
-                Log.Info($"Info{i}");
-                Log.Error($"Error{i}");
-                Log.Trace($"Trace{i}");
-                Log.Warn($"Warn{i}");
-                Log.Fatal($"Fatal{i}");
+                Log.Debug($"Debug{i}-{sb}");
+                Log.Info($"Info{i}-{sb}");
+                Log.Error($"Error{i}-{sb}");
+                Log.Trace($"Trace{i}-{sb}");
+                Log.Warn($"Warn{i}-{sb}");
+                Log.Fatal($"Fatal{i}-{sb}");
             });
             long ElapsedMilliseconds = sw.ElapsedMilliseconds;
             if (ElapsedMilliseconds == 0)

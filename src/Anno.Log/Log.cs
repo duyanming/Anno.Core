@@ -455,26 +455,36 @@ namespace Anno.Log
         static void WriteLogFile(LogDataInfo log, StreamWriter writer)
         {
             var msg = string.Empty;
-            try
-            {
-                msg = JsonConvert.SerializeObject(log.logStr);
-            }
-            catch
+            if (log.logStr is string)
             {
                 msg = log.logStr.ToString();
+            }
+            else if (log.logStr is null) {
+                msg = "null";
+            }
+            else
+            {
+                try
+                {
+                    msg = JsonConvert.SerializeObject(log.logStr);
+                }
+                catch
+                {
+                    msg = log.logStr.ToString();
+                }
             }
             /*
              * 添加空行
              */
             writer.WriteLine("------------------------------------LOG分隔符---------------------------------------------");
 
-            writer.WriteLine($"记录时间:    {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} ");
-            writer.WriteLine($"线程ID:       [{log.threadId}] ");
-            writer.WriteLine($"日志等级:    {log.logType} ");
+            writer.WriteLine($"{"记录时间:".PadRight(10, ' ')} {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} ");
+            writer.WriteLine($"{"线程标识:".PadRight(10, ' ')} [{log.threadId}] ");
+            writer.WriteLine($"{"日志等级:".PadRight(10, ' ')} {log.logType} ");
             if (log.type != null)
-                writer.WriteLine($"类型:          {log.type.FullName} ");
+                writer.WriteLine($"{"类型:".PadRight(10, ' ')} {log.type.FullName} ");
 
-            writer.WriteLine($"内容：          {msg}");
+            writer.Write(msg);
         }
     }
     /// <summary>
