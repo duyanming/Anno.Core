@@ -88,7 +88,10 @@ namespace Anno.Rpc.Center
                         }
                         else
                         {
-                            WriteHealthCheck(service, hc, "恢复正常");
+                            if (hc < (60 - errorCount))
+                            {
+                                WriteHealthCheck(service, hc, "恢复正常");
+                            }
                             if (service.IsTemporaryRemove)//如果服务已被临时移除则找回
                             {
                                 lock (LockHelper) //防止高并发下 影响权重
@@ -110,7 +113,10 @@ namespace Anno.Rpc.Center
                     else
                     {
                         hc--;
-                        Log.Anno($"Error Info:{service.Ip}:{service.Port} not alive {hc}", typeof(Distribute));
+                        if (hc < (60 - errorCount))
+                        {
+                            Log.Anno($"Error Info:{service.Ip}:{service.Port} not alive {hc}", typeof(Distribute));
+                        }
                         if (hc == (60 - errorCount))//三次失败之后 临时移除 ，防止更多请求转发给此服务节点 
                         {
                             //临时移除 并不从配置文件移除
