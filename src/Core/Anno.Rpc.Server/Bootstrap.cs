@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Reflection;
 using Anno.Const.Attribute;
@@ -12,7 +11,10 @@ namespace Anno.Rpc.Server
     using Anno.Log;
     public static partial class Bootstrap
     {
-
+        /// <summary>
+        /// 是否为重新注册
+        /// </summary>
+        private static bool regRegister = false;
         /// <summary>
         /// 启动 server
         /// </summary>
@@ -25,7 +27,17 @@ namespace Anno.Rpc.Server
         reStart:
             try
             {
+                if (args != null && args.Contains("--reg"))
+                {
+                    regRegister = true;
+                }
                 Enter(args, diAction, reStar, iocType);
+                if (regRegister)
+                {
+                    Log.WriteLine("重新注册完成，3秒后窗口自动关闭");
+                    Task.Delay(3000).Wait();
+                    return;
+                }
                 try
                 {
                     startUpCallBack?.Invoke();
@@ -72,7 +84,7 @@ namespace Anno.Rpc.Server
         /// <param name="reStart">异常之中回复启动，true。正常启动，false</param>
         static void Enter(string[] args, Action diAction, bool reStart, Loader.IocType iocType)
         {
-            if (!reStart)
+            if ((!reStart)||regRegister)
             {
                 EngineData.AnnoBootstrap.Bootstrap(diAction, iocType);
             }
@@ -119,7 +131,7 @@ namespace Anno.Rpc.Server
                 Const.SettingService.TraceOnOff = traceOnOff;
             }
             #endregion
-            if (!Server.State)
+            if ((!Server.State)&&(!regRegister))
             {
                 Server.Start();
             }
