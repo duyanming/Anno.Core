@@ -43,23 +43,27 @@ namespace Anno.Rpc.Client
         /// </summary>
         public void InitTransportPool()
         {
-            if (ServiceConfig != null&& TransportPool!=null&& TransportPool.Count<=0)
+            if (ServiceConfig != null && TransportPool != null && TransportPool.Count <= 0)
             {
                 Task.Factory.StartNew(() =>
                 {
                     for (int i = 0; i < ServiceConfig.MinIdle; i++)
                     {
-                        var transport = new TSocket(ServiceConfig.Ip, ServiceConfig.Port, ServiceConfig.Timeout);
-                        var tExt = new TTransportExt()
+                        try
                         {
-                            Transport = transport
-                            ,
-                            Client = new BrokerService.Client(new Thrift.Protocol.TBinaryProtocol(transport))
-                            ,
-                            LastDateTime = DateTime.Now
-                        };
-                        transport.Open();
-                        TransportPool.Push(tExt);
+                            var transport = new TSocket(ServiceConfig.Ip, ServiceConfig.Port, ServiceConfig.Timeout);
+                            var tExt = new TTransportExt()
+                            {
+                                Transport = transport
+                                ,
+                                Client = new BrokerService.Client(new Thrift.Protocol.TBinaryProtocol(transport))
+                                ,
+                                LastDateTime = DateTime.Now
+                            };
+                            transport.Open();
+                            TransportPool.Push(tExt);
+                        }
+                        catch{}
                     }
                 });
             }

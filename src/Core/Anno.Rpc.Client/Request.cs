@@ -43,14 +43,14 @@ namespace Anno.Rpc.Client
 
                 output = transport.Client.broker(input); //如果连接不可用，会报IO异常(重试)
             }
-            //catch (TTransportException)
-            //{
-            //    /*
-            //     * 连接打开出错
-            //     */
-            //    ThriftFactory.RemoveServicePool(id);
-            //    throw;
-            //}
+            catch (TTransportException)
+            {
+                /*
+                 * 连接打开出错
+                 */
+                ThriftFactory.RemoveServicePool(id);
+                throw;
+            }
             catch (AggregateException)
             {
                 ThriftFactory.RemoveServicePool(id);

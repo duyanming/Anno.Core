@@ -124,7 +124,12 @@ namespace Anno.Rpc.Client
         /// <param name="id"></param>
         public static void ReturnInstance(TTransportExt transport, string id)
         {
-            if (!_tranPool.TryGetValue(id, out var transpool))
+            bool exist = _tranPool.TryGetValue(id, out var transpool);
+            if (transpool == null)
+            {
+                return;
+            }
+            if (!exist)
             {
                 //可能服务连接池已经被移除
                 //transport.Transport.Flush();
@@ -137,7 +142,6 @@ namespace Anno.Rpc.Client
                 return;
                 //throw new ArgumentException("Connection Pool Exception");
             }
-
             if (transpool.TransportPool.Count > transpool.ServiceConfig.MaxIdle || !transport.Transport.IsOpen)//已经断开的连接直接释放
             {
                 //Console.WriteLine($"DisposeTransport--{transpool.TransportPool.Count}");
@@ -213,17 +217,21 @@ namespace Anno.Rpc.Client
                         int numDiff = pool.ServiceConfig.MinIdle - pool.TransportPool.Count;
                         for (int i = 0; i < numDiff; i++)
                         {
-                            var transport = new TSocket(pool.ServiceConfig.Ip, pool.ServiceConfig.Port, pool.ServiceConfig.Timeout);
-                            var tExt = new TTransportExt()
+                            try
                             {
-                                Transport = transport
-                                ,
-                                Client = new BrokerService.Client(new Thrift.Protocol.TBinaryProtocol(transport))
-                                ,
-                                LastDateTime = DateTime.Now
-                            };
-                            transport.Open();
-                            pool.TransportPool.Push(tExt);
+                                var transport = new TSocket(pool.ServiceConfig.Ip, pool.ServiceConfig.Port, pool.ServiceConfig.Timeout);
+                                var tExt = new TTransportExt()
+                                {
+                                    Transport = transport
+                                    ,
+                                    Client = new BrokerService.Client(new Thrift.Protocol.TBinaryProtocol(transport))
+                                    ,
+                                    LastDateTime = DateTime.Now
+                                };
+                                transport.Open();
+                                pool.TransportPool.Push(tExt);
+                            }
+                            catch{}
                         }
                     }
                 });

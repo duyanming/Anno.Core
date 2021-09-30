@@ -55,10 +55,24 @@ namespace ConsoleTest
         }
         public void Handle2()
         {
-            Console.Write("请输入类型 1：Handle,其他 Handle2：");
-            if (Console.ReadLine().Equals("1"))
+            Console.Write("请输入类型 1：Handle, 4：Handle4, 5：Handle5Parallel,其他 Handle2：");
+            string type = Console.ReadLine();
+            if (type.Equals("1"))
             {
                 Handle();
+                return;
+            }
+            else if (type.Equals("4"))
+            {
+                Console.Write("请输入类型为：4!");
+                Handle4();
+                return;
+            }
+            else if (type.Equals("5"))
+            {
+                Console.Write("请输入类型为：5!");
+                Handle5();
+                return;
             }
             Init();
         To:
@@ -173,7 +187,7 @@ namespace ConsoleTest
             Dictionary<string, string> input = new Dictionary<string, string>();
             var productsStr = Newtonsoft.Json.JsonConvert.SerializeObject(
                 new List<HelloWorldDto.ProductDto>() {
-            new HelloWorldDto.ProductDto() { 
+            new HelloWorldDto.ProductDto() {
                 CountryOfOrigin="sdf",
                 Number=3,
                 Name="x",
@@ -223,10 +237,51 @@ namespace ConsoleTest
             //    goto To;
         }
 
+        public void Handle4()
+        {
+            Init();
+        To:
+            Console.Write("请输入调用次数：");
+            long.TryParse(Console.ReadLine(), out long num);
+
+            for (int i = 0; i < num; i++)
+            {
+                Dictionary<string, string> input = new Dictionary<string, string>();
+
+                input.Add("channel", "Anno.Plugs.HelloWorld");
+                input.Add("router", "HelloWorldViper");
+                input.Add("method", "Test0");
+                var x = Connector.BrokerDns(input);
+                Anno.Log.Log.WriteLine(x);
+                Task.Delay(500).Wait();
+            }
+            goto To;
+        }
+
+        public void Handle5()
+        {
+            Init();
+        To:
+            Console.Write("请输入调用次数：");
+            long.TryParse(Console.ReadLine(), out long num);
+
+            Parallel.For(0, num,new ParallelOptions() { MaxDegreeOfParallelism=4}, i =>
+            {
+                Dictionary<string, string> input = new Dictionary<string, string>();
+
+                input.Add("channel", "Anno.Plugs.HelloWorld");
+                input.Add("router", "HelloWorldViper");
+                input.Add("method", "Test0");
+                var x = Connector.BrokerDns(input);
+                Anno.Log.Log.WriteLine(x);
+                Task.Delay(200).Wait();
+            });
+            goto To;
+        }
         void Init()
         {
-            DefaultConfigManager.SetDefaultConnectionPool(1000, Environment.ProcessorCount * 2, 100);
-            DefaultConfigManager.SetDefaultConfiguration("RpcTest", "127.0.0.1", 7010, false);
+            DefaultConfigManager.SetDefaultConnectionPool(100, Environment.ProcessorCount * 2, 50);
+            DefaultConfigManager.SetDefaultConfiguration("RpcTest", "127.0.0.1", 6660, false);
         }
     }
 

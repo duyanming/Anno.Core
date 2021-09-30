@@ -228,6 +228,16 @@ namespace Anno.Rpc.Client
 
             #endregion
             #region 处理请求
+            int error = 0;
+        tryRequest:
+            if (error > 0)
+            {
+                micro = Single(input[Eng.NAMESPACE])?.Mi;
+                if (micro == null)
+                {
+                    return FailMessage($"未找到服务【{input[Eng.NAMESPACE]}】");
+                }
+            }
             try
             {
                 using (Request request = new Request(micro.Ip, micro.Port))
@@ -242,11 +252,21 @@ namespace Anno.Rpc.Client
                     _microCaches.RemoveAll(c => c.Mi.Ip == micro.Ip && c.Mi.Port == micro.Port);
                 }
                 output = FailMessage(ex.Message);
+                error++;
+                if (error < 3)
+                {
+                    goto tryRequest;
+                }
             }
             catch (Exception ex) //如果异常则从缓存中清除 该缓存
             {
                 _microCaches.RemoveAll(c => c.Mi.Ip == micro.Ip && c.Mi.Port == micro.Port);
                 output = FailMessage(ex.Message);
+                error++;
+                if (error < 3)
+                {
+                    goto tryRequest;
+                }
             }
             finally
             {
