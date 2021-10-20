@@ -178,14 +178,14 @@ namespace Anno.Rpc.Client
                 trace.Rlt = trace.Response?.IndexOf("tatus\":true") >0;
 
                 /**
-                  * 成功的请求或者响应结果大于3000字符的清空链路追踪响应值
-                  */
+                 * 成功的请求清空链路追踪响应值
+                 */
                 if (trace.Rlt)
                 {
                     trace.Response = null;
                 }
-                /*
-                 * 请求内容超过3000字符不记录请求原始数据
+                /**
+                 * 请求内容默认只记录3000字符
                  */
                 if (trace.Request.Length > TransmitTrace.CallChainCharLength)
                 {
