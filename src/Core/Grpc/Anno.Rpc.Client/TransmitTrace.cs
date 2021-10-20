@@ -18,6 +18,12 @@ namespace Anno.Rpc.Client
         /// 调用链深度默认100
         /// </summary>
         public static int CallChainDepth = 100;
+
+        /// <summary>
+        /// 链路追踪请求体字段最大长度默认3000
+        /// </summary>
+        public static int CallChainCharLength = 3000;
+
         /// <summary>
         /// 设置调用链 TraceId
         /// </summary>
@@ -171,9 +177,19 @@ namespace Anno.Rpc.Client
                 trace.Uname = GetValueByKey(trace.InputDictionary, "uname");
                 trace.Rlt = trace.Response?.IndexOf("tatus\":true") >0;
 
+                /**
+                  * 成功的请求或者响应结果大于3000字符的清空链路追踪响应值
+                  */
                 if (trace.Rlt)
                 {
                     trace.Response = null;
+                }
+                /*
+                 * 请求内容超过3000字符不记录请求原始数据
+                 */
+                if (trace.Request.Length > TransmitTrace.CallChainCharLength)
+                {
+                    trace.Request = trace.Request.Substring(0, TransmitTrace.CallChainCharLength);
                 }
 
                 traces.Add(trace);
