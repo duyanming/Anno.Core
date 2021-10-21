@@ -172,10 +172,9 @@ namespace Anno.Rpc.Client
                 trace.Askchannel = GetValueByKey(trace.InputDictionary, "channel");
                 trace.Askrouter = GetValueByKey(trace.InputDictionary, "router");
                 trace.Askmethod = GetValueByKey(trace.InputDictionary, "method");
-                trace.Request = Newtonsoft.Json.JsonConvert.SerializeObject(trace.InputDictionary);
                 trace.GlobalTraceId = GetValueByKey(trace.InputDictionary, "GlobalTraceId");
                 trace.Uname = GetValueByKey(trace.InputDictionary, "uname");
-                trace.Rlt = trace.Response?.IndexOf("tatus\":true") >0;
+                trace.Rlt = trace.Response?.IndexOf("tatus\":true") > 0;
 
                 /**
                  * 成功的请求清空链路追踪响应值
@@ -187,10 +186,36 @@ namespace Anno.Rpc.Client
                 /**
                  * 请求内容默认只记录3000字符
                  */
-                if (trace.Request.Length > TransmitTrace.CallChainCharLength)
+                Dictionary<string, string> requestBody = new Dictionary<string, string>();
+                var keys = trace.InputDictionary.Keys;
+                foreach (var key in keys)
                 {
-                    trace.Request = trace.Request.Substring(0, TransmitTrace.CallChainCharLength);
+                    if (key.Equals("channel")
+                        || key.Equals("router")
+                        || key.Equals("method")
+                        || key.Equals("X-Original-For")
+                        || key.Equals("TraceId")
+                        || key.Equals("PreTraceId")
+                        || key.Equals("AppName")
+                        || key.Equals("AppNameTarget")
+                        || key.Equals("TTL")
+                        || key.Equals("Target")
+                        || key.Equals("GlobalTraceId")
+                        || key.Equals("uname")
+                        )
+                    {
+                        continue;
+                    }
+                    if (trace.InputDictionary.TryGetValue(key, out string value))
+                    {
+                        if (!string.IsNullOrEmpty(value) && value.Length > TransmitTrace.CallChainCharLength)
+                        {
+                            value = value.Substring(0, TransmitTrace.CallChainCharLength);
+                        }
+                        requestBody.Add(key, value);
+                    }
                 }
+                trace.Request = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
 
                 traces.Add(trace);
             }

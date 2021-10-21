@@ -21,20 +21,21 @@ namespace ConsoleTest
             long.TryParse(Console.ReadLine(), out long num);
             List<Task> ts = new List<Task>();
 
-            Dictionary<string, string> input = new Dictionary<string, string>();
-
-            input.Add("channel", "Anno.Plugs.HelloWorld");
-            input.Add("router", "HelloWorldViper");
-            input.Add("method", "Test0");
-
-            //input.Add("channel", "Anno.Plugs.Viper");
-            //input.Add("router", "Exam");
-            //input.Add("method", "SayHi");
-            //input.Add("name", "anno");
+          
 
             Stopwatch sw = Stopwatch.StartNew();
             Parallel.For(0, num, i =>
             {
+                Dictionary<string, string> input = new Dictionary<string, string>();
+
+                input.Add("channel", "Anno.Plugs.HelloWorld");
+                input.Add("router", "HelloWorldViper");
+                input.Add("method", "Test0");
+
+                //input.Add("channel", "Anno.Plugs.Viper");
+                //input.Add("router", "Exam");
+                //input.Add("method", "SayHi");
+                //input.Add("name", "anno");
                 var x = Connector.BrokerDns(input);
                 //Console.WriteLine(x);
                 if (x.IndexOf("true") <= 0)
@@ -281,7 +282,7 @@ namespace ConsoleTest
         void Init()
         {
             DefaultConfigManager.SetDefaultConnectionPool(100, Environment.ProcessorCount * 2, 50);
-            DefaultConfigManager.SetDefaultConfiguration("RpcTest", "127.0.0.1", 6660, false);
+            DefaultConfigManager.SetDefaultConfiguration("RpcTest", "127.0.0.1", 6660, true);
         }
     }
 
