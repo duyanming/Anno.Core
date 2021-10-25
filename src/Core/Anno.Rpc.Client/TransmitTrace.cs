@@ -208,6 +208,11 @@ namespace Anno.Rpc.Client
                     }
                     if (trace.InputDictionary.TryGetValue(key, out string value))
                     {
+                        if (key.EndsWith("Secret")
+                           || key.EndsWith("pwd"))
+                        {
+                            value = "******";
+                        }
                         if (!string.IsNullOrEmpty(value) && value.Length > TransmitTrace.CallChainCharLength)
                         {
                             value = value.Substring(0, TransmitTrace.CallChainCharLength);
