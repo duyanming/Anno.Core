@@ -198,7 +198,7 @@ namespace Thrift.Protocol
                     throw new TProtocolException(TProtocolException.BAD_VERSION, "Bad version in ReadMessageBegin: " + version);
                 }
                 message.Type = (TMessageType)(size & 0x000000ff);
-                message.Name = ReadString();
+                message.Name = ReadMessageName(ReadI32());
                 message.SeqID = ReadI32();
             }
             else
@@ -207,13 +207,28 @@ namespace Thrift.Protocol
                 {
                     throw new TProtocolException(TProtocolException.BAD_VERSION, "Missing version in readMessageBegin, old client?");
                 }
-                message.Name = ReadStringBody(size);
+                message.Name = ReadMessageName(size);
                 message.Type = (TMessageType)ReadByte();
                 message.SeqID = ReadI32();
             }
             return message;
         }
-
+        /// <summary>
+        /// 读取Message.Name 长度最初控制64个字符
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public string ReadMessageName(int size = 0)
+        {
+            if (size > 64)
+            {
+                Anno.Log.Log.Anno($">>>ReadMessageName>>>size:{size}");
+                throw new TProtocolException(TProtocolException.SIZE_LIMIT, "Rpc method name cannot exceed 64 characters");
+            }
+            var buf = new Byte[size];
+            Transport.ReadAll(buf, 0, size);
+            return Encoding.UTF8.GetString(buf, 0, buf.Length);
+        }
         public override void ReadMessageEnd()
         {
         }

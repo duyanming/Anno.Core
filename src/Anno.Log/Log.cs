@@ -482,9 +482,9 @@ namespace Anno.Log
             writer.WriteLine($"{"线程标识:".PadRight(10, ' ')} [{log.threadId}] ");
             writer.WriteLine($"{"日志等级:".PadRight(10, ' ')} {log.logType} ");
             if (log.type != null)
-                writer.WriteLine($"{"类型:".PadRight(10, ' ')} {log.type.FullName} ");
+                writer.WriteLine($"{"日志类型:".PadRight(10, ' ')} {log.type.FullName} ");
 
-            writer.Write(msg);
+            writer.WriteLine(msg);
         }
     }
     /// <summary>

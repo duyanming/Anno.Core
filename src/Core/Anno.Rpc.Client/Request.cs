@@ -33,7 +33,7 @@ namespace Anno.Rpc.Client
             string output;
             //失败计数器 N次 就直接返回异常
             int error = 0;
-            reStart:
+        reStart:
             try
             {
                 if (!transport.Transport.IsOpen)
@@ -56,37 +56,47 @@ namespace Anno.Rpc.Client
                 ThriftFactory.RemoveServicePool(id);
                 throw;
             }
+            catch (TProtocolException ex)
+            {
+                if (transport.Transport.IsOpen)
+                {
+                    transport.Transport.Close();
+                }
+                return Connector.FailMessage(ex.Message);
+            }
+            catch (IOException ex)
+            {
+                //连接不可用的时候 直接销毁 从新从连接池拿
+                var sEx = (SocketException)ex.InnerException;
+                if (sEx?.SocketErrorCode == SocketError.TimedOut)
+                {
+                    if (transport.Transport.IsOpen)
+                    {
+                        transport.Transport.Close();
+                    }
+                    return Connector.FailMessage(SocketError.TimedOut.ToString());
+                }
+                if (sEx?.SocketErrorCode == SocketError.ConnectionReset || sEx?.SocketErrorCode == SocketError.Shutdown)
+                {
+                    if (error == 100) //消耗完 线程池里面的 失效连接（此值 只是一个参考）
+                    {
+                        return Connector.FailMessage(ex.Message);
+                    }
+
+                    if (transport.Transport.IsOpen)
+                    {
+                        transport.Transport.Close();
+                    }
+                    ThriftFactory.ReturnInstance(transport, id); //归还有问题链接
+
+                    transport = ThriftFactory.BorrowInstance(id);
+                    error++;
+                    goto reStart;
+                }
+                output = Connector.FailMessage(ex.Message);
+            }
             catch (Exception ex)
             {
-                if (ex is IOException)//连接不可用的时候 直接销毁 从新从连接池拿
-                {
-                    var sEx = (SocketException)ex.InnerException;
-                    if (sEx?.SocketErrorCode == SocketError.TimedOut)
-                    {
-                        if (transport.Transport.IsOpen)
-                        {
-                            transport.Transport.Close();
-                        }
-                        return Connector.FailMessage(SocketError.TimedOut.ToString());
-                    }
-                    if (sEx?.SocketErrorCode == SocketError.ConnectionReset|| sEx?.SocketErrorCode == SocketError.Shutdown)
-                    {
-                        if (error == 100) //消耗完 线程池里面的 失效连接（此值 只是一个参考）
-                        {
-                            return Connector.FailMessage(ex.Message);
-                        }
-
-                        if (transport.Transport.IsOpen)
-                        {
-                            transport.Transport.Close();
-                        }
-                        ThriftFactory.ReturnInstance(transport,id); //归还有问题链接
-
-                        transport = ThriftFactory.BorrowInstance(id);
-                        error++;
-                        goto reStart;
-                    }
-                }
                 output = Connector.FailMessage(ex.Message);
             }
             return output;
@@ -100,7 +110,7 @@ namespace Anno.Rpc.Client
                 {
                     try
                     {
-                        ThriftFactory.ReturnInstance(transport,id);
+                        ThriftFactory.ReturnInstance(transport, id);
                     }
                     catch (Exception)
                     {

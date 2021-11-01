@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 
 namespace Anno.Rpc.Center
 {
+    using Anno.CronNET;
     using Anno.Log;
     public static class Bootstrap
     {
+        private static readonly CronDaemon CronDaemon = new CronDaemon();
         /// <summary>
         /// Daemon工作状态的主方法
         /// </summary>
@@ -60,15 +62,22 @@ namespace Anno.Rpc.Center
             };
             #endregion
             Log.WriteLine($"服务注册、发现、健康检查、KV存储、API文档、负载均衡中心，端口：{tc.Port}（AnnoCenter）已启动！", ConsoleColor.DarkGreen);
-            //阻止daemon进程退出
-            while (true)
+            CronDaemon.AddJob("*/5 * * * * ? *", () =>
             {
-                tc.ServiceInfoList.Distinct().Where(s => s.Checking == false).ToList().ForEach(service =>
+                Parallel.ForEach(
+                    tc.ServiceInfoList.Distinct().Where(s => s.Checking == false)
+                    , new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }
+                    , service =>
                 {
-                    Task.Run(() => { Distribute.HealthCheck(service); });
+                    Task.Factory.StartNew(() =>
+                    {
+                        Distribute.HealthCheck(service);
+                    }, TaskCreationOptions.LongRunning);
                 });
-                Task.Delay(5000).Wait();
-            }
+            });
+            CronDaemon.Start();
+            //阻止daemon进程退出
+            new AutoResetEvent(false).WaitOne();
         }
 
         private static void OutputLogo(ThriftConfig tc)
@@ -92,7 +101,7 @@ $@"                                                _
             logo += $" Version          [{ typeof(Center.Bootstrap).Assembly.GetName().Version}]\r\n";
             logo += $" Repository       https://github.com/duyanming/anno.core \r\n";
             logo += " -----------------------------------------------------------------------------\r\n";
-           Log.WriteLineNoDate(logo);
+            Log.WriteLineNoDate(logo);
         }
     }
 }

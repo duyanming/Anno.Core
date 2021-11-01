@@ -108,7 +108,7 @@ namespace Anno.Rpc.Center
                     else
                     {
                         hc--;
-                        if (hc < (60 - errorCount))
+                        if (hc < (60 - errorCount) && (hc % errorCount == 0))
                         {
                             Log.Anno($"Error Info:{service.Ip}:{service.Port} not alive {hc}", typeof(Distribute));
                         }

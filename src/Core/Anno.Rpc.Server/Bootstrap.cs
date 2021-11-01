@@ -9,6 +9,8 @@ using Anno.Rpc.Storage;
 namespace Anno.Rpc.Server
 {
     using Anno.Log;
+    using System.Threading;
+
     public static partial class Bootstrap
     {
         /// <summary>
@@ -56,10 +58,7 @@ namespace Anno.Rpc.Server
                     }
                 };
                 //阻止daemon进程退出
-                while (true)
-                {
-                    Task.Delay(1000).Wait();
-                }
+                (new AutoResetEvent(false)).WaitOne();
             }
             catch (Exception e)
             {
