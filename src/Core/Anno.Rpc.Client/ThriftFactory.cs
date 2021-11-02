@@ -36,7 +36,7 @@ namespace Anno.Rpc.Client
             ServiceTransportPool stp = new ServiceTransportPool()
             {
                 ServiceConfig = service,
-                TransportPool = new ConcurrentStack<TTransportExt>(),
+                TransportPool = new ConcurrentQueue<TTransportExt>(),
                 ResetEvent = new AutoResetEvent(false)
             };
             stp.InitTransportPool();
@@ -91,11 +91,11 @@ namespace Anno.Rpc.Client
             {
                 throw new ThriftException(ExceptionType.NotFoundService, $"未找到服务【{id}】");
             }
-            if (!transpool.TransportPool.TryPop(out var transport))
+            if (!transpool.TransportPool.TryDequeue(out var transport))
             {
                 if (transpool.TransportPool.Count < transpool.ServiceConfig.MinIdle && transpool.ActivedTransportCount < transpool.ServiceConfig.MaxActive)
                 {
-                    transpool.TransportPool.Push(CreateTransport(transpool.ServiceConfig));
+                    transpool.TransportPool.Enqueue(CreateTransport(transpool.ServiceConfig));
                 }
                 if (!transpool.TransportPool.Any() && transpool.ActivedTransportCount >= transpool.ServiceConfig.MaxActive)
                 {
@@ -108,7 +108,7 @@ namespace Anno.Rpc.Client
                         //monitor.TimeoutNotify(transpool.ServiceConfig.Name, transpool.ServiceConfig.WaitingTimeout);
                     }
                 }
-                if (!transpool.TransportPool.TryPop(out transport))
+                if (!transpool.TransportPool.TryDequeue(out transport))
                 {
                     transport = CreateTransport(transpool.ServiceConfig);
                     //throw new ThriftException("连接池异常");
@@ -155,7 +155,7 @@ namespace Anno.Rpc.Client
             else
             {
                 transport.LastDateTime = DateTime.Now; //记录最后访问时间
-                transpool.TransportPool.Push(transport);
+                transpool.TransportPool.Enqueue(transport);
             }
             transpool.InterlockedDecrement();
             transpool.ResetEvent.Set();
@@ -200,13 +200,13 @@ namespace Anno.Rpc.Client
                     {
                         if (pool.TransportPool.ToList().Exists(t => t.LastDateTime < nowDiff))
                         {
-                            var transportExts = new ConcurrentStack<TTransportExt>();
+                            var transportExts = new ConcurrentQueue<TTransportExt>();
 
                             //有效连接
                             var validLink = pool.TransportPool.Where(t => t.LastDateTime >= nowDiff).ToList();
                             //无效连接
                             invalidLink.AddRange(pool.TransportPool.Where(t => t.LastDateTime < nowDiff).ToList());
-                            transportExts.PushRange(validLink.ToArray());
+                            validLink.ForEach(tran=> transportExts.Enqueue(tran));
 
                             pool.TransportPool = transportExts;
                         }
@@ -229,7 +229,7 @@ namespace Anno.Rpc.Client
                                     LastDateTime = DateTime.Now
                                 };
                                 transport.Open();
-                                pool.TransportPool.Push(tExt);
+                                pool.TransportPool.Enqueue(tExt);
                             }
                             catch{}
                         }

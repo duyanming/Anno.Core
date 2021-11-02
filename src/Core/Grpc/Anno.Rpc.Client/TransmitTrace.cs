@@ -20,9 +20,9 @@ namespace Anno.Rpc.Client
         public static int CallChainDepth = 100;
 
         /// <summary>
-        /// 链路追踪请求体字段最大长度默认3000
+        /// 链路追踪请求体字段最大长度默认30
         /// </summary>
-        public static int CallChainCharLength = 3000;
+        public static int CallChainCharLength = 30;
 
         /// <summary>
         /// 设置调用链 TraceId

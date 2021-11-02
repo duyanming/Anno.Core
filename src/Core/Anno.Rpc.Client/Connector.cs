@@ -308,11 +308,6 @@ namespace Anno.Rpc.Client
         }
 
         #region 更新服务缓存
-
-        private static TTransport _proxyCenter = new TSocket(SettingService.Local.IpAddress, SettingService.Local.Port, 30000);
-        private static TProtocol _protocol = new TBinaryProtocol(_proxyCenter);
-        private static BrokerCenter.Client _client = new BrokerCenter.Client(_protocol);
-        private static bool connectionCenterInit = false;
         /// <summary>
         /// 服务MD5值
         /// </summary>
@@ -331,12 +326,18 @@ namespace Anno.Rpc.Client
                     RefreshServiceMd5();
                     channel = ServiceMd5;
                 }
-                if (!_proxyCenter.IsOpen)
-                {
-                    _proxyCenter.Open();
-                }
+                List<Micro> microList = null;
                 DateTime now = DateTime.Now; //获取缓存时间
-                var microList = _client.GetMicro(channel);
+                using (var trans = new TSocket(SettingService.Local.IpAddress, SettingService.Local.Port, 30000))
+                using (var protocol = new TBinaryProtocol(trans))
+                using (var client = new BrokerCenter.Client(protocol))
+                {
+                    trans.Open();
+                    microList = client.GetMicro(channel);
+                    trans.Close(); 
+                    trans.Dispose();
+                    protocol.Dispose();
+                }
                 #region Micro +添加到缓存
 
                 if (microList != null && microList.Count > 0)
@@ -381,29 +382,7 @@ namespace Anno.Rpc.Client
             }
             catch (Exception ex)
             {
-                try
-                {
-                    if (connectionCenterInit == false)
-                    {
-                        Log.Log.Anno(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffff") + $":注册中心 {SettingService.Local.IpAddress}:{SettingService.Local.Port} " + ex.Message);
-                        connectionCenterInit = true;
-                    }
-                    if (_proxyCenter.IsOpen)
-                    {
-                        _proxyCenter.Flush();
-                        _proxyCenter.Close();
-                    }
-
-                    _proxyCenter.Dispose();
-
-                    _proxyCenter = new TSocket(SettingService.Local.IpAddress, SettingService.Local.Port, 30000);
-                    _protocol = new TBinaryProtocol(_proxyCenter);
-                    _client = new BrokerCenter.Client(_protocol);
-                }
-                catch
-                {
-                    // ignored
-                }
+                Log.Log.Anno($"注册中心 {SettingService.Local.IpAddress}:{SettingService.Local.Port} " + ex.Message);
             }
             #endregion
         }

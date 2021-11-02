@@ -16,7 +16,7 @@ namespace Anno.Rpc.Client
         private int _activedTransportCount = 0;
         public ServiceConfig ServiceConfig { get; set; }
 
-        public ConcurrentStack<TTransportExt> TransportPool { get; set; }
+        public ConcurrentQueue<TTransportExt> TransportPool { get; set; }
 
         public AutoResetEvent ResetEvent { get; set; }
         /// <summary>
@@ -61,7 +61,7 @@ namespace Anno.Rpc.Client
                                 LastDateTime = DateTime.Now
                             };
                             transport.Open();
-                            TransportPool.Push(tExt);
+                            TransportPool.Enqueue(tExt);
                         }
                         catch{}
                     }

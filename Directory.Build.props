@@ -2,7 +2,7 @@
   <PropertyGroup>
     <DeveloperBuildCoreTfms>net5.0</DeveloperBuildCoreTfms>
     <StandardTfms>netstandard2.0</StandardTfms>
-    <Version>1.6.0.3</Version>
+    <Version>1.6.1</Version>
     <Authors>Du yanming</Authors>
     <Company>Du yanming</Company>
     <PackageIcon>logo.png</PackageIcon>
