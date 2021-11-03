@@ -36,7 +36,7 @@ namespace Anno.Rpc.Client
             ServiceTransportPool stp = new ServiceTransportPool()
             {
                 ServiceConfig = service,
-                TransportPool = new ConcurrentQueue<TTransportExt>(),
+                TransportPool = new ConcurrentStack<TTransportExt>(),
                 ResetEvent = new AutoResetEvent(false)
             };
             stp.InitTransportPool();
@@ -76,6 +76,8 @@ namespace Anno.Rpc.Client
                     {
                         transport.Transport.Close();
                     }
+                    transport.Client.InputProtocol.Dispose();
+                    transport.Client.OutputProtocol.Dispose();
                     transport.Transport.Dispose();
                 }
             }
@@ -91,11 +93,11 @@ namespace Anno.Rpc.Client
             {
                 throw new ThriftException(ExceptionType.NotFoundService, $"未找到服务【{id}】");
             }
-            if (!transpool.TransportPool.TryDequeue(out var transport))
+            if (!transpool.TransportPool.TryPop(out var transport))
             {
                 if (transpool.TransportPool.Count < transpool.ServiceConfig.MinIdle && transpool.ActivedTransportCount < transpool.ServiceConfig.MaxActive)
                 {
-                    transpool.TransportPool.Enqueue(CreateTransport(transpool.ServiceConfig));
+                    transpool.TransportPool.Push(CreateTransport(transpool.ServiceConfig));
                 }
                 if (!transpool.TransportPool.Any() && transpool.ActivedTransportCount >= transpool.ServiceConfig.MaxActive)
                 {
@@ -108,7 +110,7 @@ namespace Anno.Rpc.Client
                         //monitor.TimeoutNotify(transpool.ServiceConfig.Name, transpool.ServiceConfig.WaitingTimeout);
                     }
                 }
-                if (!transpool.TransportPool.TryDequeue(out transport))
+                if (!transpool.TransportPool.TryPop(out transport))
                 {
                     transport = CreateTransport(transpool.ServiceConfig);
                     //throw new ThriftException("连接池异常");
@@ -155,7 +157,7 @@ namespace Anno.Rpc.Client
             else
             {
                 transport.LastDateTime = DateTime.Now; //记录最后访问时间
-                transpool.TransportPool.Enqueue(transport);
+                transpool.TransportPool.Push(transport);
             }
             transpool.InterlockedDecrement();
             transpool.ResetEvent.Set();
@@ -200,13 +202,13 @@ namespace Anno.Rpc.Client
                     {
                         if (pool.TransportPool.ToList().Exists(t => t.LastDateTime < nowDiff))
                         {
-                            var transportExts = new ConcurrentQueue<TTransportExt>();
+                            var transportExts = new ConcurrentStack<TTransportExt>();
 
                             //有效连接
                             var validLink = pool.TransportPool.Where(t => t.LastDateTime >= nowDiff).ToList();
                             //无效连接
                             invalidLink.AddRange(pool.TransportPool.Where(t => t.LastDateTime < nowDiff).ToList());
-                            validLink.ForEach(tran=> transportExts.Enqueue(tran));
+                            transportExts.PushRange(validLink.ToArray());
 
                             pool.TransportPool = transportExts;
                         }
@@ -229,7 +231,7 @@ namespace Anno.Rpc.Client
                                     LastDateTime = DateTime.Now
                                 };
                                 transport.Open();
-                                pool.TransportPool.Enqueue(tExt);
+                                pool.TransportPool.Push(tExt);
                             }
                             catch{}
                         }
@@ -246,6 +248,8 @@ namespace Anno.Rpc.Client
                                 invalid.Transport.Flush();
                                 invalid.Transport.Close();
                             }
+                            invalid.Client.InputProtocol.Dispose();
+                            invalid.Client.OutputProtocol.Dispose();
                             invalid.Transport.Dispose();
                         }
                         catch

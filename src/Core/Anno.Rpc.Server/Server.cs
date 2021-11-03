@@ -46,10 +46,10 @@ $@"                                                _
                                  [{EngineData.SysInfo.RunTimeWatch.StartTime:yyyy-MM-dd HH:mm:ss}] thrift service 
 ";
             logo += " -----------------------------------------------------------------------------\r\n";
-            logo += $" Server Port      {Const.SettingService.Local.Port} \r\n";
-            logo += $" Author           YanMing.Du \r\n";
-            logo += $" Version          [{ typeof(Client.Connector).Assembly.GetName().Version}]\r\n";
-            logo += $" Repository       https://github.com/duyanming/anno.core \r\n";
+            logo += $" {"Server Port".PadRight(17, ' ')}{Const.SettingService.Local.Port} \r\n";
+            logo += $" {"Author".PadRight(17, ' ')}YanMing.Du \r\n";
+            logo += $" {"Version".PadRight(17, ' ')}[{ typeof(Client.Connector).Assembly.GetName().Version}]\r\n";
+            logo += $" {"Repository".PadRight(17, ' ')}https://github.com/duyanming/anno.core \r\n";
             logo += " -----------------------------------------------------------------------------\r\n";
             Log.WriteLineNoDate(logo);
         }
