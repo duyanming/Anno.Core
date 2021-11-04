@@ -98,7 +98,8 @@ namespace Anno.Rpc.Client
                 }
                 if (!transpool.TransportPool.TryPop(out transport))
                 {
-                    throw new GrpcException(GrpcException.ExceptionType.ServerUnkown, "连接池异常");
+                    //throw new GrpcException(GrpcException.ExceptionType.ServerUnkown, "连接池异常");
+                    transport = CreateTransport(transpool.ServiceConfig);
                 }
             }
             transpool.InterlockedIncrement();
