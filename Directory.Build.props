@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <DeveloperBuildCoreTfms>net5.0</DeveloperBuildCoreTfms>
+    <DeveloperBuildCoreTfms>net6.0</DeveloperBuildCoreTfms>
     <StandardTfms>netstandard2.0</StandardTfms>
     <Version>1.6.1.5</Version>
     <Authors>Du yanming</Authors>
