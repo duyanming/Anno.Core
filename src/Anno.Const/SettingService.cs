@@ -50,11 +50,6 @@ namespace Anno.Const
         public static List<Target> Ts { get; set; } = new List<Target>();
 
         /// <summary>
-        /// 日志配置文件路径 Log4net
-        /// </summary>                      
-        public static string LogCfg;
-
-        /// <summary>
         /// 工作站
         /// </summary>
         public static long WorkerId { get; set; } = 0;
@@ -69,9 +64,12 @@ namespace Anno.Const
         private static void InitConstAppSettings(XmlDocument doc)
         {
             XmlNodeList assembly = doc.SelectNodes("//IocDll/Assembly");
-            foreach (XmlNode n in assembly)
+            if (assembly != null)
             {
-                AppSettings.IocDll.Add(n.InnerText);
+                foreach (XmlNode n in assembly)
+                {
+                    AppSettings.IocDll.Add(n.InnerText);
+                }
             }
             AppSettings.ConnStr = AppSetting("ConnStr");
             AppSettings.DefaultPwd = AppSetting("DefaultPwd");
@@ -92,8 +90,6 @@ namespace Anno.Const
             MongoConfigure.connectionString = AppSetting("MongoConn");
             MongoConfigure.database = AppSetting("MongodName");
 
-            //Log4net 配置
-            LogCfg = Path.Combine(Directory.GetCurrentDirectory(), "log4net.config");
         }
         /// <summary>
         /// AppSetting //appSettings/add[@key='{key}']
@@ -346,7 +342,7 @@ namespace Anno.Const
                 }
                 try
                 {
-                    var assembly =
+                       var assembly =
                         Assembly.UnsafeLoadFrom(plugs[i].FullName); //装载组件
                     if (!Dic.ContainsKey(plugNameService))
                     {
@@ -412,6 +408,40 @@ namespace Anno.Const
                         Console.WriteLine(ex.Message);
                     }
                 }
+            }
+            #endregion
+
+            #region 单文件补充
+            var refs = Assembly.GetEntryAssembly().GetReferencedAssemblies().ToList().Where(f => f.Name.StartsWith("Anno.Plugs.") && f.Name.EndsWith("Service"));
+            foreach (var an in refs) {
+                if (SettingService.IgnoreFuncNames.Exists(ig => an.Name.ToUpper().Trim().Contains(ig)))
+                {
+                    continue;
+                }
+                try
+                {
+                    Assembly assembly = Assembly.Load(an);
+                    if (!Dic.ContainsKey(an.Name))
+                    {
+                        Dic.Add(an.Name, assembly);
+                        if (!string.IsNullOrEmpty(SettingService.FuncName))
+                        {
+                            SettingService.FuncName += ",";
+                        }
+                        SettingService.FuncName += an.Name;
+                    }
+                    if (AppSettings.IocDll.All(plug => plug != an.Name))
+                    {
+                        AppSettings.IocDll.Add(an.Name);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"插件【{ an.Name}】加载出错！");
+                    Console.WriteLine($"错误信息：");
+                    Console.WriteLine(ex.Message);
+                }
+
             }
             #endregion
 
