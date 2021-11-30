@@ -98,6 +98,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cocas", "samples\Grpc\Cocas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGrpcTest", "test\ConsoleGrpcTest\ConsoleGrpcTest.csproj", "{C14F5EA9-CA43-4154-902D-F30B96A24032}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jky.Web.Core.ModelManageService", "samples\Packages\Jky.Web.Core.ModelManageService\Jky.Web.Core.ModelManageService.csproj", "{DCF6EC90-3CC2-44CB-BEC9-1D3E806B7F45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -204,6 +206,10 @@ Global
 		{C14F5EA9-CA43-4154-902D-F30B96A24032}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C14F5EA9-CA43-4154-902D-F30B96A24032}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C14F5EA9-CA43-4154-902D-F30B96A24032}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCF6EC90-3CC2-44CB-BEC9-1D3E806B7F45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCF6EC90-3CC2-44CB-BEC9-1D3E806B7F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCF6EC90-3CC2-44CB-BEC9-1D3E806B7F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCF6EC90-3CC2-44CB-BEC9-1D3E806B7F45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,6 +245,7 @@ Global
 		{F33E4A2B-5E10-4EAE-8B34-608066458EF4} = {118EC682-0C63-4EDF-A192-49607FB665F2}
 		{38EB2206-0CD0-49CA-A031-E8B9014B7F20} = {4182479F-7B50-4B51-80FD-7EED6C3A1A84}
 		{C14F5EA9-CA43-4154-902D-F30B96A24032} = {B1D75545-FB2B-445F-AE77-6B9EB5906E2F}
+		{DCF6EC90-3CC2-44CB-BEC9-1D3E806B7F45} = {5EE94D38-77C8-422C-9E1B-23CBDCFFBA0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF1BE717-8264-4D74-AEED-B289CDEDD42F}

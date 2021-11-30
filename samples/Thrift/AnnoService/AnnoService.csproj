@@ -35,5 +35,6 @@
     <ProjectReference Include="..\..\Packages\Anno.Plugs.HelloWorldService\Anno.Plugs.HelloWorldService.csproj" />
     <ProjectReference Include="..\..\Packages\Anno.Plugs.SoEasyService\Anno.Plugs.SoEasyService.csproj" />
     <ProjectReference Include="..\..\Packages\Anno.Plugs.TraceService\Anno.Plugs.TraceService.csproj" />
+    <ProjectReference Include="..\..\Packages\Jky.Web.Core.ModelManageService\Jky.Web.Core.ModelManageService.csproj" />
   </ItemGroup>
 </Project>

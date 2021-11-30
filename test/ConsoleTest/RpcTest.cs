@@ -75,6 +75,12 @@ namespace ConsoleTest
                 Handle5();
                 return;
             }
+            else if (type.Equals("6"))
+            {
+                Console.Write("请输入类型为：6!");
+                Handle6();
+                return;
+            }
             Init();
         To:
             Console.Write("请输入线程数：");
@@ -277,6 +283,28 @@ namespace ConsoleTest
                 Anno.Log.Log.WriteLine(x);
                 Task.Delay(200).Wait();
             });
+            goto To;
+        }
+
+        public void Handle6()
+        {
+            Init();
+        To:
+            Console.Write("请输入调用次数：");
+            long.TryParse(Console.ReadLine(), out long num);
+
+            for (int i = 0; i < num; i++)
+            {
+                Dictionary<string, string> input = new Dictionary<string, string>();
+
+                input.Add("channel", "Jky.Web.Core.ModelManage");
+                input.Add("router", "SayHi");
+                input.Add("method", "SayHi");
+                input.Add("name", "Jky");
+                var x = Connector.BrokerDns(input);
+                Anno.Log.Log.WriteLine(x);
+                Task.Delay(500).Wait();
+            }
             goto To;
         }
         void Init()
