@@ -108,14 +108,14 @@ namespace ConsoleTest
 
                         Dictionary<string, string> input = new Dictionary<string, string>();
 
-                        //input.Add("channel", "Anno.Plugs.HelloWorld");
-                        //input.Add("router", "HelloWorldViper");
-                        //input.Add("method", "Test0");
+                        input.Add("channel", "Anno.Plugs.HelloWorld");
+                        input.Add("router", "HelloWorldViper");
+                        input.Add("method", "Test0");
 
-                        input.Add("channel", "Anno.Plugs.Viper");
-                        input.Add("router", "Exam");
-                        input.Add("method", "SayHi");
-                        input.Add("name", "test_name");
+                        //input.Add("channel", "Anno.Plugs.Viper");
+                        //input.Add("router", "Exam");
+                        //input.Add("method", "SayHi");
+                        //input.Add("name", "test_name");
 
                         //调用异步方法
                         //input.Add("channel", "Anno.Plugs.HelloWorld");
