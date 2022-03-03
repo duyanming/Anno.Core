@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Anno.EngineData\Anno.EngineData.csproj" />
-    <ProjectReference Include="..\HelloWorldDto\HelloWorldDto.csproj" />
-    <ProjectReference Include="..\SoEasy.Application\SoEasy.Application.csproj" />
   </ItemGroup>
 
 </Project>

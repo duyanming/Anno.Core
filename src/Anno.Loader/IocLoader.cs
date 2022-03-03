@@ -44,7 +44,7 @@ namespace Anno.Loader
 #if NETSTANDARD
                 else if (iocType == IocType.DependencyInjection)
                 {
-                    _diServicesCollection = DiServices.UseDependencyInjection();
+                    _diServicesCollection = DiServices;
                 }
 #endif
                 else
@@ -89,7 +89,7 @@ namespace Anno.Loader
 #if NETSTANDARD
             else if (iocType == IocType.DependencyInjection)
             {
-                _dIServiceProvider = _diServicesCollection.BuildServiceProvider();
+                _dIServiceProvider = _diServicesCollection.UseDependencyInjection().BuildServiceProvider();
             }
 #endif
             else

@@ -8,6 +8,7 @@ namespace Anno.Plugs.SoEasyService
     /// DependsOn 依赖的类型程序集自动注入DI容器
     /// </summary>
     [DependsOn(
+        typeof(SoEasy.Application.AppBootstrap)
         //typeof(Domain.Bootstrap)
         //, typeof(QueryServices.Bootstrap)
         //, typeof(Repository.Bootstrap)
