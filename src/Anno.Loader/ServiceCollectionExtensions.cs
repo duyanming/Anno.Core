@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Anno.Loader
 {
@@ -42,6 +43,16 @@ namespace Anno.Loader
                         {
                             return;
                         }
+                        if (IocFilter.Filters.Count > 0)
+                        {
+                            foreach (var filter in IocFilter.Filters)
+                            {
+                                if (!filter(t))
+                                {
+                                    return;
+                                }
+                            }
+                        }
                         var interfaces = t.GetInterfaces();
                         if (IsAssignableFrom(t, "Anno.EngineData.BaseModule")
                         || interfaces.ToList().Exists(i => i.Name == "IFilterMetadata")
@@ -53,7 +64,10 @@ namespace Anno.Loader
                         {
                             interfaces.ToList().ForEach(_interface =>
                             {
-                                services.AddTransient(_interface, t);
+                                if (!(interfaces.Length == 1 && interfaces[0].Equals(typeof(IAsyncStateMachine))))
+                                {
+                                    services.AddTransient(_interface, t);
+                                }
                             });
                         }
 
@@ -74,7 +88,7 @@ namespace Anno.Loader
             }
             else if (type.BaseType != null)
             {
-                success = IsAssignableFrom(type.BaseType,baseTypeFullName);
+                success = IsAssignableFrom(type.BaseType, baseTypeFullName);
             }
             return success;
         }

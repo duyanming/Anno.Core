@@ -40,10 +40,16 @@ namespace Anno.Loader
                        {
                            return;
                        }
-                       //if (CheckIfAnonymousType(t))
-                       //{
-                       //    return;
-                       //}
+                       if (IocFilter.Filters.Count > 0)
+                       {
+                           foreach (var filter in IocFilter.Filters)
+                           {
+                               if (!filter(t))
+                               {
+                                   return;
+                               }
+                           }
+                       }
                        var interfaces = t.GetInterfaces();
                        if (IsAssignableFrom(t, "Anno.EngineData.BaseModule")
                        || interfaces.ToList().Exists(i => i.Name == "IFilterMetadata")
@@ -62,11 +68,14 @@ namespace Anno.Loader
                        {
                            if (t.IsGenericType)
                            {
-                               builder.RegisterGeneric(t).As(t.GetInterfaces());
+                               if (!(interfaces.Length == 1 && interfaces[0].Equals(typeof(IAsyncStateMachine))))
+                               {
+                                   builder.RegisterGeneric(t).As(interfaces);
+                               }
                            }
                            else
                            {
-                               builder.RegisterType(t).As(t.GetInterfaces());
+                               builder.RegisterType(t).As(interfaces);
                            }
                        }
                    });

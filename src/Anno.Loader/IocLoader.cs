@@ -51,7 +51,7 @@ namespace Anno.Loader
                 {
                     throw new ArgumentOutOfRangeException("IocType 参数类型不正确！");
                 }
-            }           
+            }
         }
         public static ContainerBuilder GetAutoFacContainerBuilder()
         {
@@ -136,6 +136,20 @@ namespace Anno.Loader
             {
                 throw new Exception("请先初始化 RegisterIoc！");
             }
+        }
+        /// <summary>
+        /// IOC容器注入自定义过滤器
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static bool AddFilter(Func<Type, bool> filter)
+        {
+            bool success = false;
+            if (filter != null)
+            {
+                IocFilter.Filters.Add(filter);
+            }
+            return success;
         }
     }
     /// <summary>

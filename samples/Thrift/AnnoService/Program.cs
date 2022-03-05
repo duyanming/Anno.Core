@@ -40,6 +40,12 @@ namespace AnnoService
                  * 此处为 Thrift
                  */
                 var autofac = IocLoader.GetAutoFacContainerBuilder();
+                #region 自带依赖注入过滤器 true  注入 false 不注入
+                //IocLoader.AddFilter((type) =>
+                //       {
+                //           return true;
+                //       });
+                #endregion
                 /**
                  * IRpcConnector 是Anno.EngineData 内置的服务调用接口
                  * 例如：this.InvokeProcessor("Anno.Plugs.SoEasy", "AnnoSoEasy", "SayHi", input)
@@ -53,7 +59,7 @@ namespace AnnoService
                 /**
                  * 服务Api文档写入注册中心
                  */
-               Bootstrap.ApiDoc();
+                Bootstrap.ApiDoc();
             });
         }
     }

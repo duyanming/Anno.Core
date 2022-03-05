@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>$(StandardTfms);net461</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>$(Version)</Version>
+    <!--<Version>$(Version)</Version>-->
+	  <Version>1.7.0.2</Version>
     <Authors>Du yanming</Authors>
     <Company>Du yanming</Company>
     <Product>Anno IOC  DI</Product>
