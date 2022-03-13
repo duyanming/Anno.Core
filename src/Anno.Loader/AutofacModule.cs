@@ -50,6 +50,15 @@ namespace Anno.Loader
                                }
                            }
                        }
+                       string lifetime = "Transient";
+                       if (t.GetCustomAttribute<SingletonAttribute>() != null)
+                       {
+                           lifetime = "Singleton";
+                       }
+                       if (t.GetCustomAttribute<ScopedAttribute>() != null)
+                       {
+                           lifetime = "Scoped";
+                       }
                        var interfaces = t.GetInterfaces();
                        if (IsAssignableFrom(t, "Anno.EngineData.BaseModule")
                        || interfaces.ToList().Exists(i => i.Name == "IFilterMetadata")
@@ -57,11 +66,33 @@ namespace Anno.Loader
                        {
                            if (t.IsGenericType)
                            {
-                               builder.RegisterGeneric(t);
+                               switch (lifetime)
+                               {
+                                   case "Singleton":
+                                       builder.RegisterGeneric(t).SingleInstance();
+                                       break;
+                                   case "Scoped":
+                                       builder.RegisterGeneric(t).InstancePerLifetimeScope();
+                                       break;
+                                   default:
+                                       builder.RegisterGeneric(t);
+                                       break;
+                               }
                            }
                            else
                            {
-                               builder.RegisterType(t);
+                               switch (lifetime)
+                               {
+                                   case "Singleton":
+                                       builder.RegisterType(t).SingleInstance();
+                                       break;
+                                   case "Scoped":
+                                       builder.RegisterType(t).InstancePerLifetimeScope();
+                                       break;
+                                   default:
+                                       builder.RegisterType(t);
+                                       break;
+                               }
                            }
                        }
                        else if (!interfaces.ToList().Exists(i => i.Name == "IEntity"))
@@ -70,12 +101,34 @@ namespace Anno.Loader
                            {
                                if (!(interfaces.Length == 1 && interfaces[0].Equals(typeof(IAsyncStateMachine))))
                                {
-                                   builder.RegisterGeneric(t).As(interfaces);
+                                   switch (lifetime)
+                                   {
+                                       case "Singleton":
+                                           builder.RegisterGeneric(t).As(interfaces).SingleInstance();
+                                           break;
+                                       case "Scoped":
+                                           builder.RegisterGeneric(t).As(interfaces).InstancePerLifetimeScope();
+                                           break;
+                                       default:
+                                           builder.RegisterGeneric(t).As(interfaces);
+                                           break;
+                                   }
                                }
                            }
                            else
                            {
-                               builder.RegisterType(t).As(interfaces);
+                               switch (lifetime)
+                               {
+                                   case "Singleton":
+                                       builder.RegisterType(t).As(interfaces).SingleInstance();
+                                       break;
+                                   case "Scoped":
+                                       builder.RegisterType(t).As(interfaces).InstancePerLifetimeScope();
+                                       break;
+                                   default:
+                                       builder.RegisterType(t).As(interfaces);
+                                       break;
+                               }
                            }
                        }
                    });

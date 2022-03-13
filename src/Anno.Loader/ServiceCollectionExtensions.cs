@@ -53,12 +53,32 @@ namespace Anno.Loader
                                 }
                             }
                         }
+
+                        ServiceLifetime lifetime = ServiceLifetime.Transient;
+                        if (t.GetCustomAttribute<SingletonAttribute>() != null)
+                        {
+                            lifetime = ServiceLifetime.Singleton;
+                        }
+                        if (t.GetCustomAttribute<ScopedAttribute>() != null)
+                        {
+                            lifetime = ServiceLifetime.Scoped;
+                        }
                         var interfaces = t.GetInterfaces();
                         if (IsAssignableFrom(t, "Anno.EngineData.BaseModule")
                         || interfaces.ToList().Exists(i => i.Name == "IFilterMetadata")
                         || interfaces.Length <= 0)
                         {
-                            services.AddTransient(t);
+                            switch (lifetime) { 
+                            case ServiceLifetime.Singleton:
+                                    services.AddSingleton(t);
+                                    break;
+                                case ServiceLifetime.Scoped:
+                                    services.AddScoped(t);
+                                    break;
+                                default:
+                                    services.AddTransient(t);
+                                    break;
+                            }
                         }
                         else if (!interfaces.ToList().Exists(i => i.Name == "IEntity"))
                         {
@@ -66,7 +86,18 @@ namespace Anno.Loader
                             {
                                 if (!(interfaces.Length == 1 && interfaces[0].Equals(typeof(IAsyncStateMachine))))
                                 {
-                                    services.AddTransient(_interface, t);
+                                    switch (lifetime)
+                                    {
+                                        case ServiceLifetime.Singleton:
+                                            services.AddSingleton(_interface,t);
+                                            break;
+                                        case ServiceLifetime.Scoped:
+                                            services.AddScoped(_interface,t);
+                                            break;
+                                        default:
+                                            services.AddTransient(_interface, t);
+                                            break;
+                                    }
                                 }
                             });
                         }
