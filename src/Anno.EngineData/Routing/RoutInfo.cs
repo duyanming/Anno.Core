@@ -38,7 +38,14 @@ namespace Anno.EngineData.Routing
                 if (value != null)
                 {
                     returnTypeIsTask = taskType.IsAssignableFrom(value.ReturnType);
-                    returnTypeIsIActionResult = iActionResultType.IsAssignableFrom(value.ReturnType);
+                    if (returnTypeIsTask&& value.ReturnType.GetGenericArguments().Length>0)
+                    {
+                        returnTypeIsIActionResult = iActionResultType.IsAssignableFrom(value.ReturnType.GetGenericArguments()[0]);  
+                    }
+                    else
+                    {
+                        returnTypeIsIActionResult = iActionResultType.IsAssignableFrom(value.ReturnType);
+                    }
                 }
                 else
                 {

@@ -15,7 +15,7 @@ namespace ConsoleTest
             //var x3 = Newtonsoft.Json.JsonConvert.SerializeObject(1.3);
             //new CronNetTest().Handle();
             //new RpcStorage().Handle();//RPCRpcStorage
-            new RpcTest().Handle2();//RPC客户端测试
+            new RpcTest().Handle7();//RPC客户端测试
             //new ExpressionAnalysisTest().Handle();
             //new LogTest().Handle();
             //new GrpcTest().Handle();

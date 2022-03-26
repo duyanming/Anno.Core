@@ -35,5 +35,9 @@ namespace Anno.Plugs.HelloWorldService
             object rlt = new { HelloWorldViperMsg = $"{name}你好啊，今年{age}岁了" };
             return Task.FromResult(rlt);
         }
+        [AnnoInfo(Desc = "Task<ActionResult> 返回类型测试")]
+        public Task<ActionResult> TaskActionResult() {
+            return Task.FromResult(new ActionResult(true,"outputData",null,""));
+        }
     }
 }
