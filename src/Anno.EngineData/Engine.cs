@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Anno.Const.Enum;
 using Anno.EngineData.Filters;
@@ -16,6 +17,12 @@ namespace Anno.EngineData
     /// </summary>
     public static class Engine
     {
+        private static int engineCounter = 0;
+        /// <summary>
+        /// 处理中的请求数
+        /// </summary>
+        public static int EngineCounter => engineCounter ;
+
         private readonly static Type enumType = typeof(Enum);
         /// <summary>
         /// 转发器
@@ -75,6 +82,7 @@ namespace Anno.EngineData
             BaseModule module = null;
             try
             {
+                Interlocked.Increment(ref engineCounter);
                 #region Cache
                 string key = string.Empty;
                 if (routInfo.CacheMiddleware.Count > 0)
@@ -176,6 +184,9 @@ namespace Anno.EngineData
                     OutputData = null,
                     Msg = ex.InnerException?.Message ?? ex.Message
                 };
+            }
+            finally {
+                Interlocked.Decrement(ref engineCounter);
             }
         }
 

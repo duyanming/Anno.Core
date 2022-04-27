@@ -11,6 +11,8 @@ using Anno.Const;
 namespace ConsoleTest
 {
     using Anno.Rpc.Client;
+    using Anno.Rpc.Storage;
+
     public class RpcTest
     {
         public void Handle()
@@ -322,6 +324,33 @@ namespace ConsoleTest
         {
             DefaultConfigManager.SetDefaultConnectionPool(100, Environment.ProcessorCount * 2, 50);
             DefaultConfigManager.SetDefaultConfiguration("RpcTest", "127.0.0.1", 6660, true);
+        }
+
+        /// <summary>
+        /// 修改服务权重
+        /// </summary>
+        public void Handle8() {
+            Init();
+        To:
+            Console.Write("请输入权重：");
+            long.TryParse(Console.ReadLine(), out long weight);
+            Dictionary<string, string> input = new Dictionary<string, string>();
+            input[StorageCommand.COMMAND] = StorageCommand.ANNOMICROSERVICE;
+            input["ip"] = "10.128.3.109";
+            input["port"] = "6659";
+            input["weight"] = weight.ToString();
+            StorageEngine.Invoke(input);
+            for (int i = 0; i < 10; i++)
+            {
+                Dictionary<string, string> inputx = new Dictionary<string, string>();
+                inputx.Add("channel", "Anno.Plugs.HelloWorld");
+                inputx.Add("router", "HelloWorldTask");
+                inputx.Add("method", "TaskActionResult");
+                var x = Connector.BrokerDns(inputx);
+                Console.WriteLine(x);
+                Task.Delay(1000).Wait();
+            }
+            goto To;
         }
     }
 

@@ -18,5 +18,10 @@ namespace Anno.Rpc.Storage
         /// API文档存储命令
         /// </summary>
         public const string APIDOCCOMMAND = "APIDOC";
+
+        /// <summary>
+        /// 管理微服务信息
+        /// </summary>
+        public const string ANNOMICROSERVICE = "ANNOSVR";
     }
 }

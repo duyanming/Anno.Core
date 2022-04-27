@@ -211,7 +211,100 @@ namespace Anno.Rpc.Center
                 }
                 catch (Exception ex)
                 {
-                    Log.Anno(ex,typeof(ThriftConfig));
+                    Log.Anno(ex, typeof(ThriftConfig));
+                    return false;
+                }
+                finally
+                {
+                    Save();
+                }
+            }
+            return true;
+        }
+        /// <summary>
+        /// 变更服务信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public bool ChangeMicroServiceWeight(Dictionary<string, string> input)
+        {
+            lock (LockAdd)
+            {
+                try
+                {
+                    if (!input.ContainsKey("ip") || !input.ContainsKey("port") || (!input.ContainsKey("weight") && !input.ContainsKey("timeout")))
+                    {
+                        return false;
+                    }
+                    var ip = input["ip"];
+                    int.TryParse(input["port"], out int port);
+                    var hasWeight = false;
+                    int weight = 0;
+                    int timeout = 0;
+                    if (input.ContainsKey("weight"))
+                    {
+                        hasWeight = int.TryParse(input["weight"], out weight);
+                    }
+                    var hasTimeOut = false;
+                    if (input.ContainsKey("timeout"))
+                    {
+                        hasTimeOut = int.TryParse(input["timeout"], out timeout);
+                    }
+                    #region 原有服务
+                    var oldService = ServiceInfoList.FirstOrDefault(t => ip == t.Ip && port == t.Port);
+                    if (oldService == null)
+                    {
+                        return false;
+                    }
+                    #endregion
+                    ServiceInfo serviceInfo = new ServiceInfo()
+                    {
+                        Timeout = oldService.Timeout,
+                        Name = oldService.Name,
+                        NickName = oldService.NickName,
+                        Ip = oldService.Ip,
+                        Port = oldService.Port,
+                        Weight = oldService.Weight
+                    };
+                    if (hasTimeOut)
+                        serviceInfo.Timeout = timeout;
+                    if (hasWeight)
+                        serviceInfo.Weight = weight;
+
+                    ServiceInfoList.RemoveAll(t => ip == t.Ip && port == t.Port);
+
+                    for (int w = 0; w < weight; w++) //权重
+                    {
+                        ServiceInfoList.Add(serviceInfo);
+                    }
+                    /*
+                     * 至少保留一条服务信息数据
+                     */
+                    if (weight <= 0)
+                    {
+                        ServiceInfoList.Add(serviceInfo);
+                    }
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.AppendLine($"{serviceInfo.Ip}:{serviceInfo.Port}");
+                    foreach (var f in serviceInfo.Name.Split(','))
+                    {
+                        stringBuilder.AppendLine($"{f}");
+                    }
+                    stringBuilder.AppendLine($"{"权重:" + serviceInfo.Weight}");
+                    stringBuilder.AppendLine($"{serviceInfo.NickName}已登记！");
+                    Log.Anno(stringBuilder.ToString(), typeof(ThriftConfig));
+
+                    #region 上线和变更通知                   
+                    if (ChangeNotice != null && oldService != null)
+                    {
+                        ChangeNotice.Invoke(serviceInfo, oldService);
+                    }
+                    #endregion
+                }
+                catch (Exception ex)
+                {
+                    Log.Anno(ex, typeof(ThriftConfig));
                     return false;
                 }
                 finally

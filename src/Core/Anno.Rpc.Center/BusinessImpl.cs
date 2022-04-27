@@ -16,6 +16,7 @@ namespace Anno.Rpc.Center
         {
             _adapters.TryAdd(StorageCommand.KVCOMMAND, new KvStorageAdapter());
             _adapters.TryAdd(StorageCommand.APIDOCCOMMAND, new ApiDocStorageAdapter());
+            _adapters.TryAdd(StorageCommand.ANNOMICROSERVICE, new AnnoMicroManagementStorageAdapter());
         }
         /// <summary>
         /// 添加

@@ -19,6 +19,7 @@ namespace Anno.Rpc.Center
         {
             _adapters.TryAdd(StorageCommand.KVCOMMAND, new KvStorageAdapter());
             _adapters.TryAdd(StorageCommand.APIDOCCOMMAND, new ApiDocStorageAdapter());
+            _adapters.TryAdd(StorageCommand.ANNOMICROSERVICE, new AnnoMicroManagementStorageAdapter());
         }
         public override Task<BrokerReply> Add_broker(Micro request, ServerCallContext context)
         {
