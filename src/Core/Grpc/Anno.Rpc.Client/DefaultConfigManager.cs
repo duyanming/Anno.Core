@@ -14,6 +14,7 @@ namespace Anno.Rpc.Client
         /// 任务管理器
         /// </summary>
         private static readonly CronDaemon CronDaemon = new CronDaemon();
+        private static readonly object _locker = new object();
 
         public static ConnectionPoolConfiguration DefaultConnectionPoolConfiguration = new ConnectionPoolConfiguration()
         {
@@ -30,7 +31,7 @@ namespace Anno.Rpc.Client
         /// <param name="centerAddress">注册中心地址</param>
         /// <param name="port">注册中心端口</param>
         /// <param name="traceOnOff">调用链追踪默认打开</param>
-        public static void SetDefaultConfiguration(string appName ,string centerAddress,int port=6660,bool traceOnOff=true)
+        public static void SetDefaultConfiguration(string appName, string centerAddress, int port = 6660, bool traceOnOff = true)
         {
             SettingService.AppName = appName;
             SettingService.Local.IpAddress = centerAddress;
@@ -40,7 +41,8 @@ namespace Anno.Rpc.Client
             Connector.UpdateCache(string.Empty);
             if (CronDaemon.Status == DaemonStatus.Stop)
             {
-               
+                lock (_locker)
+                {
                     if (CronDaemon.Status == DaemonStatus.Stop)
                     {
                         CronDaemon.AddJob("*/30 * * * * ? *", GrpcFactory.CleanPoolLink);
@@ -51,6 +53,7 @@ namespace Anno.Rpc.Client
                         CronDaemon.AddJob("*/5 * * * * ? *", () => { Connector.UpdateCache("cron:"); });
                         CronDaemon.Start();
                     }
+                }
             }
         }
         /// <summary>

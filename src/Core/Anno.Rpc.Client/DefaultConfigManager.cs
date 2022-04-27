@@ -16,6 +16,7 @@ namespace Anno.Rpc.Client
         /// 任务管理器
         /// </summary>
         private static readonly CronDaemon CronDaemon = new CronDaemon();
+        private static readonly object _locker = new object();
 
         public static ConnectionPoolConfiguration DefaultConnectionPoolConfiguration = new ConnectionPoolConfiguration()
         {
@@ -41,16 +42,18 @@ namespace Anno.Rpc.Client
             Connector.UpdateCache(string.Empty);
             if (CronDaemon.Status == DaemonStatus.Stop)
             {
-
-                if (CronDaemon.Status == DaemonStatus.Stop)
+                lock (_locker)
                 {
-                    CronDaemon.AddJob("*/30 * * * * ? *", ThriftFactory.CleanPoolLink);
-                    if (Const.SettingService.TraceOnOff)
+                    if (CronDaemon.Status == DaemonStatus.Stop)
                     {
-                        CronDaemon.AddJob("*/10 * * * * ? *", TracePool.TryDequeue);
+                        CronDaemon.AddJob("*/30 * * * * ? *", ThriftFactory.CleanPoolLink);
+                        if (Const.SettingService.TraceOnOff)
+                        {
+                            CronDaemon.AddJob("*/10 * * * * ? *", TracePool.TryDequeue);
+                        }
+                        CronDaemon.AddJob("*/5 * * * * ? *", () => { Connector.UpdateCache("cron:"); });
+                        CronDaemon.Start();
                     }
-                    CronDaemon.AddJob("*/5 * * * * ? *", () => { Connector.UpdateCache("cron:"); });
-                    CronDaemon.Start();
                 }
             }
         }
