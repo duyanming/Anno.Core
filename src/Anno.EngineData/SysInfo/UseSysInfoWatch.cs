@@ -23,7 +23,7 @@ namespace Anno.EngineData.SysInfo
             _mLastTotalProcessorTime = mProcess.TotalProcessorTime.Milliseconds;
         }
 
-        private readonly System.Diagnostics.Process mProcess;
+        private readonly Process mProcess;
 
         private readonly long _mCpuMaxTime;
 
@@ -125,17 +125,47 @@ namespace Anno.EngineData.SysInfo
             public ServerStatus()
             {
             }
+            /// <summary>
+            /// 运行时长
+            /// </summary>
             public string RunTime { get; set; }
+            /// <summary>
+            /// 当前时间
+            /// </summary>
             public DateTime CurrentTime { get; set; } = DateTime.Now;
+            /// <summary>
+            /// 内存占用
+            /// </summary>
             public long Memory { get; set; }
+            /// <summary>
+            /// CPU 占用
+            /// </summary>
             public double Cpu { get; set; }
+            /// <summary>
+            /// 标签
+            /// </summary>
             public string Tag { get; set; }
-
+            /// <summary>
+            /// 总内存
+            /// </summary>
             public double MemoryTotal { get; set; }
+            /// <summary>
+            /// 总内存占用
+            /// </summary>
             public double MemoryTotalUse { get; set; }
+           /// <summary>
+           /// 总CPU占用
+           /// </summary>
             public double CpuTotalUse { get; set; }
-
+            /// <summary>
+            /// 磁盘信息
+            /// </summary>
             public List<AnnoDrive> Drives { get; set; }
+
+            /// <summary>
+            /// 处理中的请求数
+            /// </summary>
+            public  int EngineCounter => Engine.EngineCounter;
 
         }
     }

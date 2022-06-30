@@ -16,7 +16,11 @@ namespace ConsoleTest
                 Console.WriteLine(info.RunTime);
                 Console.WriteLine($"CPU:{info.Cpu}");
                 Console.WriteLine($"Memory:{info.Memory}");
-                System.Threading.Thread.Sleep(1000);
+
+                Console.WriteLine($"CpuTotalUse:{info.CpuTotalUse}");
+                Console.WriteLine($"MemoryTotalUse:{info.MemoryTotalUse}");
+                Console.WriteLine($"EngineCounter:{info.EngineCounter}");
+                System.Threading.Thread.Sleep(500);
             }
         }
     }
