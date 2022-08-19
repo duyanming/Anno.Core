@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Anno.Plugs.MonitorService" Version="1.7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
     <None Update="Packages\Plugs插件使用说明.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

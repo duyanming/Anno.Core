@@ -42,6 +42,7 @@ namespace Anno.Plugs.HelloWorldService
         [AnnoInfo(Desc = "Task<ActionResult> 返回类型测试")]
         public Task<ActionResult> TaskinputNullActionResult(int? x=0)
         {
+            Task.Delay(20000).Wait();
             return Task.FromResult(new ActionResult(true, "outputData"+x, null, ""));
         }
     }

@@ -78,6 +78,8 @@ namespace Anno.EngineData.SysInfo
             _mInfo.Drives = AnnoDrives.GetDrivesInfo();
             if (_mInfo.Cpu > _mInfo.CpuTotalUse)
                 _mInfo.CpuTotalUse = _mInfo.Cpu;
+
+            _mInfo.EngineCounter = Engine.EngineCounter;
             return _mInfo;
         }
 
@@ -153,9 +155,9 @@ namespace Anno.EngineData.SysInfo
             /// 总内存占用
             /// </summary>
             public double MemoryTotalUse { get; set; }
-           /// <summary>
-           /// 总CPU占用
-           /// </summary>
+            /// <summary>
+            /// 总CPU占用
+            /// </summary>
             public double CpuTotalUse { get; set; }
             /// <summary>
             /// 磁盘信息
@@ -165,7 +167,7 @@ namespace Anno.EngineData.SysInfo
             /// <summary>
             /// 处理中的请求数
             /// </summary>
-            public  int EngineCounter => Engine.EngineCounter;
+            public int EngineCounter { get; set; }
 
         }
     }
