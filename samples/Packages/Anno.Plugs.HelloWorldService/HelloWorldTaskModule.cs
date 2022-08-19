@@ -39,5 +39,10 @@ namespace Anno.Plugs.HelloWorldService
         public Task<ActionResult> TaskActionResult() {
             return Task.FromResult(new ActionResult(true,"outputData",null,""));
         }
+        [AnnoInfo(Desc = "Task<ActionResult> 返回类型测试")]
+        public Task<ActionResult> TaskinputNullActionResult(int? x=0)
+        {
+            return Task.FromResult(new ActionResult(true, "outputData"+x, null, ""));
+        }
     }
 }

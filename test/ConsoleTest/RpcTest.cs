@@ -320,6 +320,17 @@ namespace ConsoleTest
             var x = Connector.BrokerDns(input);
             Console.Write(x);   
         }
+        public void Handle9()
+        {
+            Init();
+            Dictionary<string, string> input = new Dictionary<string, string>();
+            input.Add("channel", "Anno.Plugs.HelloWorld");
+            input.Add("router", "HelloWorldTask");
+            input.Add("method", "TaskinputNullActionResult");
+            input.Add("x", "1");
+            var x = Connector.BrokerDns(input);
+            Console.Write(x);
+        }
         void Init()
         {
             DefaultConfigManager.SetDefaultConnectionPool(100, Environment.ProcessorCount * 2, 50);
