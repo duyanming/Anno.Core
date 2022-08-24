@@ -21,7 +21,7 @@ namespace Anno.EngineData
         /// <summary>
         /// 处理中的请求数
         /// </summary>
-        public static int EngineCounter => engineCounter ;
+        public static int EngineCounter => engineCounter;
 
         private readonly static Type enumType = typeof(Enum);
         /// <summary>
@@ -169,6 +169,11 @@ namespace Anno.EngineData
             {
                 if (routInfo.RoutMethod != null)
                 {
+                    if (module.ActionResult != null)
+                    {
+                        module.ActionResult.Status = false;
+                        module.ActionResult.Msg = ex.InnerException?.Message ?? ex.Message;
+                    }
                     foreach (var ef in routInfo.ExceptionFilters)
                     {
                         ef.OnException(ex, module);
@@ -178,14 +183,15 @@ namespace Anno.EngineData
                 //记录日志
                 Log.Log.Error(ex, routInfo.RoutModuleType);
 #endif
-                return new ActionResult()
+                return module.ActionResult?? new ActionResult()
                 {
                     Status = false,
                     OutputData = null,
                     Msg = ex.InnerException?.Message ?? ex.Message
                 };
             }
-            finally {
+            finally
+            {
                 Interlocked.Decrement(ref engineCounter);
             }
         }
@@ -222,7 +228,7 @@ namespace Anno.EngineData
                     {
                         parameters.Add(Newtonsoft.Json.JsonConvert.DeserializeObject(input[p.Name], p.ParameterType));
                     }
-                    else if (p.ParameterType.FullName.StartsWith("System.")&& !p.ParameterType.Name.StartsWith("Nullable`"))//系统基础数据类型
+                    else if (p.ParameterType.FullName.StartsWith("System.") && !p.ParameterType.Name.StartsWith("Nullable`"))//系统基础数据类型
                     {
                         parameters.Add(Convert.ChangeType(input[p.Name], p.ParameterType));//枚举
                     }
