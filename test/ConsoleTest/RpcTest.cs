@@ -336,7 +336,7 @@ namespace ConsoleTest
         void Init()
         {
             DefaultConfigManager.SetDefaultConnectionPool(100, Environment.ProcessorCount * 2, 50);
-            DefaultConfigManager.SetDefaultConfiguration("RpcTest", "127.0.0.1", 6660, true);
+            DefaultConfigManager.SetDefaultConfiguration("RpcTest", "127.0.0.1", 6660, false);
         }
 
         /// <summary>
