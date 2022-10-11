@@ -31,6 +31,12 @@ namespace Anno.EngineData
         public virtual bool Init(Dictionary<string, string> input)
         {
             this._input = input;
+            #region 设置上下文
+            AnnoContext.Current = new AnnoRequestContext()
+            {
+                Input = input
+            };
+            #endregion
             return true;
         }
 
