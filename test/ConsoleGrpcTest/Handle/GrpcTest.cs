@@ -94,6 +94,47 @@ namespace ConsoleGrpcTest
 
             Task.WaitAll(ts.ToArray());
         }
+        public void Handle2()
+        {
+            Init();
+        To:
+            Console.Write("请输入调用次数：");
+            long.TryParse(Console.ReadLine(), out long num);
+            List<Task> ts = new List<Task>();
+
+
+
+            Stopwatch sw = Stopwatch.StartNew();
+            Parallel.For(0, num, i =>
+            {
+                Dictionary<string, string> input = new Dictionary<string, string>();
+
+                input.Add("channel", "Anno.Plugs.HelloWorld");
+                input.Add("router", "HelloWorldViper");
+                input.Add("method", "Test0");
+
+                //input.Add("channel", "Anno.Plugs.Viper");
+                //input.Add("router", "Exam");
+                //input.Add("method", "SayHi");
+                //input.Add("name", "anno");
+                var x = Connector.BrokerDns(input);
+                //Console.WriteLine(x);
+                if (x.IndexOf("true") <= 0)
+                {
+                    Console.WriteLine(x);
+                }
+
+
+            });
+            long ElapsedMilliseconds = sw.ElapsedMilliseconds;
+            if (ElapsedMilliseconds == 0)
+            {
+                ElapsedMilliseconds = 1;
+            }
+            Console.WriteLine($"运行时间：{sw.ElapsedMilliseconds}/ms,TPS:{(num) * 1000 / ElapsedMilliseconds}");
+            sw.Stop();
+            goto To;
+        }
 
         void Init()
         {
