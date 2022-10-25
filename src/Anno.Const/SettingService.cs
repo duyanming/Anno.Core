@@ -17,7 +17,7 @@ namespace Anno.Const
         /// <summary>
         /// 服务端最大工作线程数量
         /// </summary>
-        public static int MaxThreads { get; set; } = 200;
+        public static int MaxThreads { get; set; } = 2000;
 
         /// <summary>
         /// 本机信息
