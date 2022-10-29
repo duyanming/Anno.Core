@@ -22,7 +22,7 @@ namespace Anno.Rpc.Center
             ThriftConfig tc = ThriftConfig.CreateInstance();
             TServerSocket serverTransport = new TServerSocket(tc.Port, 0, true);
             BrokerCenter.Processor processor = new BrokerCenter.Processor(new BusinessImpl());
-            _server = new TThreadedServer(processor, serverTransport,Log.Log.Anno, 500);
+            _server = new TThreadedServer(processor, serverTransport,Log.Log.Anno, 2000);
             new Thread(_server.Serve) { IsBackground = true }.Start();//开启业务服务
             State = true;
         }

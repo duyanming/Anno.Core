@@ -382,7 +382,7 @@ namespace Anno.Rpc.Client
             }
             catch (Exception ex)
             {
-                Log.Log.Anno($"注册中心 {SettingService.Local.IpAddress}:{SettingService.Local.Port} " + ex.Message);
+                Log.Log.Anno(new { Title= $"注册中心 {SettingService.Local.IpAddress}:{SettingService.Local.Port} " + ex.Message , StackTrace = ex.StackTrace});
             }
             #endregion
         }
