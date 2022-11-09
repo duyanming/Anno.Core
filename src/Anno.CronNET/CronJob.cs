@@ -45,7 +45,7 @@ namespace Anno.CronNET
 
         public void abort()
         {
-#if !NETSTANDARD
+#if !NETSTANDARD2_0_OR_GREATER && !NET7_0_OR_GREATER
             _thread.Abort();
 #endif
         }
