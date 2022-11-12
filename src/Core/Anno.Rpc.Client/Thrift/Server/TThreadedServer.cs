@@ -260,7 +260,7 @@ namespace Thrift.Server
             stop = true;
             serverTransport.Close();
             //clean up all the threads myself
-#if !NETSTANDARD
+#if !NETSTANDARD2_0_OR_GREATER && !NET7_0_OR_GREATER
             workerThread.Abort();
             foreach (Thread t in clientThreads)
             {

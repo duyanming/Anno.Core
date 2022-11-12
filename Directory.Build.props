@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <DeveloperBuildCoreTfms>net6.0</DeveloperBuildCoreTfms>
-    <StandardTfms>netstandard2.0;net45;</StandardTfms>
+    <DeveloperBuildCoreTfms>net7.0</DeveloperBuildCoreTfms>
+    <StandardTfms>netstandard2.0;net45;net7.0</StandardTfms>
     <Version>2.0.0.0</Version>
     <Authors>Du yanming</Authors>
     <Company>Du yanming</Company>

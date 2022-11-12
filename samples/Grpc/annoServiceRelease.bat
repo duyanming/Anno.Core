@@ -1,3 +1,3 @@
 cd %cd%
-cd ./AnnoService/bin/Release/net6.0
+cd ./AnnoService/bin/Release/net7.0
 dotnet AnnoService.dll
