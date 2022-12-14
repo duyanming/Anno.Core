@@ -30,7 +30,7 @@ namespace ConsoleTest
             {
                 Dictionary<string, string> input = new Dictionary<string, string>();
 
-                input.Add("channel", "Anno.Plugs.HelloWorld");
+                input.Add("channel", "anno.plugs.HelloWorld");
                 input.Add("router", "HelloWorldViper");
                 input.Add("method", "Test0");
 

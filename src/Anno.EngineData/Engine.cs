@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Anno.Const.Enum;
 using Anno.EngineData.Filters;
+using Anno.EngineData.Routing;
 
 namespace Anno.EngineData
 {
@@ -33,7 +34,7 @@ namespace Anno.EngineData
         {
             #region 查找路由信息RoutInfo
             var key = $"{input[Eng.NAMESPACE]}Service.{input[Eng.CLASS]}Module/{input[Eng.METHOD]}";
-            if (Routing.Routing.Router.TryGetValue(key, out Routing.RoutInfo routInfo))
+            if (Routing.Routing.Router.TryGetRouter(key, out RoutInfo routInfo))
             {
                 try
                 {
@@ -133,6 +134,16 @@ namespace Anno.EngineData
                 for (int i = 0; i < routInfo.ActionFilters.Count; i++)
                 {
                     routInfo.ActionFilters[i].OnActionExecuting(module);
+                    if (!module.Authorized)
+                    {
+                        return module.ActionResult == null ? new ActionResult()
+                        {
+                            Status = false,
+                            OutputData = 424,
+                            Msg = "424,Failed Dependency"
+                        } : module.ActionResult
+                        ;
+                    }
                 }
                 #region 调用业务方法
                 object rltCustomize = null;
