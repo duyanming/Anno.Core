@@ -55,5 +55,21 @@ namespace Anno.EngineData.Routing
         }
         #endregion
         public static ConcurrentDictionary<string, RoutInfo> Router { get; set; } = new ConcurrentDictionary<string, RoutInfo>();
+
+        public static bool TryGetRouter(this ConcurrentDictionary<string, RoutInfo> router, string routeKey, out RoutInfo routInfo)
+        {
+            routInfo = default;
+            if (!router.Any())
+                return false;
+            if (router.TryGetValue(routeKey, out routInfo))
+                return true;
+            var key = router.Keys.FirstOrDefault(d => d.Equals(routeKey, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrEmpty(key))
+            {
+                routInfo = router[key];
+                return true;
+            }
+            return false;
+        }
     }
 }

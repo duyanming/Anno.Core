@@ -5,9 +5,11 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Anno.Const.Enum;
 using Anno.EngineData.Filters;
+using Anno.EngineData.Routing;
 
 namespace Anno.EngineData
 {
@@ -16,6 +18,12 @@ namespace Anno.EngineData
     /// </summary>
     public static class Engine
     {
+        private static int engineCounter = 0;
+        /// <summary>
+        /// 处理中的请求数
+        /// </summary>
+        public static int EngineCounter => engineCounter;
+
         private readonly static Type enumType = typeof(Enum);
         /// <summary>
         /// 转发器
@@ -26,7 +34,7 @@ namespace Anno.EngineData
         {
             #region 查找路由信息RoutInfo
             var key = $"{input[Eng.NAMESPACE]}Service.{input[Eng.CLASS]}Module/{input[Eng.METHOD]}";
-            if (Routing.Routing.Router.TryGetValue(key, out Routing.RoutInfo routInfo))
+            if (Routing.Routing.Router.TryGetRouter(key, out RoutInfo routInfo))
             {
                 try
                 {
@@ -75,6 +83,7 @@ namespace Anno.EngineData
             BaseModule module = null;
             try
             {
+                Interlocked.Increment(ref engineCounter);
                 #region Cache
                 string key = string.Empty;
                 if (routInfo.CacheMiddleware.Count > 0)
@@ -125,6 +134,16 @@ namespace Anno.EngineData
                 for (int i = 0; i < routInfo.ActionFilters.Count; i++)
                 {
                     routInfo.ActionFilters[i].OnActionExecuting(module);
+                    if (!module.Authorized)
+                    {
+                        return module.ActionResult == null ? new ActionResult()
+                        {
+                            Status = false,
+                            OutputData = 424,
+                            Msg = "424,Failed Dependency"
+                        } : module.ActionResult
+                        ;
+                    }
                 }
                 #region 调用业务方法
                 object rltCustomize = null;
@@ -161,6 +180,11 @@ namespace Anno.EngineData
             {
                 if (routInfo.RoutMethod != null)
                 {
+                    if (module.ActionResult != null)
+                    {
+                        module.ActionResult.Status = false;
+                        module.ActionResult.Msg = ex.InnerException?.Message ?? ex.Message;
+                    }
                     foreach (var ef in routInfo.ExceptionFilters)
                     {
                         ef.OnException(ex, module);
@@ -170,12 +194,16 @@ namespace Anno.EngineData
                 //记录日志
                 Log.Log.Error(ex, routInfo.RoutModuleType);
 #endif
-                return new ActionResult()
+                return module.ActionResult?? new ActionResult()
                 {
                     Status = false,
                     OutputData = null,
                     Msg = ex.InnerException?.Message ?? ex.Message
                 };
+            }
+            finally
+            {
+                Interlocked.Decrement(ref engineCounter);
             }
         }
 
@@ -211,7 +239,7 @@ namespace Anno.EngineData
                     {
                         parameters.Add(Newtonsoft.Json.JsonConvert.DeserializeObject(input[p.Name], p.ParameterType));
                     }
-                    else if (p.ParameterType.FullName.StartsWith("System."))//系统基础数据类型
+                    else if (p.ParameterType.FullName.StartsWith("System.") && !p.ParameterType.Name.StartsWith("Nullable`"))//系统基础数据类型
                     {
                         parameters.Add(Convert.ChangeType(input[p.Name], p.ParameterType));//枚举
                     }
