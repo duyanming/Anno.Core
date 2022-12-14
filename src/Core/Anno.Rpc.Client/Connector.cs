@@ -229,7 +229,7 @@ namespace Anno.Rpc.Client
             #endregion
             #region 处理请求
             int error = 0;
-        tryRequest:
+            tryRequest:
             if (error > 0)
             {
                 micro = Single(input[Eng.NAMESPACE])?.Mi;
@@ -297,7 +297,7 @@ namespace Anno.Rpc.Client
         /// <returns></returns>
         static MicroCache Single(string channel)
         {
-            var ms = _microCaches.FindAll(m => m.Tags.Exists(t => t == channel));
+            var ms = _microCaches.FindAll(m => m.Tags.Exists(t => t.Equals(channel, StringComparison.OrdinalIgnoreCase)));
             Random rd = new Random(Guid.NewGuid().GetHashCode());
             if (ms.Count > 0)
             {
@@ -334,7 +334,7 @@ namespace Anno.Rpc.Client
                 {
                     trans.Open();
                     microList = client.GetMicro(channel);
-                    trans.Close(); 
+                    trans.Close();
                     trans.Dispose();
                     protocol.Dispose();
                 }
