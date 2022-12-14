@@ -100,7 +100,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGrpcTest", "test\Con
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jky.Web.Core.ModelManageService", "samples\Packages\Jky.Web.Core.ModelManageService\Jky.Web.Core.ModelManageService.csproj", "{DCF6EC90-3CC2-44CB-BEC9-1D3E806B7F45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoEasy.Application", "samples\Packages\SoEasy.Application\SoEasy.Application.csproj", "{B772BEE8-E77F-4A1E-9E5C-422BF6119FF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoEasy.Application", "samples\Packages\SoEasy.Application\SoEasy.Application.csproj", "{B772BEE8-E77F-4A1E-9E5C-422BF6119FF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
