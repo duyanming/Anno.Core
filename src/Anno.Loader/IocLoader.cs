@@ -44,7 +44,7 @@ namespace Anno.Loader
 #if NETSTANDARD
                 else if (iocType == IocType.DependencyInjection)
                 {
-                    _diServicesCollection = DiServices;
+                    _diServicesCollection = DiServices.UseDependencyInjection();
                 }
 #endif
                 else
@@ -53,6 +53,29 @@ namespace Anno.Loader
                 }
             }
         }
+
+#if NETSTANDARD
+        /// <summary>
+        /// 初始化IOC
+        /// </summary>
+        public static void RegisterIoc(IocType iocType = IocType.Autofac, IServiceCollection services = null)
+        {
+            switch (iocType)
+            {
+                case IocType.DependencyInjection:
+                    if (services == null)
+                    {
+                        services = DiServices;
+                    }
+                    _diServicesCollection = services.UseDependencyInjection();
+                    break;
+                default:
+                    RegisterIoc(iocType);
+                    break;
+            }
+        }
+#endif
+
         public static ContainerBuilder GetAutoFacContainerBuilder()
         {
             if (iocType == IocType.Autofac)
@@ -89,7 +112,7 @@ namespace Anno.Loader
 #if NETSTANDARD
             else if (iocType == IocType.DependencyInjection)
             {
-                _dIServiceProvider = _diServicesCollection.UseDependencyInjection().BuildServiceProvider();
+                _dIServiceProvider = _diServicesCollection.BuildServiceProvider();
             }
 #endif
             else
