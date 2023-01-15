@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RuntimeIdentifiers>win10-x64;</RuntimeIdentifiers>
-    <TargetFrameworks>$(DeveloperBuildCoreTfms);net461</TargetFrameworks>
+    <TargetFrameworks>$(DeveloperBuildCoreTfms)</TargetFrameworks>
     <Authors>杜燕明</Authors>
     <Company>杜燕明</Company>
     <Version>1.0.0.1</Version>

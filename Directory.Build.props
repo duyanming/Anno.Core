@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
     <DeveloperBuildCoreTfms>net7.0</DeveloperBuildCoreTfms>
-    <StandardTfms>netstandard2.0;net45;net7.0</StandardTfms>
-    <Version>2.0.0.0</Version>
+    <StandardTfms>netstandard2.0;net45;</StandardTfms>
+    <Version>2.1.0.1</Version>
     <Authors>Du yanming</Authors>
     <Company>Du yanming</Company>
     <PackageIcon>logo.png</PackageIcon>

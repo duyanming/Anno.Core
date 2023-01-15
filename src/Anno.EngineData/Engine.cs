@@ -8,8 +8,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Anno.Const.Enum;
-using Anno.EngineData.Filters;
 using Anno.EngineData.Routing;
+using Anno.Loader;
+using Autofac;
 
 namespace Anno.EngineData
 {
@@ -80,7 +81,28 @@ namespace Anno.EngineData
         /// <returns></returns>
         public static ActionResult Transmit(Dictionary<string, string> input, Routing.RoutInfo routInfo)
         {
-            BaseModule module = null;
+#if NETSTANDARD
+            if (IocLoader.IocType == IocType.Autofac)
+#endif
+            {
+                using (ILifetimeScope scope = (ILifetimeScope)IocLoader.CreateScope())
+                {
+                    return InternalTransmit(input, routInfo, (BaseModule)scope.Resolve(routInfo.RoutModuleType));
+                }
+            }
+#if NETSTANDARD
+            else
+            {
+                using (Microsoft.Extensions.DependencyInjection.IServiceScope scope = (Microsoft.Extensions.DependencyInjection.IServiceScope)IocLoader.CreateScope())
+                {
+                    return InternalTransmit(input, routInfo, (BaseModule)scope.ServiceProvider.GetService(routInfo.RoutModuleType));
+                }
+            }
+#endif
+        }
+
+        internal static ActionResult InternalTransmit(Dictionary<string, string> input, Routing.RoutInfo routInfo, BaseModule module)
+        {
             try
             {
                 Interlocked.Increment(ref engineCounter);
@@ -96,7 +118,6 @@ namespace Anno.EngineData
                 }
                 #endregion
                 List<object> lo = new List<object>() { input };
-                module = Loader.IocLoader.Resolve<BaseModule>(routInfo.RoutModuleType);
                 var init = module.Init(input);
                 if (!init)
                 {
@@ -194,7 +215,7 @@ namespace Anno.EngineData
                 //记录日志
                 Log.Log.Error(ex, routInfo.RoutModuleType);
 #endif
-                return module.ActionResult?? new ActionResult()
+                return module.ActionResult ?? new ActionResult()
                 {
                     Status = false,
                     OutputData = null,

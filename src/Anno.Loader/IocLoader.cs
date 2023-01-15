@@ -22,7 +22,10 @@ namespace Anno.Loader
         public static IServiceCollection DiServices = new ServiceCollection();
 #endif
         private static IocType iocType = IocType.Autofac;
-
+        /// <summary>
+        /// 使用的IOC容器
+        /// </summary>
+        public static IocType IocType => iocType;
 
         /// <summary>
         /// 初始化IOC
@@ -132,6 +135,23 @@ namespace Anno.Loader
             {
                 return _dIServiceProvider.GetService(serviceType) as T;
             }
+            else
+            {
+                throw new Exception("请先初始化 RegisterIoc！");
+            }
+        }
+        public static dynamic CreateScope()
+        {
+            if (iocType == IocType.Autofac)
+            {
+                return _autofacContainer.BeginLifetimeScope();
+            }
+#if NETSTANDARD
+            else if (iocType == IocType.DependencyInjection)
+            {
+                return _dIServiceProvider.CreateScope();
+            }
+#endif
             else
             {
                 throw new Exception("请先初始化 RegisterIoc！");
