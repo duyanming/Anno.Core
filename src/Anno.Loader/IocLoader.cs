@@ -63,6 +63,7 @@ namespace Anno.Loader
         /// </summary>
         public static void RegisterIoc(IocType iocType = IocType.Autofac, IServiceCollection services = null)
         {
+            IocLoader.iocType = iocType;
             switch (iocType)
             {
                 case IocType.DependencyInjection:
