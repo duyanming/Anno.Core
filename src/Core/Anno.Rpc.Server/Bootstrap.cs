@@ -9,6 +9,10 @@ using Anno.Rpc.Storage;
 namespace Anno.Rpc.Server
 {
     using Anno.Log;
+#if NETSTANDARD
+    using Microsoft.Extensions.DependencyInjection;
+#endif
+
     using System.Threading;
 
     public static partial class Bootstrap
@@ -23,17 +27,25 @@ namespace Anno.Rpc.Server
         /// <param name="args"></param> 
         /// <param name="diAction"></param>
         /// <param name="iocType">依赖注入类型</param>
-        public static void StartUp(string[] args, Action diAction, Action startUpCallBack = null, Loader.IocType iocType = Loader.IocType.Autofac)
+        public static void StartUp(string[] args, Action diAction, Action startUpCallBack = null, Loader.IocType iocType = Loader.IocType.Autofac
+#if NETSTANDARD
+            , IServiceCollection services = null
+#endif
+            )
         {
             var reStar = false;
-        reStart:
+            reStart:
             try
             {
                 if (args != null && args.Contains("--reg"))
                 {
                     regRegister = true;
                 }
-                Enter(args, diAction, reStar, iocType);
+                Enter(args, diAction, reStar, iocType
+#if NETSTANDARD
+                    , services
+#endif
+                    );
                 if (regRegister)
                 {
                     Log.WriteLine("重新注册完成，3秒后窗口自动关闭");
@@ -81,11 +93,19 @@ namespace Anno.Rpc.Server
         /// <param name="args"></param>
         /// <param name="diAction"></param>
         /// <param name="reStart">异常之中回复启动，true。正常启动，false</param>
-        static void Enter(string[] args, Action diAction, bool reStart, Loader.IocType iocType)
+        static void Enter(string[] args, Action diAction, bool reStart, Loader.IocType iocType
+#if NETSTANDARD
+             , IServiceCollection services = null
+#endif
+            )
         {
-            if ((!reStart)||regRegister)
+            if ((!reStart) || regRegister)
             {
-                EngineData.AnnoBootstrap.Bootstrap(diAction, iocType);
+                EngineData.AnnoBootstrap.Bootstrap(diAction, iocType
+#if NETSTANDARD
+                    , services
+#endif
+                    );
             }
             #region 设置监听端口（可以通过参数 设置。没有取配置文件）
 
@@ -130,7 +150,7 @@ namespace Anno.Rpc.Server
                 Const.SettingService.TraceOnOff = traceOnOff;
             }
             #endregion
-            if ((!Server.State)&&(!regRegister))
+            if ((!Server.State) && (!regRegister))
             {
                 Server.Start();
             }

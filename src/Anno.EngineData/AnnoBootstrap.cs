@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using Anno.EngineData.Filters;
+#if NETSTANDARD
+using Microsoft.Extensions.DependencyInjection;
+#endif
 
 namespace Anno.EngineData
 {
@@ -13,10 +16,18 @@ namespace Anno.EngineData
         /// 插件启动配置
         /// </summary>
         /// <param name="iocAction">用于用户自定义做依赖注入</param>
-        public static void Bootstrap(Action iocAction, Loader.IocType iocType)
+        public static void Bootstrap(Action iocAction, Loader.IocType iocType
+#if NETSTANDARD
+            , IServiceCollection services = null
+#endif
+            )
         {
             Const.SettingService.InitConfig();
-            Loader.IocLoader.RegisterIoc(iocType);
+            Loader.IocLoader.RegisterIoc(iocType
+#if NETSTANDARD
+                , services
+#endif
+                );
             iocAction?.Invoke();
             PreConfigurationBootstrap();
             Loader.IocLoader.Build();
@@ -210,7 +221,7 @@ namespace Anno.EngineData
                 for (int i = 0; i < annoObjCustomAttributes.Length; i++)
                 {
                     var annoObjCustom = annoObjCustomAttributes[i];
-                    if (annoObjCustom.GetType().GetInterface(typeof(T).Name, true)!=null)
+                    if (annoObjCustom.GetType().GetInterface(typeof(T).Name, true) != null)
                     {
                         annoCustomAttributes.Add((T)annoObjCustom);
                     }
