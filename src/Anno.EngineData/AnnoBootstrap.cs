@@ -23,13 +23,14 @@ namespace Anno.EngineData
             )
         {
             Const.SettingService.InitConfig();
+            PreConfigurationBootstrap();
+
             Loader.IocLoader.RegisterIoc(iocType
 #if NETSTANDARD
                 , services
 #endif
                 );
             iocAction?.Invoke();
-            PreConfigurationBootstrap();
             Loader.IocLoader.Build();
             var bootstraps = Loader.IocLoader.Resolve<IEnumerable<IPlugsConfigurationBootstrap>>();
             if (bootstraps != null)
