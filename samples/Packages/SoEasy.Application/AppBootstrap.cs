@@ -1,4 +1,7 @@
 ﻿using Anno.EngineData;
+using Anno.Loader;
+using SoEasy.Application.Po;
+using SoEasy.Application.Repositories;
 using System;
 
 namespace SoEasy.Application
@@ -7,12 +10,14 @@ namespace SoEasy.Application
     {
         public void ConfigurationBootstrap()
         {
-            Console.WriteLine("ConfigurationBootstrap:" + this.GetType().FullName);
+            var userRepository = IocLoader.Resolve<IBaseRepository<UserEntity>>();
+            Console.WriteLine($"ConfigurationBootstrap:{GetType().FullName},{userRepository.GetType().FullName}");
         }
 
         public void PreConfigurationBootstrap()
         {
-            Console.WriteLine("PreConfigurationBootstrap:" + this.GetType().FullName);
+            //var services = IocLoader.GetServiceDescriptors();
+            Console.WriteLine($"PreConfigurationBootstrap:{GetType().FullName}");
         }
     }
 }

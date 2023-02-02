@@ -23,14 +23,14 @@ namespace Anno.EngineData
             )
         {
             Const.SettingService.InitConfig();
-            PreConfigurationBootstrap();
-
+            DependsOnInit();
             Loader.IocLoader.RegisterIoc(iocType
 #if NETSTANDARD
                 , services
 #endif
                 );
             iocAction?.Invoke();
+            PreConfigurationBootstrap();
             Loader.IocLoader.Build();
             var bootstraps = Loader.IocLoader.Resolve<IEnumerable<IPlugsConfigurationBootstrap>>();
             if (bootstraps != null)
@@ -42,6 +42,7 @@ namespace Anno.EngineData
             }
             BuilderRouterInfo();
         }
+        #region DependsOn+查找依赖项目
         /// <summary>
         /// IOC注入之前插件事件
         /// </summary>
@@ -49,15 +50,15 @@ namespace Anno.EngineData
         {
             foreach (var svc in Const.Assemblys.Dic)
             {
-                GetDependedTypesAssemblies(svc.Value);
+                InvokeDependedTypesAssemblies(svc.Value);
             }
         }
         /// <summary>
-        /// 查找依赖
+        /// 调用依赖
         /// </summary>
         /// <param name="assembly"></param>
         /// <returns></returns>
-        static void GetDependedTypesAssemblies(Assembly assembly)
+        static void InvokeDependedTypesAssemblies(Assembly assembly)
         {
             List<Assembly> assemblies = new List<Assembly>();
             var type = assembly.GetTypes().FirstOrDefault(t => typeof(IPlugsConfigurationBootstrap).IsAssignableFrom(t));
@@ -67,6 +68,39 @@ namespace Anno.EngineData
             }
             var obj = Activator.CreateInstance(type);
             type.GetMethod("PreConfigurationBootstrap")?.Invoke(obj, null);
+            var dependsOn = type.GetCustomAttributes<DependsOnAttribute>().FirstOrDefault();
+            if (dependsOn != null)
+            {
+                foreach (var module in dependsOn.DependedTypes)
+                {
+                    InvokeDependedTypesAssemblies(module.Assembly);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 加载插件依赖
+        /// </summary>
+        private static void DependsOnInit()
+        {
+            foreach (var svc in Const.Assemblys.Dic)
+            {
+                DependsOnAssemblies(svc.Value);
+            }
+        }
+        /// <summary>
+        /// 查找依赖
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        static void DependsOnAssemblies(Assembly assembly)
+        {
+            List<Assembly> assemblies = new List<Assembly>();
+            var type = assembly.GetTypes().FirstOrDefault(t => typeof(IPlugsConfigurationBootstrap).IsAssignableFrom(t));
+            if (type == null)
+            {
+                return;
+            }
             var dependsOn = type.GetCustomAttributes<DependsOnAttribute>().FirstOrDefault();
             if (dependsOn != null)
             {
@@ -84,10 +118,11 @@ namespace Anno.EngineData
             {
                 foreach (var module in assemblies)
                 {
-                    GetDependedTypesAssemblies(module);
+                    DependsOnAssemblies(module);
                 }
             }
         }
+        #endregion
         /// <summary>
         /// 构建路由信息
         /// </summary>

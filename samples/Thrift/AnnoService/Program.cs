@@ -41,8 +41,8 @@ namespace AnnoService
                  * Install-Package Anno.Rpc.ServerGrpc -Version 1.0.1.5 Grpc
                  * 此处为 Thrift
                  */
-                //var service = IocLoader.GetServiceDescriptors();
-                var autofac = IocLoader.GetAutoFacContainerBuilder();
+                var service = IocLoader.GetServiceDescriptors();
+                //var autofac = IocLoader.GetAutoFacContainerBuilder();
                 #region 自带依赖注入过滤器 true  注入 false 不注入
                 //IocLoader.AddFilter((type) =>
                 //       {
@@ -55,8 +55,8 @@ namespace AnnoService
                  * IRpcConnector 接口用户可以自己实现也可以使用 Thrift或者Grpc Anno内置的实现
                  * 此处使用的是Thrift的实现
                  */
-                //service.AddSingleton<IRpcConnector,RpcConnectorImpl>();
-                autofac.RegisterType(typeof(RpcConnectorImpl)).As(typeof(IRpcConnector)).SingleInstance();
+                service.AddSingleton<IRpcConnector, RpcConnectorImpl>();
+                //autofac.RegisterType(typeof(RpcConnectorImpl)).As(typeof(IRpcConnector)).SingleInstance();
             }
             , () =>//服务启动后的回调方法
             {
@@ -64,7 +64,7 @@ namespace AnnoService
                  * 服务Api文档写入注册中心
                  */
                 Bootstrap.ApiDoc();
-            });
+            },IocType.DependencyInjection);
         }
     }
 }
