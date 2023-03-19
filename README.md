@@ -19,7 +19,7 @@
 ![Dashboard](https://z3.ax1x.com/2021/06/29/RaBkE8.png)
 
 
-[在线演示](http://49.232.112.70) :http://49.232.112.70
+[在线演示](http://anno.liqingxi.cn) :http://anno.liqingxi.cn
 
 [示例项目](https://github.com/duyanming/Viper) :https://github.com/duyanming/Viper
 
