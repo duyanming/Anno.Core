@@ -152,6 +152,8 @@ namespace Anno.EngineData
                     }
                 }
                 #endregion
+
+                module.Authorized = true;
                 for (int i = 0; i < routInfo.ActionFilters.Count; i++)
                 {
                     routInfo.ActionFilters[i].OnActionExecuting(module);
@@ -160,8 +162,8 @@ namespace Anno.EngineData
                         return module.ActionResult == null ? new ActionResult()
                         {
                             Status = false,
-                            OutputData = 424,
-                            Msg = "424,Failed Dependency"
+                            OutputData = 401,
+                            Msg = "401,Unauthrized"
                         } : module.ActionResult
                         ;
                     }
