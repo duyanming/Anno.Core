@@ -113,13 +113,14 @@ namespace Anno.CronNET
 
         private void timer_elapsed(object sender, ElapsedEventArgs e)
         {
-            if (DateTime.Now.Second != _last.Second)
+            DateTime now=DateTime.Now;
+            if (now.Second != _last.Second)
             {
-                _last = DateTime.Now;
+                _last = now;
                 lock (JobLock)
                 {
                     foreach (ICronJob job in _cronJobs)
-                        job.execute(DateTime.Now);
+                        job.execute(_last);
                 }
             }
         }

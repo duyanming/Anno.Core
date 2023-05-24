@@ -8,7 +8,9 @@ namespace Anno.CronNET
     {
         bool isValid(string expression);
         bool isTime(DateTime date_time);
-    }
+        List<DateTime> QueryLatestTimes(DateTime now,int timesCount=10);
+		List<DateTime> QueryLatestTimes(int timesCount = 10);
+	}
 
     public class CronSchedule : ICronSchedule
     {
@@ -69,8 +71,41 @@ namespace Anno.CronNET
                    months.Contains(date_time.Month) &&
                    days_of_week.Contains((int)date_time.DayOfWeek);
         }
+		/// <summary>
+		/// 返回最近 timesCount 将要执行的时间
+        /// 时间长度不超过最近2年
+		/// </summary>
+		/// <param name="now"></param>
+		/// <param name="timesCount"></param>
+		/// <returns></returns>
+		public List<DateTime> QueryLatestTimes(DateTime now, int timesCount = 10) {
+			DateTime endDate = DateTime.Now.AddYears(2);
+			DateTime time = now;
+			int isTimeCount = 0;
+            List<DateTime> times = new List<DateTime>();
+			while (time <= endDate&& isTimeCount<timesCount)
+			{
+				if (isTime(time))
+				{
+					times.Add(time);
+					isTimeCount++;
+				}
+				time = time.AddSeconds(1);
+			}
+            return times;
+		}
+		/// <summary>
+		/// 返回最近 timesCount 将要执行的时间
+		/// 时间长度不超过最近2年
+		/// </summary>
+		/// <param name="timesCount"></param>
+		/// <returns></returns>
+		public List<DateTime> QueryLatestTimes(int timesCount = 10) {
+            return QueryLatestTimes(DateTime.Now, timesCount);
+		}
 
-        private void generate()
+
+		private void generate()
         {
             if (!isValid()) return;
 
