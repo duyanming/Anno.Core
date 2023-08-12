@@ -23,10 +23,14 @@ namespace ConsoleTest
             Parallel.For(0, num, i =>
             {
                 using (Anno.Rpc.Storage.KvStorageEngine kvEngine = new Anno.Rpc.Storage.KvStorageEngine())
-                {
-                    var rlt = kvEngine.Set("viper", "Viper 你好啊！");
+				{
+					var viperAnno = kvEngine.Get("viperAnno");
+					var rlt = kvEngine.Set("viper", "Viper 你好啊！");
                     var getViper = kvEngine.Get("viper");
-                    var rltobj = kvEngine.Set("12", new ViperTest() { Id = 12, Name = "Viper" });
+
+					var viperAnnoObj = kvEngine.Get<ViperTest>("viperAnno");
+
+					var rltobj = kvEngine.Set("12", new ViperTest() { Id = 12, Name = "Viper" });
                     var getobj = kvEngine.Get<ViperTest>("12");
                 }
             });

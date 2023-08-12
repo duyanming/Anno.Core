@@ -45,12 +45,16 @@ namespace Anno.Rpc.Storage
         }
         public string Get(string key)
         {
-            return GetAnnoKV(key).Value;
+            return GetAnnoKV(key)?.Value;
         }
         public T Get<T>(string key)where T:class,new()
         {
             var rlt = GetAnnoKV(key);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(rlt.Value);
+			if (rlt == null)
+			{
+				return default(T);
+			}
+			return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(rlt.Value);
         }
         public bool Set(string key, string value)
         {
