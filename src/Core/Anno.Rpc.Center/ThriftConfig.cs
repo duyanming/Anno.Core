@@ -8,6 +8,8 @@ using System.Text;
 namespace Anno.Rpc.Center
 {
     using Anno.Log;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// 系统配置
     /// </summary>
@@ -29,6 +31,13 @@ namespace Anno.Rpc.Center
         private static readonly object LockHelper = new object();
 
         private static readonly object LockAdd = new object();
+
+        /// <summary>
+        /// 是否需要持久到本地磁盘 AnnoFile
+        /// </summary>
+        private static bool needSave = false;
+
+        private static XmlDocument xml = new XmlDocument();
 
         private ThriftConfig()
         {
@@ -89,7 +98,6 @@ namespace Anno.Rpc.Center
             string xmlPath = Path.Combine(Directory.GetCurrentDirectory(), AnnoFile);
             if (File.Exists(xmlPath))
             {
-                XmlDocument xml = new XmlDocument();
                 xml.Load(xmlPath);
                 this.Port = Convert.ToInt32(xml.GetElementsByTagName("Port")[0].InnerText);
                 TimeOut = Convert.ToInt32(xml.GetElementsByTagName("TimeOut")[0].InnerText);
@@ -123,7 +131,6 @@ namespace Anno.Rpc.Center
                 this.Port = 6660;
                 this.TimeOut = 120000;
 
-                XmlDocument xmlDoc = new XmlDocument(); //创建空的XML文档 
                 StringBuilder xmlText = new StringBuilder();
                 xmlText.AppendLine("<?xml version='1.0' encoding='utf-8'?>");
                 xmlText.AppendLine("<configuration>");
@@ -134,8 +141,8 @@ namespace Anno.Rpc.Center
 
                 xmlText.AppendLine("  </Servers>");
                 xmlText.AppendLine("</configuration>");
-                xmlDoc.LoadXml(xmlText.ToString());
-                xmlDoc.Save(xmlPath); //保存 
+                xml.LoadXml(xmlText.ToString());
+                xml.Save(xmlPath); //保存 
             }
             this.RefreshServiceMd5();
         }
@@ -146,12 +153,7 @@ namespace Anno.Rpc.Center
         /// <param name="input">ip=192.168.X.X,port=6659</param>
         public bool Remove(Dictionary<string, string> input)
         {
-            lock (LockAdd)
-            {
-                Save();
-            }
-
-            return true;
+            return NeedSave();
         }
         /// <summary>
         /// 加载节点
@@ -159,25 +161,26 @@ namespace Anno.Rpc.Center
         /// <param name="input">"name=dc1,ip=192.168.X.X,port=6659,timeout=3000,weight=5"</param>
         public bool Add(Dictionary<string, string> input)
         {
+            var ip = GetValidIp(input["ip"], Convert.ToInt32(input["port"]));
+            if (ip == string.Empty)
+            {
+                return false;
+            }
+            ServiceInfo ips = new ServiceInfo
+            {
+                Timeout = input["timeout"] == null ? TimeOut : Convert.ToInt32(input["timeout"]),
+                Name = input["name"],
+                NickName = input["nickname"],
+                Ip = ip,
+                Port = Convert.ToInt32(input["port"])
+            };
+            int weight = input["weight"] == null ? 1 : (int)Convert.ToDecimal(input["weight"]);
+            ips.Weight = weight;
+
             lock (LockAdd)
             {
                 try
                 {
-                    var ip = GetValidIp(input["ip"], Convert.ToInt32(input["port"]));
-                    if (ip == string.Empty)
-                    {
-                        return false;
-                    }
-                    ServiceInfo ips = new ServiceInfo
-                    {
-                        Timeout = input["timeout"] == null ? TimeOut : Convert.ToInt32(input["timeout"]),
-                        Name = input["name"],
-                        NickName = input["nickname"],
-                        Ip = ip,
-                        Port = Convert.ToInt32(input["port"])
-                    };
-                    int weight = input["weight"] == null ? 1 : (int)Convert.ToDecimal(input["weight"]);
-                    ips.Weight = weight;
                     #region 原有服务
                     var oldService = ServiceInfoList.FirstOrDefault(t => ips.Ip == t.Ip && ips.Port == t.Port);
                     #endregion
@@ -198,15 +201,18 @@ namespace Anno.Rpc.Center
                     stringBuilder.AppendLine($"{ips.NickName}已登记！");
                     Log.Anno(stringBuilder.ToString(), typeof(ThriftConfig));
 
-                    #region 上线和变更通知                   
-                    if (OnlineNotice != null && oldService == null)
+                    #region 上线和变更通知   
+                    Task.Factory.StartNewAnno(() =>
                     {
-                        OnlineNotice.Invoke(ips, NoticeType.OnLine);
-                    }
-                    else if (ChangeNotice != null && oldService != null)
-                    {
-                        ChangeNotice.Invoke(ips, oldService);
-                    }
+                        if (OnlineNotice != null && oldService == null)
+                        {
+                            OnlineNotice.Invoke(ips, NoticeType.OnLine);
+                        }
+                        else if (ChangeNotice != null && oldService != null)
+                        {
+                            ChangeNotice.Invoke(ips, oldService);
+                        }
+                    });
                     #endregion
                 }
                 catch (Exception ex)
@@ -216,7 +222,7 @@ namespace Anno.Rpc.Center
                 }
                 finally
                 {
-                    Save();
+                    NeedSave();
                 }
             }
             return true;
@@ -309,21 +315,40 @@ namespace Anno.Rpc.Center
                 }
                 finally
                 {
-                    Save();
+                    NeedSave();
                 }
             }
             return true;
         }
+        /// <summary>
+        /// 变更需要持久化硬盘
+        /// </summary>
+        /// <returns></returns>
+        private bool NeedSave()
+        {
+            if (needSave) { return needSave; }
+            needSave = true;
+            Task.Factory.StartNewAnno(async () =>
+            {
+                await Task.Delay(1000);
+                if (!needSave) { return; }
+                needSave = false;
+                lock (LockAdd)
+                {
+                    Save();
+                }
 
+            });
+            return needSave;
+        }
         /// <summary>
         /// 保存配置
         /// </summary>
         private bool Save()
         {
+
             try
             {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(Path.Combine(Directory.GetCurrentDirectory(), AnnoFile));
                 XmlNode servers = xml.SelectSingleNode("//configuration/Servers");//查找<Servers> 
                 servers.RemoveAll();
                 List<ServiceInfo> tempIps = new List<ServiceInfo>();
@@ -375,10 +400,6 @@ namespace Anno.Rpc.Center
                             service.Open();
                             return ip;
                         }
-                    }
-                    catch
-                    {
-                        //
                     }
                     finally
                     {
