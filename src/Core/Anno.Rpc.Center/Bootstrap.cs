@@ -65,14 +65,14 @@ namespace Anno.Rpc.Center
             CronDaemon.AddJob("*/5 * * * * ? *", () =>
             {
                 Parallel.ForEach(
-                    tc.ServiceInfoList.Distinct().Where(s => s.Checking == false)
-                    , new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }
+                    tc.ServiceInfoList.Distinct().Where(s => !s.Checking)
+                    , new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount*2*8 }
                     , service =>
                 {
                     Task.Factory.StartNew(() =>
                     {
                         Distribute.HealthCheck(service);
-                    }, TaskCreationOptions.LongRunning);
+                    });
                 });
             });
             CronDaemon.Start();
