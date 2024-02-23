@@ -50,6 +50,7 @@ $@"                                                _
             logo += $" {"Author".PadRight(17, ' ')}YanMing.Du \r\n";
             logo += $" {"Version".PadRight(17, ' ')}[{ typeof(Client.Connector).Assembly.GetName().Version}]\r\n";
             logo += $" {"Repository".PadRight(17, ' ')}https://github.com/duyanming/anno.core \r\n";
+            logo += $" {"Documentation".PadRight(17, ' ')}https://duyanming.github.io \r\n";
             logo += " -----------------------------------------------------------------------------\r\n";
             Log.WriteLineNoDate(logo);
         }

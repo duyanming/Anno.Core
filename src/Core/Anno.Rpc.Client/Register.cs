@@ -27,6 +27,16 @@ namespace Anno.Rpc.Client
         public bool ToCenter(Target target, int countDown = 10)
         {
 
+            Dictionary<string, string> info = new Dictionary<string, string>
+                    {
+                        { "timeout",SettingService.TimeOut.ToString() },
+                        { "name", SettingService.FuncName },
+                        { "ip", SettingService.Local.IpAddress==null?GetLocalIps():SettingService.Local.IpAddress },
+                        { "port", SettingService.Local.Port.ToString() },
+                        { "weight", SettingService.Weight.ToString() },
+                        { "nickname", SettingService.AppName }
+                    };
+
         begin:
             try
             {
@@ -38,17 +48,7 @@ namespace Anno.Rpc.Client
                 {
                     _transport.Open();
                 }
-                Dictionary<string, string> info = new Dictionary<string, string>
-                    {
-                        { "timeout",SettingService.TimeOut.ToString() },
-                        { "name", SettingService.FuncName },
-                        { "ip", SettingService.Local.IpAddress==null?GetLocalIps():SettingService.Local.IpAddress },
-                        { "port", SettingService.Local.Port.ToString() },
-                        { "weight", SettingService.Weight.ToString() },
-                        { "nickname", SettingService.AppName }
-                    };
                 bool rlt = _client.add_broker(info);
-                _transport.Close();
                 if (rlt)
                 {
                     StringBuilder stringBuilder = new StringBuilder();
@@ -72,18 +72,7 @@ namespace Anno.Rpc.Client
                     stringBuilder.AppendLine($"注册到{target.IpAddress}:{target.Port}失败......剩余重试次数（{countDown}）");
                     stringBuilder.AppendLine(ex.Message);
                     Log.Anno(stringBuilder.ToString(), typeof(Register));
-                    try
-                    {
-                        if (_transport.IsOpen)
-                        {
-                            _transport.Close();
-                        }
-                        _transport.Dispose();
-                    }
-                    catch
-                    {
-                        //忽略异常
-                    }
+                    DisposeTransport();
                     --countDown;
                     goto begin;
                 }
@@ -95,18 +84,7 @@ namespace Anno.Rpc.Client
             }
             finally
             {
-                try
-                {
-                    if (_transport.IsOpen)
-                    {
-                        _transport.Close();
-                    }
-                    _transport.Dispose();
-                }
-                catch
-                {
-                    //忽略异常
-                }
+                DisposeTransport();
             }
             return true;
         }
@@ -128,6 +106,22 @@ namespace Anno.Rpc.Client
             }
             Log.Anno("找不到有效IPv4地址！",typeof(Register));
             return string.Empty;
+        }
+
+        private  void DisposeTransport() {
+            if (_transport == null) return;
+            try
+            {
+                if (_transport.IsOpen)
+                {
+                    _transport.Close();
+                }
+                _transport.Dispose();
+            }
+            catch(Exception ex)
+            {
+                Log.Anno($"{DateTime.Now} {ex.Message}", typeof(Register));
+            }
         }
     }
 }

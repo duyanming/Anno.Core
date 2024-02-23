@@ -15,17 +15,23 @@ namespace Anno.Rpc.Server
 
     using System.Threading;
 
+    /// <summary>
+    /// Anno Server 启动类
+    /// </summary>
     public static partial class Bootstrap
     {
         /// <summary>
         /// 是否为重新注册
         /// </summary>
         private static bool regRegister = false;
+
+
         /// <summary>
-        /// 启动 server
+        /// 启动 Anno微服务
         /// </summary>
-        /// <param name="args"></param> 
-        /// <param name="diAction"></param>
+        /// <param name="args">启动参数</param>
+        /// <param name="diAction">加载完配置回调</param>
+        /// <param name="startUpCallBack">服务启动完成后的回调</param>
         /// <param name="iocType">依赖注入类型</param>
         public static void StartUp(string[] args, Action diAction, Action startUpCallBack = null, Loader.IocType iocType = Loader.IocType.Autofac
 #if NETSTANDARD
@@ -34,7 +40,7 @@ namespace Anno.Rpc.Server
             )
         {
             var reStar = false;
-            reStart:
+        reStart:
             try
             {
                 if (args != null && args.Contains("--reg"))
@@ -173,8 +179,6 @@ namespace Anno.Rpc.Server
 
         /// <summary>
         ///服务启动后将服务Api文档写入注册中心
-        ///
-        ///增加自己的服务的时候只用复制下面的代码就可以不用做修改
         /// </summary>
         public static void ApiDoc()
         {
