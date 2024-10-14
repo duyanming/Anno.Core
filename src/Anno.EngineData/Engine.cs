@@ -264,11 +264,11 @@ namespace Anno.EngineData
                     }
                     else if (p.ParameterType.FullName.StartsWith("System.") && !p.ParameterType.Name.StartsWith("Nullable`"))//系统基础数据类型
                     {
-                        parameters.Add(Convert.ChangeType(input[p.Name], p.ParameterType));//枚举
+                        object parameterTypeValue = p.ParameterType.Case(input[p.Name]);
+                        parameters.Add(parameterTypeValue);//枚举
                     }
                     else if (p.ParameterType.BaseType == enumType)
                     {
-
                         parameters.Add(Enum.Parse(p.ParameterType, input[p.Name]));
                     }
                     else // 系统基础数据类型、枚举 之外。例如 结构体、类、匿名对象
