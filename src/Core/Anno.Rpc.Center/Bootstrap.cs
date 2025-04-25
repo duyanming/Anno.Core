@@ -7,6 +7,8 @@ namespace Anno.Rpc.Center
 {
     using Anno.CronNET;
     using Anno.Log;
+    using System.Text;
+
     public static class Bootstrap
     {
         private static readonly CronDaemon CronDaemon = new CronDaemon();
@@ -64,16 +66,23 @@ namespace Anno.Rpc.Center
             Log.WriteLine($"服务注册、发现、健康检查、KV存储、API文档、负载均衡中心，端口：{tc.Port}（AnnoCenter）已启动！", ConsoleColor.DarkGreen);
             CronDaemon.AddJob("*/5 * * * * ? *", () =>
             {
-                Parallel.ForEach(
-                    tc.ServiceInfoList.Distinct().Where(s => !s.Checking)
-                    , new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount*2*8 }
-                    , service =>
+                try
                 {
-                    Task.Factory.StartNew(() =>
+                    Parallel.ForEach(
+                        tc.ServiceInfoList.Distinct().Where(s => !s.Checking)
+                        , new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 * 8 }
+                        , service =>
                     {
-                        Distribute.HealthCheck(service);
+                        Task.Factory.StartNew(() =>
+                        {
+                            Distribute.HealthCheck(service);
+                        });
                     });
-                });
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, typeof(Bootstrap));
+                }
             });
             CronDaemon.Start();
             //阻止daemon进程退出
@@ -98,7 +107,7 @@ $@"                                                _
             logo += " -----------------------------------------------------------------------------\r\n";
             logo += $" {"Center Port".PadRight(17, ' ')}{tc.Port} \r\n";
             logo += $" {"Author".PadRight(17, ' ')}YanMing.Du \r\n";
-            logo += $" {"Version".PadRight(17, ' ')}[{ typeof(Center.Bootstrap).Assembly.GetName().Version}]\r\n";
+            logo += $" {"Version".PadRight(17, ' ')}[{typeof(Center.Bootstrap).Assembly.GetName().Version}]\r\n";
             logo += $" {"Repository".PadRight(17, ' ')}https://github.com/duyanming/anno.core \r\n";
             logo += " -----------------------------------------------------------------------------\r\n";
             Log.WriteLineNoDate(logo);
