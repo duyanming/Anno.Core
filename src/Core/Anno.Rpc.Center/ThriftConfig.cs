@@ -55,8 +55,9 @@ namespace Anno.Rpc.Center
         /// </summary>
         internal void RefreshServiceMd5()
         {
+            var services = ServiceInfoList.ToArray();
             StringBuilder stringBuilder = new StringBuilder();
-            foreach (var service in ServiceInfoList)
+            foreach (var service in services)
             {
                 stringBuilder.Append(service.Name);
                 stringBuilder.Append("#");

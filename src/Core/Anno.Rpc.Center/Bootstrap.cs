@@ -68,8 +68,8 @@ namespace Anno.Rpc.Center
             {
                 try
                 {
-                    Parallel.ForEach(
-                        tc.ServiceInfoList.Distinct().Where(s => !s.Checking)
+                    var needCheckNodes = tc.ServiceInfoList.Distinct().Where(s => !s.Checking).ToArray();
+                    Parallel.ForEach(needCheckNodes
                         , new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 * 8 }
                         , service =>
                     {
