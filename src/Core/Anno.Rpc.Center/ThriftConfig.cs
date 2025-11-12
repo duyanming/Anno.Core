@@ -353,7 +353,8 @@ namespace Anno.Rpc.Center
                 XmlNode servers = xml.SelectSingleNode("//configuration/Servers");//查找<Servers> 
                 servers.RemoveAll();
                 List<ServiceInfo> tempIps = new List<ServiceInfo>();
-                ServiceInfoList.ForEach(p =>
+                var serviceInfoList = ServiceInfoList.ToArray();
+                serviceInfoList.ToList().ForEach(p =>
                 {
                     if (tempIps.FindAll(t => p.Ip == t.Ip && p.Port == t.Port).Count <= 0)
                     {

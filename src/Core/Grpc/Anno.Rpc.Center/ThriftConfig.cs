@@ -46,7 +46,8 @@ namespace Anno.Rpc.Center
         /// <summary>
         /// 刷新Md5值
         /// </summary>
-        internal void RefreshServiceMd5() {
+        internal void RefreshServiceMd5()
+        {
             var services = ServiceInfoList.ToArray();
             StringBuilder stringBuilder = new StringBuilder();
             foreach (var service in services)
@@ -234,7 +235,7 @@ namespace Anno.Rpc.Center
             {
                 try
                 {
-                    if (!input.ContainsKey("ip") || !input.ContainsKey("port") || (!input.ContainsKey("weight")&&!input.ContainsKey("timeout")))
+                    if (!input.ContainsKey("ip") || !input.ContainsKey("port") || (!input.ContainsKey("weight") && !input.ContainsKey("timeout")))
                     {
                         return false;
                     }
@@ -328,7 +329,8 @@ namespace Anno.Rpc.Center
                 XmlNode servers = xml.SelectSingleNode("//configuration/Servers");//查找<Servers> 
                 servers.RemoveAll();
                 List<ServiceInfo> tempIps = new List<ServiceInfo>();
-                ServiceInfoList.ForEach(p =>
+                var serviceInfoList = ServiceInfoList.ToArray();
+                serviceInfoList.ToList().ForEach(p =>
                 {
                     if (tempIps.FindAll(t => p.Ip == t.Ip && p.Port == t.Port).Count <= 0)
                     {
@@ -350,7 +352,7 @@ namespace Anno.Rpc.Center
             }
             catch (Exception ex)
             {
-                Log.Anno(ex,typeof(ThriftConfig));
+                Log.Anno(ex, typeof(ThriftConfig));
                 return false;
             }
             return true;
