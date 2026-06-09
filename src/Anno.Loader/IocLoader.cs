@@ -188,7 +188,7 @@ namespace Anno.Loader
         /// <returns></returns>
         public static bool AddFilter(Func<Type, bool> filter)
         {
-            bool success = false;
+            bool success = true;
             if (filter != null)
             {
                 IocFilter.Filters.Add(filter);
