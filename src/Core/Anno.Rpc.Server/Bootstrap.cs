@@ -186,7 +186,6 @@ namespace Anno.Rpc.Server
              * 2、Const.SettingService.Local 在客户端 作为 负载均衡地址信息(AnnoCenter)
              * 3、此处为了让AnnoService 可以调用外部服务 Local使用完毕后更改为 AnnoCenter 地址
              */
-            Const.Target target = Const.SettingService.Ts?.First();
             Client.DefaultConfigManager.SetDefaultConfiguration(Const.SettingService.AppName, target.IpAddress, target.Port, Const.SettingService.TraceOnOff);
         }
 

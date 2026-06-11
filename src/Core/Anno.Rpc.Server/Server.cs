@@ -5,6 +5,8 @@ using System.Threading;
 namespace Anno.Rpc.Server
 {
     using Anno.Log;
+    using System.Linq;
+
     public static class Server
     {
         private static  TServer _server;
@@ -49,6 +51,7 @@ $@"                                                _
             logo += $" {"Server Port".PadRight(17, ' ')}{Const.SettingService.Local.Port} \r\n";
             logo += $" {"Author".PadRight(17, ' ')}YanMing.Du \r\n";
             logo += $" {"Version".PadRight(17, ' ')}[{ typeof(Client.Connector).Assembly.GetName().Version}]\r\n";
+            logo += $" {"Cluster Center".PadRight(17, ' ')}{Const.SettingService.Ts?.FirstOrDefault()?.IpAddress}:{Const.SettingService.Ts?.FirstOrDefault()?.Port} \r\n";
             logo += $" {"Repository".PadRight(17, ' ')}https://github.com/duyanming/anno.core \r\n";
             logo += " -----------------------------------------------------------------------------\r\n";
             Log.WriteLineNoDate(logo);
