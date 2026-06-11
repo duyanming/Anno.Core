@@ -144,6 +144,25 @@ namespace Anno.Rpc.Server
                 bool.TryParse(traceOnOffStr, out bool traceOnOff);
                 Const.SettingService.TraceOnOff = traceOnOff;
             }
+
+            #region 注册中心
+            Const.Target target = Const.SettingService.Ts.FirstOrDefault();
+            if (target == null)
+            {
+                target = new Const.Target();
+                Const.SettingService.Ts = new List<Const.Target>() { target };
+            }
+            int.TryParse(ArgsValue.GetValueByName("-cp", args), out int cport);
+            if (cport > 0)
+            {
+                target.Port = cport;
+            }
+            var chost = ArgsValue.GetValueByName("-ch", args);
+            if (!string.IsNullOrEmpty(chost))
+            {
+                target.IpAddress = chost;
+            }
+            #endregion
             #endregion
             if ((!Server.State) && (!regRegister))
             {

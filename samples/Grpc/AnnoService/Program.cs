@@ -25,6 +25,8 @@ namespace AnnoService
                 -h     192.168.0.2             设置服务在注册中心的地址
                 -tr    false                   设置调用链追踪是否启用
                 --reg  false                   重新注册服务
+                -cp    7010                    设置注册中心端口
+                -ch    192.168.0.1             设置注册中心地址
 ");
                 return;
             }
